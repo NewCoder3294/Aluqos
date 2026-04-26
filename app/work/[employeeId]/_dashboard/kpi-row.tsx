@@ -1,23 +1,10 @@
 import { cn } from "@/src/lib/cn";
+import type { Kpi } from "./data/types";
 
-type Kpi = {
-  label: string;
-  value: string;
-  caption?: string;
-  tone?: "default" | "warning";
-};
-
-const KPIS: Kpi[] = [
-  { label: "PRDs drafted today", value: "1", caption: "+1 vs. yesterday" },
-  { label: "Needs review", value: "2", caption: "awaiting your input", tone: "warning" },
-  { label: "Items flagged", value: "3", caption: "needs your eye", tone: "warning" },
-  { label: "Avg time-to-PRD", value: "8m 14s", caption: "−2m vs. last week" },
-];
-
-export function KpiRow() {
+export function KpiRow({ kpis }: { kpis: Kpi[] }) {
   return (
     <div className="grid grid-cols-4 gap-5">
-      {KPIS.map((k) => (
+      {kpis.map((k) => (
         <div
           key={k.label}
           className={cn(

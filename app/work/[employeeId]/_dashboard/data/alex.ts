@@ -1,0 +1,125 @@
+import type { DashboardData } from "./types";
+
+export const ALEX_DATA: DashboardData = {
+  greetingName: "Nick",
+  greetingSubline: "Here's what Alex has been up to.",
+  kpis: [
+    { label: "PRDs drafted today", value: "1", caption: "+1 vs. yesterday" },
+    { label: "Needs review", value: "2", caption: "awaiting your input", tone: "warning" },
+    { label: "Items flagged", value: "3", caption: "needs your eye", tone: "warning" },
+    { label: "Avg time-to-PRD", value: "8m 14s", caption: "−2m vs. last week" },
+  ],
+  attention: [
+    {
+      id: "i1",
+      type: "PRD",
+      title: "Issue #47 PRD ready for review",
+      context: "drafted 3m ago",
+      cta: "Review",
+      blocker: true,
+      href: "prd/issue-47",
+    },
+    {
+      id: "i2",
+      type: "Scope",
+      title: "Bulk export — scope expanded beyond original brief",
+      context: "flagged 12m ago",
+      cta: "Resolve",
+      blocker: true,
+      toastMessage: "Marked as resolved.",
+    },
+    {
+      id: "i3",
+      type: "Slack",
+      title: "Marie asked about CSV format in #product-feedback",
+      context: "45m ago",
+      cta: "Reply",
+      toastMessage: "Drafted a reply for your review.",
+    },
+    {
+      id: "i4",
+      type: "Meeting",
+      title: "Sprint review tomorrow — no agenda yet",
+      context: "yesterday",
+      cta: "Draft",
+      toastMessage: "Drafting a sprint-review agenda…",
+    },
+    {
+      id: "i5",
+      type: "PRD",
+      title: "PRD #44 stale — last edited 5 days ago",
+      context: "5d ago",
+      cta: "Refresh",
+      href: "prd/issue-44",
+    },
+  ],
+  events: [
+    { time: "9:00 AM", title: "Sprint planning" },
+    { time: "11:30", title: "1:1 with Olivia" },
+    { time: "2:00 PM", title: "Demo rehearsal" },
+    { time: "4:30", title: "Eng sync", muted: true },
+  ],
+  pipelineTitle: "Pipeline",
+  pipelineColumns: [
+    {
+      id: "backlog",
+      label: "Backlog",
+      dotColor: "bg-paper-edge",
+      totalCount: 4,
+      cards: [
+        { id: "b1", title: "Add filter saved-views", sub: "Backlog · proposed by Alex", href: "prd/issue-b1" },
+        { id: "b2", title: "Improve onboarding completion", sub: "Backlog · 2 supporters", href: "prd/issue-b2" },
+        { id: "b3", title: "Slack import for status updates", sub: "Backlog · idea", href: "prd/issue-b3" },
+        { id: "b4", title: "Sprint planning automation", sub: "Backlog · idea", href: "prd/issue-b4" },
+      ],
+    },
+    {
+      id: "drafting",
+      label: "Drafting",
+      dotColor: "bg-coral",
+      totalCount: 1,
+      cards: [
+        {
+          id: "d1",
+          title: "Issue #47 — Bulk export for analytics",
+          sub: "drafting now",
+          progress: 60,
+          href: "prd/issue-47",
+        },
+      ],
+    },
+    {
+      id: "review",
+      label: "In review",
+      dotColor: "bg-coral-light",
+      totalCount: 2,
+      cards: [
+        { id: "r1", title: "Issue #44 — Quick filters on dashboard", sub: "Issue #44 · 2 reviewers", href: "prd/issue-44" },
+        { id: "r2", title: "Issue #41 — Rename workspace flow", sub: "Issue #41 · 1 reviewer", href: "prd/issue-41" },
+      ],
+    },
+    {
+      id: "approved",
+      label: "Approved",
+      dotColor: "bg-[#7a8b5c]",
+      totalCount: 3,
+      cards: [
+        { id: "a1", title: "Issue #38 — Saved searches API", sub: "Issue #38 · approved 2d ago", href: "prd/issue-38" },
+        { id: "a2", title: "Issue #36 — Mobile detail view", sub: "Issue #36 · approved 4d ago", href: "prd/issue-36" },
+        { id: "a3", title: "Issue #35 — Daily summaries", sub: "Issue #35 · approved 1w ago", href: "prd/issue-35" },
+      ],
+    },
+    {
+      id: "shipped",
+      label: "Shipped",
+      dotColor: "bg-ink-muted",
+      totalCount: 12,
+      cards: [
+        { id: "s1", title: "Issue #34 — Onboarding gating", sub: "shipped 1w ago", href: "prd/issue-34" },
+        { id: "s2", title: "Issue #32 — Notion export", sub: "shipped 2w ago", href: "prd/issue-32" },
+        { id: "s3", title: "Issue #31 — Voice notes", sub: "shipped 3w ago", href: "prd/issue-31" },
+      ],
+      truncatedExtra: 9,
+    },
+  ],
+};

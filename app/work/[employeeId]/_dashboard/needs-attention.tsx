@@ -5,65 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/ca
 import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/lib/cn";
 import { toast } from "@/src/components/toast";
+import type { AttentionItem } from "./data/types";
 
-type AttentionItem = {
-  id: string;
-  type: string;
-  title: string;
-  context: string;
-  cta: "Review" | "Resolve" | "Reply" | "Draft" | "Refresh";
-  blocker?: boolean;
-  href?: string;
-  toastMessage?: string;
-};
-
-const ITEMS: AttentionItem[] = [
-  {
-    id: "i1",
-    type: "PRD",
-    title: "Issue #47 PRD ready for review",
-    context: "drafted 3m ago",
-    cta: "Review",
-    blocker: true,
-    href: "prd/issue-47",
-  },
-  {
-    id: "i2",
-    type: "Scope",
-    title: "Bulk export — scope expanded beyond original brief",
-    context: "flagged 12m ago",
-    cta: "Resolve",
-    blocker: true,
-    toastMessage: "Marked as resolved.",
-  },
-  {
-    id: "i3",
-    type: "Slack",
-    title: "Marie asked about CSV format in #product-feedback",
-    context: "45m ago",
-    cta: "Reply",
-    toastMessage: "Drafted a reply for your review.",
-  },
-  {
-    id: "i4",
-    type: "Meeting",
-    title: "Sprint review tomorrow — no agenda yet",
-    context: "yesterday",
-    cta: "Draft",
-    toastMessage: "Drafting a sprint-review agenda…",
-  },
-  {
-    id: "i5",
-    type: "PRD",
-    title: "PRD #44 stale — last edited 5 days ago",
-    context: "5d ago",
-    cta: "Refresh",
-    href: "prd/issue-44",
-  },
-];
-
-export function NeedsAttention({ employeeId }: { employeeId: string }) {
-  const blockerCount = ITEMS.filter((i) => i.blocker).length;
+export function NeedsAttention({
+  employeeId,
+  items,
+}: {
+  employeeId: string;
+  items: AttentionItem[];
+}) {
+  const blockerCount = items.filter((i) => i.blocker).length;
   return (
     <Card className="h-full">
       <CardHeader>
@@ -74,7 +25,7 @@ export function NeedsAttention({ employeeId }: { employeeId: string }) {
       </CardHeader>
       <CardContent compact className="p-0">
         <ul>
-          {ITEMS.map((item, idx) => {
+          {items.map((item, idx) => {
             const rowInner = (
               <>
                 <span
@@ -99,7 +50,7 @@ export function NeedsAttention({ employeeId }: { employeeId: string }) {
             );
             const rowClass = cn(
               "flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-paper-hi/40 w-full text-left",
-              idx !== ITEMS.length - 1 && "border-b border-paper-edge",
+              idx !== items.length - 1 && "border-b border-paper-edge",
             );
             return (
               <li key={item.id}>

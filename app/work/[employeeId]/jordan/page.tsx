@@ -1,9 +1,9 @@
 import { fetchWorkspaceState } from "@/src/server/run-prd";
 import { fakeEmployee } from "@/src/db/client";
 import { DashboardShell } from "../_dashboard/dashboard-shell";
-import { ComingSoon } from "../_dashboard/coming-soon";
+import { JORDAN_DATA } from "../_dashboard/data/jordan";
 
-export default async function PrdsPage({
+export default async function JordanDashboardPage({
   params,
 }: {
   params: Promise<{ employeeId: string }>;
@@ -18,8 +18,11 @@ export default async function PrdsPage({
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
 
   return (
-    <DashboardShell employeeId={emp.id} employeeName={emp.name} activeNav="alex-prds">
-      <ComingSoon title="PRDs" />
-    </DashboardShell>
+    <DashboardShell
+      employeeId={emp.id}
+      employeeName="Jordan"
+      activeNav="jordan-dashboard"
+      data={JORDAN_DATA}
+    />
   );
 }

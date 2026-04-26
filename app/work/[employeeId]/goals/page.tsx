@@ -18,7 +18,7 @@ export default async function GoalsPage({
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
 
   return (
-    <DashboardShell employeeId={emp.id} employeeName={emp.name} activeNav="goals">
+    <DashboardShell employeeId={emp.id} employeeName={emp.name} activeNav="alex-goals">
       <ComingSoon title="Goals" />
     </DashboardShell>
   );

@@ -4,97 +4,26 @@ import Link from "next/link";
 import { cn } from "@/src/lib/cn";
 import { Card, CardHeader, CardTitle, CardContent } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
+import type { PipelineColumnData } from "./data/types";
 
-type PipelineCard = {
-  id: string;
-  title: string;
-  sub: string;
-  progress?: number;
-  href?: string;
-};
-
-type PipelineColumn = {
-  id: string;
-  label: string;
-  dotColor: string;
-  cards: PipelineCard[];
-  totalCount: number;
-  truncatedExtra?: number;
-};
-
-const COLUMNS: PipelineColumn[] = [
-  {
-    id: "backlog",
-    label: "Backlog",
-    dotColor: "bg-paper-edge",
-    totalCount: 4,
-    cards: [
-      { id: "b1", title: "Add filter saved-views", sub: "Backlog · proposed by Alex", href: "prd/issue-b1" },
-      { id: "b2", title: "Improve onboarding completion", sub: "Backlog · 2 supporters", href: "prd/issue-b2" },
-      { id: "b3", title: "Slack import for status updates", sub: "Backlog · idea", href: "prd/issue-b3" },
-      { id: "b4", title: "Sprint planning automation", sub: "Backlog · idea", href: "prd/issue-b4" },
-    ],
-  },
-  {
-    id: "drafting",
-    label: "Drafting",
-    dotColor: "bg-coral",
-    totalCount: 1,
-    cards: [
-      {
-        id: "d1",
-        title: "Issue #47 — Bulk export for analytics",
-        sub: "drafting now",
-        progress: 60,
-        href: "prd/issue-47",
-      },
-    ],
-  },
-  {
-    id: "review",
-    label: "In review",
-    dotColor: "bg-coral-light",
-    totalCount: 2,
-    cards: [
-      { id: "r1", title: "Issue #44 — Quick filters on dashboard", sub: "Issue #44 · 2 reviewers", href: "prd/issue-44" },
-      { id: "r2", title: "Issue #41 — Rename workspace flow", sub: "Issue #41 · 1 reviewer", href: "prd/issue-41" },
-    ],
-  },
-  {
-    id: "approved",
-    label: "Approved",
-    dotColor: "bg-[#7a8b5c]",
-    totalCount: 3,
-    cards: [
-      { id: "a1", title: "Issue #38 — Saved searches API", sub: "Issue #38 · approved 2d ago", href: "prd/issue-38" },
-      { id: "a2", title: "Issue #36 — Mobile detail view", sub: "Issue #36 · approved 4d ago", href: "prd/issue-36" },
-      { id: "a3", title: "Issue #35 — Daily summaries", sub: "Issue #35 · approved 1w ago", href: "prd/issue-35" },
-    ],
-  },
-  {
-    id: "shipped",
-    label: "Shipped",
-    dotColor: "bg-ink-muted",
-    totalCount: 12,
-    cards: [
-      { id: "s1", title: "Issue #34 — Onboarding gating", sub: "shipped 1w ago", href: "prd/issue-34" },
-      { id: "s2", title: "Issue #32 — Notion export", sub: "shipped 2w ago", href: "prd/issue-32" },
-      { id: "s3", title: "Issue #31 — Voice notes", sub: "shipped 3w ago", href: "prd/issue-31" },
-    ],
-    truncatedExtra: 9,
-  },
-];
-
-export function Pipeline({ employeeId }: { employeeId: string }) {
+export function Pipeline({
+  employeeId,
+  title = "Pipeline",
+  columns,
+}: {
+  employeeId: string;
+  title?: string;
+  columns: PipelineColumnData[];
+}) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Pipeline</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <Button variant="outline" size="sm">View all →</Button>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-5 gap-4">
-        {COLUMNS.map((col) => (
+        {columns.map((col) => (
           <div key={col.id} className="flex flex-col">
             <div className="flex items-center gap-2 mb-3 px-1">
               <span className={cn("size-2 rounded-full shrink-0", col.dotColor)} />

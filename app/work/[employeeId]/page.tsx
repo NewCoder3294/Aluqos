@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { fetchWorkspaceState } from "@/src/server/run-prd";
 import { fakeEmployee } from "@/src/db/client";
 import { DashboardShell } from "./_dashboard/dashboard-shell";
+import { ALEX_DATA } from "./_dashboard/data/alex";
 
 export default async function WorkPage({
   params,
@@ -26,5 +27,12 @@ export default async function WorkPage({
   }
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
 
-  return <DashboardShell employeeId={emp.id} employeeName={emp.name} />;
+  return (
+    <DashboardShell
+      employeeId={emp.id}
+      employeeName={emp.name}
+      activeNav="alex-dashboard"
+      data={ALEX_DATA}
+    />
+  );
 }

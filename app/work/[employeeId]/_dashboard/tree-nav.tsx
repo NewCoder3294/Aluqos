@@ -19,23 +19,36 @@ import {
 import { cn } from "@/src/lib/cn";
 import { toast } from "@/src/components/toast";
 
-export type ActiveNavKey = "dashboard" | "prds" | "backlog" | "calendar" | "goals";
+export type ActiveNavKey =
+  | "alex-dashboard"
+  | "alex-prds"
+  | "alex-backlog"
+  | "alex-calendar"
+  | "alex-goals"
+  | "jordan-dashboard"
+  | "jordan-standups"
+  | "jordan-status"
+  | "jordan-risks"
+  | "sam-dashboard"
+  | "sam-campaigns"
+  | "sam-brand-voice"
+  | "sam-performance";
 
 type NavItem = {
-  key?: ActiveNavKey;
+  key: ActiveNavKey;
   label: string;
   icon: React.ReactNode;
-  href?: string;
-  comingSoon?: boolean;
-  onClick?: () => void;
+  href: string;
+  /** Soft-coming-soon: still navigates, but shows the "soon" tag in the nav. */
+  comingSoonLabel?: boolean;
 };
 
 type NavSection = {
-  id: string;
+  id: "alex" | "jordan" | "sam";
   label: string;
-  badge?: string;
+  /** Tailwind background class for the section dot indicator. */
+  dotClass: string;
   defaultOpen?: boolean;
-  comingSoon?: boolean;
   items: NavItem[];
 };
 
@@ -46,55 +59,61 @@ function buildSections(employeeId: string): NavSection[] {
     {
       id: "alex",
       label: "Alex (PM)",
+      dotClass: "bg-coral",
       defaultOpen: true,
       items: [
-        { key: "dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}` },
-        { key: "prds", label: "PRDs", icon: <FileText {...ICON_PROPS} />, href: `/work/${employeeId}/prds` },
-        { key: "backlog", label: "Backlog", icon: <ListTodo {...ICON_PROPS} />, href: `/work/${employeeId}/backlog` },
-        { key: "calendar", label: "Calendar", icon: <Calendar {...ICON_PROPS} />, href: `/work/${employeeId}/calendar` },
-        { key: "goals", label: "Goals", icon: <Target {...ICON_PROPS} />, href: `/work/${employeeId}/goals` },
+        { key: "alex-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}` },
+        { key: "alex-prds", label: "PRDs", icon: <FileText {...ICON_PROPS} />, href: `/work/${employeeId}/prds` },
+        { key: "alex-backlog", label: "Backlog", icon: <ListTodo {...ICON_PROPS} />, href: `/work/${employeeId}/backlog` },
+        { key: "alex-calendar", label: "Calendar", icon: <Calendar {...ICON_PROPS} />, href: `/work/${employeeId}/calendar` },
+        { key: "alex-goals", label: "Goals", icon: <Target {...ICON_PROPS} />, href: `/work/${employeeId}/goals` },
       ],
     },
     {
       id: "jordan",
       label: "Jordan (PGM)",
-      comingSoon: true,
+      dotClass: "bg-[#5a4f3d]",
       items: [
-        { label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, comingSoon: true },
-        { label: "Standups", icon: <MessageSquare {...ICON_PROPS} />, comingSoon: true },
-        { label: "Status updates", icon: <BellRing {...ICON_PROPS} />, comingSoon: true },
-        { label: "Risks", icon: <AlertTriangle {...ICON_PROPS} />, comingSoon: true },
+        { key: "jordan-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}/jordan` },
+        { key: "jordan-standups", label: "Standups", icon: <MessageSquare {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/standups`, comingSoonLabel: true },
+        { key: "jordan-status", label: "Status updates", icon: <BellRing {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/status`, comingSoonLabel: true },
+        { key: "jordan-risks", label: "Risks", icon: <AlertTriangle {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/risks`, comingSoonLabel: true },
       ],
     },
     {
       id: "sam",
       label: "Sam (Marketing)",
-      comingSoon: true,
+      dotClass: "bg-[#7a8b5c]",
       items: [
-        { label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, comingSoon: true },
-        { label: "Campaigns", icon: <Megaphone {...ICON_PROPS} />, comingSoon: true },
-        { label: "Brand voice", icon: <Mic {...ICON_PROPS} />, comingSoon: true },
-        { label: "Performance", icon: <BarChart {...ICON_PROPS} />, comingSoon: true },
+        { key: "sam-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}/sam` },
+        { key: "sam-campaigns", label: "Campaigns", icon: <Megaphone {...ICON_PROPS} />, href: `/work/${employeeId}/sam/campaigns`, comingSoonLabel: true },
+        { key: "sam-brand-voice", label: "Brand voice", icon: <Mic {...ICON_PROPS} />, href: `/work/${employeeId}/sam/brand-voice`, comingSoonLabel: true },
+        { key: "sam-performance", label: "Performance", icon: <BarChart {...ICON_PROPS} />, href: `/work/${employeeId}/sam/performance`, comingSoonLabel: true },
       ],
     },
   ];
 }
 
-const COMING_SOON_TOAST: Record<string, string> = {
-  jordan: "Jordan launches next month — you'll get an email.",
-  sam: "Sam launches next month — you'll get an email.",
-};
+/** Map an active nav key to its owning section so we can auto-expand it. */
+function sectionForActive(activeNav: ActiveNavKey): NavSection["id"] {
+  if (activeNav.startsWith("jordan-")) return "jordan";
+  if (activeNav.startsWith("sam-")) return "sam";
+  return "alex";
+}
 
 export function TreeNav({
   employeeId,
-  activeNav = "dashboard",
+  activeNav = "alex-dashboard",
 }: {
   employeeId: string;
   activeNav?: ActiveNavKey;
 }) {
   const sections = buildSections(employeeId);
+  const activeSection = sectionForActive(activeNav);
   const [open, setOpen] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(sections.map((s) => [s.id, s.defaultOpen ?? false])),
+    Object.fromEntries(
+      sections.map((s) => [s.id, s.defaultOpen || s.id === activeSection]),
+    ),
   );
 
   return (
@@ -123,62 +142,38 @@ export function TreeNav({
                     isOpen && "rotate-90",
                   )}
                 />
+                <span className={cn("size-1.5 rounded-full shrink-0", section.dotClass)} />
                 <span className="text-[10px] uppercase tracking-[0.14em] text-ink-faint font-medium">
                   {section.label}
                 </span>
-                {section.comingSoon && (
-                  <span className="ml-auto text-[9px] uppercase tracking-[0.1em] text-ink-faint/70 italic">
-                    soon
-                  </span>
-                )}
               </button>
 
               {isOpen && (
                 <ul className="mt-0.5 ml-1.5 border-l border-paper-edge">
                   {section.items.map((item) => {
-                    const isActive =
-                      section.id === "alex" && item.key === activeNav && !item.comingSoon;
-                    const inner = (
-                      <span
-                        className={cn(
-                          "flex items-center gap-2 px-2.5 py-1.5 ml-1 rounded-sm text-[13px] transition-colors",
-                          item.comingSoon
-                            ? "text-ink-faint/70 hover:bg-paper-edge/30 cursor-pointer"
-                            : isActive
-                              ? "bg-coral/10 text-coral-deep"
-                              : "text-ink-muted hover:bg-paper-edge/40 hover:text-ink",
-                        )}
-                      >
-                        <span className={cn("shrink-0", isActive ? "text-coral-deep" : "text-ink-faint")}>
-                          {item.icon}
-                        </span>
-                        <span className="truncate">{item.label}</span>
-                        {item.comingSoon && (
-                          <span className="ml-auto text-[9px] uppercase tracking-[0.1em] text-ink-faint/60">
-                            soon
-                          </span>
-                        )}
-                      </span>
-                    );
-                    const handleComingSoonClick = () => {
-                      toast.info(
-                        COMING_SOON_TOAST[section.id] ??
-                          "Coming soon — you'll get an email when it launches.",
-                      );
-                    };
+                    const isActive = item.key === activeNav;
                     return (
-                      <li key={item.label}>
-                        {item.href && !item.comingSoon ? (
-                          <Link href={item.href}>{inner}</Link>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={item.comingSoon ? handleComingSoonClick : undefined}
-                            className="block w-full text-left"
+                      <li key={item.key}>
+                        <Link href={item.href}>
+                          <span
+                            className={cn(
+                              "flex items-center gap-2 px-2.5 py-1.5 ml-1 rounded-sm text-[13px] transition-colors",
+                              isActive
+                                ? "bg-coral/10 text-coral-deep"
+                                : "text-ink-muted hover:bg-paper-edge/40 hover:text-ink",
+                            )}
                           >
-                            {inner}
-                          </button>
-                        )}
+                            <span className={cn("shrink-0", isActive ? "text-coral-deep" : "text-ink-faint")}>
+                              {item.icon}
+                            </span>
+                            <span className="truncate">{item.label}</span>
+                            {item.comingSoonLabel && !isActive && (
+                              <span className="ml-auto text-[9px] uppercase tracking-[0.1em] text-ink-faint/60">
+                                soon
+                              </span>
+                            )}
+                          </span>
+                        </Link>
                       </li>
                     );
                   })}

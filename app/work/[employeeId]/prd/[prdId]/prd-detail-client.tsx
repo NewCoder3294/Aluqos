@@ -27,7 +27,7 @@ export function PrdDetailClient({
 
   return (
     <div className="min-h-screen flex bg-paper">
-      <TreeNav employeeId={employeeId} activeNav="prds" />
+      <TreeNav employeeId={employeeId} activeNav="alex-prds" />
 
       <div className="flex-1 min-w-0 flex flex-col">
         <header className="h-[56px] shrink-0 border-b border-paper-edge bg-paper px-8 flex items-center justify-between">

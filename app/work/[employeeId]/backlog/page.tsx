@@ -18,7 +18,7 @@ export default async function BacklogPage({
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
 
   return (
-    <DashboardShell employeeId={emp.id} employeeName={emp.name} activeNav="backlog">
+    <DashboardShell employeeId={emp.id} employeeName={emp.name} activeNav="alex-backlog">
       <ComingSoon title="Backlog" />
     </DashboardShell>
   );

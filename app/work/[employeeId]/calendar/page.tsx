@@ -18,7 +18,7 @@ export default async function CalendarPage({
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
 
   return (
-    <DashboardShell employeeId={emp.id} employeeName={emp.name} activeNav="calendar">
+    <DashboardShell employeeId={emp.id} employeeName={emp.name} activeNav="alex-calendar">
       <ComingSoon title="Calendar" />
     </DashboardShell>
   );
