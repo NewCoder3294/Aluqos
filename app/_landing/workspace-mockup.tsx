@@ -6,7 +6,7 @@ import { Serif } from "@/src/components/serif";
 import { Activity, Bell, FileText, Flag, Search, Sparkles } from "lucide-react";
 import { EASE } from "./motion-primitives";
 
-// A faithful, decorative rendering of the Saathi workspace with subtle live
+// A faithful, decorative rendering of the Aluqos workspace with subtle live
 // motion. Wrapped by the caller in pointer-events-none so it reads as a
 // screenshot — the motion is purely visual.
 
@@ -113,7 +113,7 @@ export function WorkspaceMockup() {
         <span className="w-2.5 h-2.5 rounded-full bg-[#a3b48a]" aria-hidden />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-[11px] text-[--color-ink-faint] tracking-[0.02em] tabular-nums">
-            saathi.ai/work/alex
+            aluqos.ai/work/alex
           </div>
         </div>
       </div>

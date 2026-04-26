@@ -13,7 +13,7 @@ export function TopToolbar({
   centerLabel: string;
   /**
    * Optional extra breadcrumb segments appended after `centerLabel`.
-   * e.g. ["Phase 2"] renders: Saathi › Alex › Workspace › Phase 2
+   * e.g. ["Phase 2"] renders: Aluqos › Alex › Workspace › Phase 2
    */
   trail?: string[];
 }) {
@@ -24,7 +24,7 @@ export function TopToolbar({
         aria-label="Breadcrumb"
         className="flex items-center gap-1.5 text-[12px] text-[--color-ink-faint] min-w-0 font-sans"
       >
-        <span className="truncate">Saathi</span>
+        <span className="truncate">Aluqos</span>
         <ChevronRight className="size-3 shrink-0 text-[--color-paper-edge]" />
         <span className="truncate text-[--color-ink-muted]">{employeeName}</span>
         <ChevronRight className="size-3 shrink-0 text-[--color-paper-edge]" />

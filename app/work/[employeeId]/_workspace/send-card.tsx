@@ -25,7 +25,7 @@ const DESTINATIONS: Destination[] = [
     id: "notion",
     name: "Notion",
     glyph: <NotionGlyph />,
-    context: "Saathi PRDs database",
+    context: "Aluqos PRDs database",
     sub: "last sent: never",
     onSend: (title, sections) => fakeNotionExport({ title, sections }),
   },

@@ -39,7 +39,7 @@ export function LandingCTA() {
                 </Button>
               </form>
               <Button variant="outline" size="lg" asChild>
-                <a href="mailto:hello@saathi.ai">Talk to founders</a>
+                <a href="mailto:hello@aluqos.ai">Talk to founders</a>
               </Button>
             </div>
           </div>

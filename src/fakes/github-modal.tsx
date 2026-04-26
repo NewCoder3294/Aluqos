@@ -29,10 +29,10 @@ export function GithubConnectButton({
           <div className="w-[420px] rounded-lg bg-white shadow-2xl border border-stone-200 overflow-hidden">
             <div className="px-5 py-4 border-b border-stone-200 flex items-center gap-3">
               <GithubGlyph />
-              <div className="text-[15px] font-medium">Authorize Saathi</div>
+              <div className="text-[15px] font-medium">Authorize Aluqos</div>
             </div>
             <div className="p-5 text-[13.5px] text-stone-700 space-y-3">
-              <p>Saathi by <strong>nicolasdossantos</strong> wants to access your repositories.</p>
+              <p>Aluqos by <strong>nicolasdossantos</strong> wants to access your repositories.</p>
               <ul className="list-disc pl-5 text-stone-600 space-y-1">
                 <li>Read repository contents</li>
                 <li>Read issues</li>
@@ -63,7 +63,7 @@ export function GithubConnectButton({
                 className="!bg-[#1f883d] hover:!bg-[#1a7234] text-sm normal-case tracking-normal"
                 disabled={busy}
               >
-                {busy ? "Authorizing…" : "Authorize Saathi"}
+                {busy ? "Authorizing…" : "Authorize Aluqos"}
               </Button>
             </div>
           </div>

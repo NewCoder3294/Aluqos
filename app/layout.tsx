@@ -11,7 +11,7 @@ const serif = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Saathi",
+  title: "Aluqos",
   description: "AI employees that learn how you work.",
 };
 

@@ -1,4 +1,4 @@
-# Q2 Roadmap — Saathi
+# Q2 Roadmap — Aluqos
 **Target:** YC Demo Day, ship 3 AI employees.
 
 ## April

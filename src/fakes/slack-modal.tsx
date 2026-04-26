@@ -32,14 +32,14 @@ export function SlackConnectButton({
             <div className="px-5 py-4 border-b border-stone-200 flex items-center gap-3">
               <SlackGlyph />
               <div className="text-[15px] font-medium">
-                {step === "auth" ? "Authorize Saathi" : "Choose a channel"}
+                {step === "auth" ? "Authorize Aluqos" : "Choose a channel"}
               </div>
             </div>
             {step === "auth" && (
               <div className="p-5 text-[13.5px] text-stone-700 space-y-3">
-                <p>Saathi will be able to:</p>
+                <p>Aluqos will be able to:</p>
                 <ul className="list-disc pl-5 text-stone-600 space-y-1">
-                  <li>View messages in channels Saathi is added to</li>
+                  <li>View messages in channels Aluqos is added to</li>
                   <li>Post messages as Alex</li>
                 </ul>
               </div>

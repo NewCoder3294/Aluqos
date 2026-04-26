@@ -35,7 +35,7 @@ export function LandingNav() {
     >
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
         <a href="#top" className="serif text-[18px] tracking-[-0.01em] text-[--color-ink]">
-          Saathi
+          Aluqos
         </a>
 
         <nav

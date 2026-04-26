@@ -1,6 +1,6 @@
 # saathi-mvp
 
-YC demo build of Saathi. Next.js 15, Supabase, Claude.
+YC demo build of Aluqos. Next.js 15, Supabase, Claude.
 
 ## Status
 Day 3 of 5. PM employee shipping today; PgM and Marketing tomorrow.

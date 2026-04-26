@@ -36,7 +36,7 @@ export async function seedDemoFixture(employeeId: string) {
     }
     await updateOnboarding(employeeId, {
       brief: {
-        project: "Saathi — AI employees that learn how you work",
+        project: "Aluqos — AI employees that learn how you work",
         role: "Founder / head of product",
         priorities: ["Ship YC demo", "Close 10 design partners", "Hit $10K MRR in 90 days"],
         time_sink: "Drafting PRDs from scratch every week",

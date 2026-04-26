@@ -13,7 +13,7 @@ const COMPANY_LINKS: Array<{ href: string; label: string }> = [
   { href: "#", label: "About" },
   { href: "#", label: "Careers" },
   { href: "#", label: "Press" },
-  { href: "mailto:hello@saathi.ai", label: "hello@saathi.ai" },
+  { href: "mailto:hello@aluqos.ai", label: "hello@aluqos.ai" },
 ];
 
 export function LandingFooter() {
@@ -24,13 +24,13 @@ export function LandingFooter() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div>
               <div className="serif text-[20px] tracking-[-0.01em] text-[--color-ink]">
-                Saathi
+                Aluqos
               </div>
               <p className="mt-3 max-w-[36ch] text-[14px] leading-[1.6] text-[--color-ink-muted]">
                 AI employees that learn how you work.
               </p>
               <p className="mt-6 text-[12px] text-[--color-ink-faint]">
-                &copy; 2026 Saathi Labs, Inc.
+                &copy; 2026 Aluqos Labs, Inc.
               </p>
             </div>
 

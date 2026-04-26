@@ -19,7 +19,7 @@ export function fakeNotionExport(prd: GeneratedPrd) {
   URL.revokeObjectURL(url);
   const slug = `prd-${nextSlug++}`;
   toast.success("Exported to Notion", {
-    description: `saathi.notion.site/${slug}`,
+    description: `aluqos.notion.site/${slug}`,
     icon: <NotionGlyph />,
   });
 }

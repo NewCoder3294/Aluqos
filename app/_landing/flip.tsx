@@ -6,12 +6,12 @@ import { Serif } from "@/src/components/serif";
 import { Card } from "@/src/components/ui/card";
 import { EASE, Reveal } from "./motion-primitives";
 
-const ROWS: Array<{ old: string; saathi: string }> = [
-  { old: "Human learns prompts", saathi: "AI learns how YOU work" },
-  { old: "Generic setup required", saathi: "Personalized from day 1" },
-  { old: "Static, no memory", saathi: "Gets smarter over time" },
-  { old: "Technical users only", saathi: "Anyone can use it" },
-  { old: "You adapt to AI", saathi: "AI adapts to you" },
+const ROWS: Array<{ old: string; aluqos: string }> = [
+  { old: "Human learns prompts", aluqos: "AI learns how YOU work" },
+  { old: "Generic setup required", aluqos: "Personalized from day 1" },
+  { old: "Static, no memory", aluqos: "Gets smarter over time" },
+  { old: "Technical users only", aluqos: "Anyone can use it" },
+  { old: "You adapt to AI", aluqos: "AI adapts to you" },
 ];
 
 export function LandingFlip() {
@@ -31,7 +31,7 @@ export function LandingFlip() {
         </Reveal>
         <Reveal delay={0.1}>
           <p className="mt-6 max-w-[60ch] text-[17px] leading-[1.6] text-[--color-ink-muted]">
-            Saathi flips the burden. Instead of teaching people to talk to AI, we
+            Aluqos flips the burden. Instead of teaching people to talk to AI, we
             teach AI to learn from people &mdash; their tools, their patterns, their
             taste. The way a new colleague would.
           </p>
@@ -47,7 +47,7 @@ export function LandingFlip() {
                 </div>
               </div>
               <div className="px-6 py-4">
-                <Serif className="text-[18px] text-[--color-coral-deep]">Saathi</Serif>
+                <Serif className="text-[18px] text-[--color-coral-deep]">Aluqos</Serif>
               </div>
             </div>
 
@@ -73,7 +73,7 @@ function FlipRow({
   index,
   last,
 }: {
-  row: { old: string; saathi: string };
+  row: { old: string; aluqos: string };
   index: number;
   last: boolean;
 }) {
@@ -107,7 +107,7 @@ function FlipRow({
             aria-hidden
           />
         </motion.span>
-        <span className="serif text-[16px] leading-snug">{row.saathi}</span>
+        <span className="serif text-[16px] leading-snug">{row.aluqos}</span>
       </div>
     </motion.li>
   );

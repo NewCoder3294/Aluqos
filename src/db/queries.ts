@@ -7,7 +7,7 @@ const MOCK_UPLOADS = [
     filename: "saathi-mvp-README.md",
     storage_path: "mock/saathi-mvp-README.md",
     mime_type: "text/markdown",
-    parsed_text: "Saathi — AI employees that learn how you work. MVP overview, problem, solution, and target users.",
+    parsed_text: "Aluqos — AI employees that learn how you work. MVP overview, problem, solution, and target users.",
     parse_status: "done",
     created_at: new Date().toISOString(),
   },

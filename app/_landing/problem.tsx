@@ -34,7 +34,7 @@ const STATS: Stat[] = [
     value: "$0",
     label:
       "of ChatGPT Enterprise revenue used by ops teams at one 150-person SaaS",
-    caption: "Saathi customer interview",
+    caption: "Aluqos customer interview",
   },
 ];
 

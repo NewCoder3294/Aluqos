@@ -1,4 +1,4 @@
-# Saathi — autonomous build handoff
+# Aluqos — autonomous build handoff
 
 **Branch:** `build/walkthrough-workspace-v1` (37 commits, ahead of master)
 **Status:** 36 of 37 plan tasks shipped. T36 (live polish pass) deferred — needs API keys.
@@ -16,7 +16,7 @@ The full vertical slice from the spec/plan:
 - **Faked integrations (4):** GitHub OAuth modal, Jira toast, Notion export (real .md download + theatrical toast), Slack OAuth + channel picker. All theater, no real API calls.
 - **Walkthrough (`/onboarding/[employeeId]`):** route shell + state machine + the 6 phases. Phase 1 brief form, Phase 2 reading + understood card, Phase 3 observation Qs + decision style + sample-PRD upload, Phase 4 streaming action plan, Phase 5 approval UI + autonomy + Start working, Phase 6 hands off to workspace.
 - **Workspace (`/work/[employeeId]`):** two-column layout, streaming PRD renderer with editable Tiptap sections, follow-up chips + free-text refinement, left rail (sources + action plan), export row.
-- **Demo fixture:** Saathi-themed `saathi-mvp` fake repo, q2-roadmap PDF, sample-PRD PDF, issue-47.json, slack-messages.json, plus four canonical canned-response files for offline AI fallback.
+- **Demo fixture:** Aluqos-themed `saathi-mvp` fake repo, q2-roadmap PDF, sample-PRD PDF, issue-47.json, slack-messages.json, plus four canonical canned-response files for offline AI fallback.
 - **"Use demo data" hidden button:** appears on Phase 1 when URL is `/onboarding/<id>?demo=1`. Seeds the fixture and jumps to Phase 2.
 - **Voice (Whisper):** `/api/voice` route + `<VoiceButton>` component (not wired into UI yet — drop-in available).
 - **E2E test:** `tests/e2e/demo-path.spec.ts` covers the canonical demo path end-to-end.

@@ -11,7 +11,7 @@ import { seedDemoFixture } from "@/src/server/seed-demo-fixture";
 import { PhaseHeader, PhaseFooter } from "../_chrome/phase-header";
 
 const STEPS = [
-  { key: "project", q: "What are you building?", placeholder: "Saathi — AI employees that learn how you work" },
+  { key: "project", q: "What are you building?", placeholder: "Aluqos — AI employees that learn how you work" },
   { key: "role", q: "What's your role?", placeholder: "Founder / Head of Product / …" },
   { key: "priorities", q: "Top three priorities right now?", placeholder: "Ship the YC demo, close design partners, hire eng #2" },
   { key: "time_sink", q: "What's eating most of your time?", placeholder: "Drafting PRDs from scratch every week" },

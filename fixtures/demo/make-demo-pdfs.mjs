@@ -52,7 +52,7 @@ function buildPdf(lines) {
 const here = path.dirname(new URL(import.meta.url).pathname);
 
 const roadmapLines = [
-  "Q2 Roadmap - Saathi",
+  "Q2 Roadmap - Aluqos",
   "Target: YC Demo Day, ship 3 AI employees.",
   "",
   "April",
