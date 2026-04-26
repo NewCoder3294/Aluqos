@@ -21,3 +21,8 @@ export async function submitBrief(employeeId: string, brief: BriefData, files: A
   await logEvent(employeeId, "phase_completed", { phase: 1 });
   revalidatePath(`/onboarding/${employeeId}`);
 }
+
+export async function updateOnboardingObservations(employeeId: string, observations: Record<string, unknown>) {
+  await updateOnboarding(employeeId, { observations, phase: 4 });
+  await logEvent(employeeId, "phase_completed", { phase: 3 });
+}
