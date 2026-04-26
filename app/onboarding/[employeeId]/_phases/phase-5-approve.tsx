@@ -49,149 +49,155 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-6 py-24">
-      <div className="w-full max-w-[760px] flex flex-col items-center text-center gap-8">
-        <span className="text-[11px] uppercase tracking-[0.18em] text-ink-faint font-medium">
-          Phase 5 · Your call
-        </span>
+    <section className="min-h-screen flex items-center justify-center px-6 py-12">
+      <div className="w-full max-w-[820px] bg-white border border-paper-edge rounded-lg shadow-[0_2px_12px_rgba(31,29,26,0.06)] flex flex-col min-h-[640px]">
+        <div className="flex-1 p-10 flex flex-col items-center text-center gap-8">
+          <span className="text-[11px] uppercase tracking-[0.18em] text-ink-faint font-medium">
+            Phase 5 · Your call
+          </span>
 
-        <Serif as="h1" className="font-medium leading-[1.05]">
-          <span style={{ fontSize: "clamp(32px, 6vw, 56px)" }}>Approve the plan.</span>
-        </Serif>
+          <Serif as="h1" className="font-medium leading-[1.05]">
+            <span style={{ fontSize: "clamp(32px, 6vw, 56px)" }}>Approve the plan.</span>
+          </Serif>
 
-        <Serif italic className="text-[16px] text-ink-muted">
-          Approve, edit, or remove anything. This locks in what I&apos;ll do on day one.
-        </Serif>
+          <Serif italic className="text-[16px] text-ink-muted">
+            Approve, edit, or remove anything. This locks in what I&apos;ll do on day one.
+          </Serif>
 
-        <div className="w-full flex flex-col gap-10 text-left pt-4">
-          {tiers.map(t => {
-            if (t.items.length === 0) return null;
-            const meta = TIER_META[t.tier];
-            return (
-              <div key={t.tier} className="space-y-3">
-                <Serif italic className="text-[14px] text-coral block">
-                  {meta.label}
-                </Serif>
-                <ul className="space-y-4">
-                  {t.items.map((it, i) => {
-                    const k = `${t.tier}-${i}`;
-                    const state = approvals[k] ?? "approved";
-                    const removed = state === "removed";
-                    return (
-                      <li
-                        key={k}
-                        className={
-                          "flex items-start gap-3 transition-opacity " +
-                          (removed ? "opacity-50" : "")
-                        }
-                      >
-                        <span
-                          aria-hidden
-                          className="w-[6px] h-[6px] rounded-full bg-coral mt-[9px] shrink-0"
-                        />
-                        <div className="flex-1 min-w-0">
-                          {state === "modified" ? (
-                            <input
-                              defaultValue={mods[k] ?? it.title}
-                              onChange={e => setMods(m => ({ ...m, [k]: e.target.value }))}
-                              className="w-full bg-transparent border-b border-paper-edge text-[15px] text-ink focus:outline-none focus:border-coral transition-colors py-1"
-                            />
-                          ) : (
-                            <div
-                              className={
-                                "text-[15px] text-ink leading-snug " +
-                                (removed ? "line-through" : "")
-                              }
-                            >
-                              {it.title}
-                            </div>
-                          )}
-                          {it.rationale && (
-                            <div className="text-[13px] text-ink-faint mt-1 italic leading-snug serif">
-                              {it.rationale}
-                            </div>
-                          )}
-                        </div>
-                        <div
-                          role="group"
-                          aria-label="Approval"
-                          className="inline-flex items-center bg-paper-hi border border-paper-edge rounded-md p-0.5 shrink-0"
+          <div className="w-full flex flex-col gap-10 text-left pt-4">
+            {tiers.map(t => {
+              if (t.items.length === 0) return null;
+              const meta = TIER_META[t.tier];
+              return (
+                <div key={t.tier} className="space-y-3">
+                  <Serif italic className="text-[14px] text-coral block">
+                    {meta.label}
+                  </Serif>
+                  <ul className="space-y-4">
+                    {t.items.map((it, i) => {
+                      const k = `${t.tier}-${i}`;
+                      const state = approvals[k] ?? "approved";
+                      const removed = state === "removed";
+                      return (
+                        <li
+                          key={k}
+                          className={
+                            "flex items-start gap-3 transition-opacity " +
+                            (removed ? "opacity-50" : "")
+                          }
                         >
-                          {(["approved", "modified", "removed"] as const).map(opt => {
-                            const active = state === opt;
-                            return (
-                              <button
-                                key={opt}
-                                type="button"
-                                aria-pressed={active}
-                                onClick={() => setApproval(k, opt)}
+                          <span
+                            aria-hidden
+                            className="w-[6px] h-[6px] rounded-full bg-coral mt-[9px] shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            {state === "modified" ? (
+                              <input
+                                defaultValue={mods[k] ?? it.title}
+                                onChange={e => setMods(m => ({ ...m, [k]: e.target.value }))}
+                                className="w-full bg-transparent border-b border-paper-edge text-[15px] text-ink focus:outline-none focus:border-coral transition-colors py-1"
+                              />
+                            ) : (
+                              <div
                                 className={
-                                  "px-2.5 py-1 text-[10.5px] uppercase tracking-[0.1em] rounded transition-colors " +
-                                  (active
-                                    ? "bg-ink text-paper"
-                                    : "text-ink-faint hover:text-ink hover:bg-white")
+                                  "text-[15px] text-ink leading-snug " +
+                                  (removed ? "line-through" : "")
                                 }
                               >
-                                {opt}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Autonomy chooser */}
-        <div className="w-full flex flex-col gap-4 pt-6 text-left">
-          <Serif italic className="text-[14px] text-coral block text-center">
-            How autonomous should I be?
-          </Serif>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {AUTONOMY.map(a => {
-              const selected = autonomy === a.val;
-              return (
-                <button
-                  key={a.val}
-                  type="button"
-                  aria-pressed={selected}
-                  onClick={() => setAutonomy(a.val)}
-                  className={
-                    "rounded-md border px-4 py-4 text-center transition-all " +
-                    (selected
-                      ? "border-ink bg-ink text-paper"
-                      : "border-paper-edge bg-white text-ink hover:border-coral")
-                  }
-                >
-                  <div className="text-[14px] font-medium">{a.label}</div>
-                  <div
-                    className={
-                      "text-[12px] mt-1 " + (selected ? "text-paper/70" : "text-ink-faint")
-                    }
-                  >
-                    {a.sub}
-                  </div>
-                </button>
+                                {it.title}
+                              </div>
+                            )}
+                            {it.rationale && (
+                              <div className="text-[13px] text-ink-faint mt-1 italic leading-snug serif">
+                                {it.rationale}
+                              </div>
+                            )}
+                          </div>
+                          <div
+                            role="group"
+                            aria-label="Approval"
+                            className="inline-flex items-center bg-paper-hi border border-paper-edge rounded-md p-0.5 shrink-0"
+                          >
+                            {(["approved", "modified", "removed"] as const).map(opt => {
+                              const active = state === opt;
+                              return (
+                                <button
+                                  key={opt}
+                                  type="button"
+                                  aria-pressed={active}
+                                  onClick={() => setApproval(k, opt)}
+                                  className={
+                                    "px-2.5 py-1 text-[10.5px] uppercase tracking-[0.1em] rounded transition-colors " +
+                                    (active
+                                      ? "bg-ink text-paper"
+                                      : "text-ink-faint hover:text-ink hover:bg-white")
+                                  }
+                                >
+                                  {opt}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               );
             })}
           </div>
+
+          {/* Autonomy chooser */}
+          <div className="w-full flex flex-col gap-4 pt-6 text-left">
+            <Serif italic className="text-[14px] text-coral block text-center">
+              How autonomous should I be?
+            </Serif>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {AUTONOMY.map(a => {
+                const selected = autonomy === a.val;
+                return (
+                  <button
+                    key={a.val}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => setAutonomy(a.val)}
+                    className={
+                      "rounded-md border px-4 py-4 text-center transition-all " +
+                      (selected
+                        ? "border-ink bg-ink text-paper"
+                        : "border-paper-edge bg-white text-ink hover:border-coral")
+                    }
+                  >
+                    <div className="text-[14px] font-medium">{a.label}</div>
+                    <div
+                      className={
+                        "text-[12px] mt-1 " + (selected ? "text-paper/70" : "text-ink-faint")
+                      }
+                    >
+                      {a.sub}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Live summary line */}
+          <Serif italic className="text-[15px] text-ink-muted leading-relaxed pt-2">
+            Alex will own <span className="text-ink not-italic">{counts.own}</span> tasks, assist on{" "}
+            <span className="text-ink not-italic">{counts.assist}</span>, and flag{" "}
+            <span className="text-ink not-italic">{counts.flag}</span> things.
+          </Serif>
         </div>
 
-        {/* Live summary line */}
-        <Serif italic className="text-[15px] text-ink-muted leading-relaxed pt-2">
-          Alex will own <span className="text-ink not-italic">{counts.own}</span> tasks, assist on{" "}
-          <span className="text-ink not-italic">{counts.assist}</span>, and flag{" "}
-          <span className="text-ink not-italic">{counts.flag}</span> things.
-        </Serif>
-
-        <div className="pt-4">
+        <div className="shrink-0 px-10 py-5 border-t border-paper-edge flex items-center justify-between gap-3">
+          <span className="text-[12px] text-ink-faint" aria-hidden />
+          <span className="tabular-nums uppercase tracking-[0.14em] text-[12px] text-ink-faint">
+            5 / 6
+          </span>
           <Button
             variant="ink"
-            size="lg"
+            size="sm"
             disabled={submitting}
             onClick={async () => {
               setSubmitting(true);
@@ -201,10 +207,6 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
             {submitting ? "Starting…" : "Start working"}
           </Button>
         </div>
-      </div>
-
-      <div className="fixed bottom-6 right-6 flex items-center gap-3 font-sans text-[11px] text-ink-faint z-30">
-        <span className="tabular-nums uppercase tracking-[0.14em]">5 / 6</span>
       </div>
     </section>
   );

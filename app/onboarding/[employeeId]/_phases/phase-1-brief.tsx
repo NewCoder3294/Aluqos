@@ -140,11 +140,11 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
   const step = STEPS[stepIdx];
 
   return (
-    <>
-      <section className="min-h-screen flex items-center justify-center px-6 py-24">
+    <section className="min-h-screen flex items-center justify-center px-6 py-12">
+      <div className="w-full max-w-[820px] bg-white border border-paper-edge rounded-lg shadow-[0_2px_12px_rgba(31,29,26,0.06)] flex flex-col min-h-[600px]">
         <div
           key={stepIdx}
-          className="w-full max-w-[640px] flex flex-col items-center text-center gap-7"
+          className="flex-1 p-10 lg:p-12 flex flex-col items-center text-center gap-7"
         >
           <span className="text-[11px] uppercase tracking-[0.18em] text-ink-faint font-medium">
             Phase 1 · Step {stepIdx + 1} of {TOTAL}
@@ -220,39 +220,39 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
             </div>
           )}
         </div>
-      </section>
 
-      {/* Bottom-right phase indicator + nav */}
-      <div className="fixed bottom-6 right-6 flex items-center gap-3 font-sans text-[11px] text-ink-faint z-30">
-        <span className="tabular-nums uppercase tracking-[0.14em]">1 / 6</span>
-        <span className="opacity-40">·</span>
-        <Button
-          variant="quiet"
-          size="sm"
-          onClick={goBack}
-          disabled={stepIdx === 0}
-          aria-label="Back"
-        >
-          <ArrowLeft className="size-3.5" />
-          Back
-        </Button>
-        {step.kind === "input" ? (
-          <Button variant="ink" size="sm" onClick={goNext}>
-            Next
-            <ArrowRight className="size-3.5" />
-          </Button>
-        ) : (
+        <div className="shrink-0 px-10 lg:px-12 py-5 border-t border-paper-edge flex items-center justify-between gap-3">
           <Button
-            variant="ink"
+            variant="quiet"
             size="sm"
-            disabled={files.length === 0 || submitting}
-            onClick={onUpload}
+            onClick={goBack}
+            disabled={stepIdx === 0}
+            aria-label="Back"
           >
-            {submitting ? "Reading…" : "Hand it over"}
-            {!submitting && <ArrowRight className="size-3.5" />}
+            <ArrowLeft className="size-3.5" />
+            Back
           </Button>
-        )}
+          <span className="tabular-nums uppercase tracking-[0.14em] text-[12px] text-ink-faint">
+            1 / 6
+          </span>
+          {step.kind === "input" ? (
+            <Button variant="ink" size="sm" onClick={goNext}>
+              Next
+              <ArrowRight className="size-3.5" />
+            </Button>
+          ) : (
+            <Button
+              variant="ink"
+              size="sm"
+              disabled={files.length === 0 || submitting}
+              onClick={onUpload}
+            >
+              {submitting ? "Reading…" : "Hand it over"}
+              {!submitting && <ArrowRight className="size-3.5" />}
+            </Button>
+          )}
+        </div>
       </div>
-    </>
+    </section>
   );
 }

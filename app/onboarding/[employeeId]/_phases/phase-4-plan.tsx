@@ -54,9 +54,9 @@ export function Phase4Plan({ employeeId }: { employeeId: string }) {
   }, [employeeId, setPlanStore]);
 
   return (
-    <>
-      <section className="min-h-screen flex items-center justify-center px-6 py-24">
-        <div className="w-full max-w-[720px] flex flex-col items-center text-center gap-8">
+    <section className="min-h-screen flex items-center justify-center px-6 py-12">
+      <div className="w-full max-w-[820px] bg-white border border-paper-edge rounded-lg shadow-[0_2px_12px_rgba(31,29,26,0.06)] flex flex-col min-h-[600px]">
+        <div className="flex-1 p-10 lg:p-12 flex flex-col items-center text-center gap-7">
           <span className="text-[11px] uppercase tracking-[0.18em] text-ink-faint font-medium">
             Phase 4 · Your action plan
           </span>
@@ -85,26 +85,28 @@ export function Phase4Plan({ employeeId }: { employeeId: string }) {
             </div>
           )}
         </div>
-      </section>
 
-      <div className="fixed bottom-6 right-6 flex items-center gap-3 font-sans text-[11px] text-ink-faint z-30">
-        <span className="tabular-nums uppercase tracking-[0.14em]">4 / 6</span>
-        <span className="opacity-40">·</span>
-        <Button
-          variant="ink"
-          size="sm"
-          disabled={!plan}
-          onClick={async () => {
-            if (!plan) return;
-            await persistPlan(employeeId, plan);
-            setPhase(5);
-          }}
-        >
-          Looks good — let me approve
-          <ArrowRight className="size-3.5" />
-        </Button>
+        <div className="shrink-0 px-10 lg:px-12 py-5 border-t border-paper-edge flex items-center justify-between gap-3">
+          <span className="text-[12px] text-ink-faint" aria-hidden />
+          <span className="tabular-nums uppercase tracking-[0.14em] text-[12px] text-ink-faint">
+            4 / 6
+          </span>
+          <Button
+            variant="ink"
+            size="sm"
+            disabled={!plan}
+            onClick={async () => {
+              if (!plan) return;
+              await persistPlan(employeeId, plan);
+              setPhase(5);
+            }}
+          >
+            Looks good
+            <ArrowRight className="size-3.5" />
+          </Button>
+        </div>
       </div>
-    </>
+    </section>
   );
 }
 
