@@ -33,14 +33,17 @@ export function LandingNav() {
           : "border-b border-transparent",
       )}
     >
-      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
-        <a href="#top" className="serif text-[18px] tracking-[-0.01em] text-ink">
+      <div className="max-w-6xl mx-auto px-6 h-14 grid grid-cols-[1fr_auto_1fr] items-center gap-6">
+        <a
+          href="#top"
+          className="serif text-[18px] tracking-[-0.01em] text-ink justify-self-start"
+        >
           Aluqos
         </a>
 
         <nav
           aria-label="Primary"
-          className="hidden lg:flex items-center gap-8 text-[13px] text-ink-muted"
+          className="hidden lg:flex items-center justify-self-center gap-8 text-[13px] text-ink-muted"
         >
           {NAV_LINKS.map(link => (
             <a
@@ -53,7 +56,7 @@ export function LandingNav() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-5 justify-self-end">
           <a
             href="#"
             className="hidden sm:inline-block text-[13px] text-ink-faint hover:text-ink transition-colors duration-200"
