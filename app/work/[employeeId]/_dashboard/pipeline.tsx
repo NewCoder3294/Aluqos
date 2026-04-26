@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { cn } from "@/src/lib/cn";
+import { Card, CardHeader, CardTitle, CardContent } from "@/src/components/ui/card";
 
 type PipelineCard = {
   id: string;
@@ -85,18 +86,18 @@ const COLUMNS: PipelineColumn[] = [
 
 export function Pipeline({ employeeId }: { employeeId: string }) {
   return (
-    <section>
-      <div className="flex items-baseline justify-between mb-4">
-        <h2 className="serif text-[22px] tracking-[-0.01em] text-ink">Pipeline</h2>
+    <Card>
+      <CardHeader>
+        <CardTitle>Pipeline</CardTitle>
         <button
           type="button"
           className="text-[11.5px] uppercase tracking-[0.12em] text-ink-faint hover:text-coral-deep transition-colors"
         >
           View all →
         </button>
-      </div>
-
-      <div className="grid grid-cols-5 gap-4">
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-5 gap-4">
         {COLUMNS.map((col) => (
           <div key={col.id} className="flex flex-col">
             <div className="flex items-center gap-2 mb-3 px-1">
@@ -154,7 +155,8 @@ export function Pipeline({ employeeId }: { employeeId: string }) {
             </div>
           </div>
         ))}
-      </div>
-    </section>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
