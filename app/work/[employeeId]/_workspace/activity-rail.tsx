@@ -81,19 +81,19 @@ export function ActivityRail() {
   return (
     <Card tone="default" className="flex flex-col h-full">
       <Tabs defaultValue="activity" className="flex flex-col flex-1 min-h-0">
-        <div className="px-3 pt-2 bg-paper-hi border-b border-paper-edge">
-          <TabsList className="border-b-0 -mb-px">
-            <TabsTrigger value="activity" className="px-2">
-              Activity
+        <div className="px-2 pt-2 bg-paper-hi border-b border-paper-edge">
+          <TabsList className="border-b-0 -mb-px gap-0">
+            <TabsTrigger value="activity" className="px-1.5">
+              <TabLabel label="Activity" />
             </TabsTrigger>
-            <TabsTrigger value="comments" count={1} className="px-2">
-              Comments
+            <TabsTrigger value="comments" className="px-1.5">
+              <TabLabel label="Comments" count={1} />
             </TabsTrigger>
-            <TabsTrigger value="versions" count={3} className="px-2">
-              Versions
+            <TabsTrigger value="versions" className="px-1.5">
+              <TabLabel label="Versions" count={3} />
             </TabsTrigger>
-            <TabsTrigger value="tasks" count={tasks.filter(t => !t.done).length} className="px-2">
-              Tasks
+            <TabsTrigger value="tasks" className="px-1.5">
+              <TabLabel label="Tasks" count={tasks.filter(t => !t.done).length} />
             </TabsTrigger>
           </TabsList>
         </div>
@@ -234,6 +234,19 @@ function FeedGroup({ label, items }: { label: string; items: FeedItem[] }) {
         ))}
       </ul>
     </div>
+  );
+}
+
+function TabLabel({ label, count }: { label: string; count?: number }) {
+  return (
+    <span className="inline-flex items-baseline gap-1">
+      <span>{label}</span>
+      {typeof count === "number" && (
+        <span className="text-[9px] tabular-nums px-1 py-0.5 rounded bg-paper-edge text-ink-faint leading-none tracking-normal normal-case">
+          {count}
+        </span>
+      )}
+    </span>
   );
 }
 

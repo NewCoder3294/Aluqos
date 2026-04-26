@@ -48,7 +48,7 @@ export function PrdSection({
   const showEdit = !streaming && !isEmpty;
 
   return (
-    <Card tone="default">
+    <Card tone="default" className="min-h-[220px]">
       <CardHeader>
         <h3 className="serif text-[12px] uppercase tracking-[0.14em] text-coral-deep">
           {LABELS[sectionKey] ?? sectionKey}
@@ -70,7 +70,7 @@ export function PrdSection({
           <Badge variant="outline">Pending</Badge>
         )}
       </CardHeader>
-      <CardContent compact className="!p-7">
+      <CardContent compact className="!p-10">
         {showSkeleton ? (
           <div className="space-y-2 py-1" aria-label="Loading section content">
             <div className="h-3 rounded w-full bg-gradient-to-r from-paper-hi via-paper-edge/40 to-paper-hi animate-pulse" />

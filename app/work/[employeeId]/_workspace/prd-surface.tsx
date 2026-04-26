@@ -86,40 +86,46 @@ export function PrdSurface({
     <>
       {/* Center column — work surface */}
       <section className="h-full overflow-y-auto bg-paper">
-        <div className="px-6 py-5 space-y-4 max-w-[920px] mx-auto">
-          <KpiStrip />
+        <div className="px-6 py-5 max-w-[920px] mx-auto">
+          {/* KPI strip + PRD header are visually a unit — keep tight gap */}
+          <div className="space-y-4">
+            <KpiStrip />
 
-          <PrdHeader
-            title={ws.title}
-            sourceIssue={latest?.source_issue ?? null}
-            isStreaming={isStreaming}
-            sectionsComplete={sectionsComplete}
-            totalSections={SECTION_ORDER.length}
-          />
-
-          <SectionProgressStrip
-            sections={ws.sections}
-            streamingSection={ws.streamingSection}
-          />
-
-          <div className="space-y-3">
-            {SECTION_ORDER.map(k => (
-              <PrdSection
-                key={k}
-                sectionKey={k}
-                text={ws.sections[k] ?? ""}
-                streaming={ws.streamingSection === k}
-                onCommit={(newText) => {
-                  ws.appendSection(k, "");
-                  if (ws.prdId) persistPrdEdit(ws.prdId, k, newText);
-                }}
-              />
-            ))}
+            <PrdHeader
+              title={ws.title}
+              sourceIssue={latest?.source_issue ?? null}
+              isStreaming={isStreaming}
+              sectionsComplete={sectionsComplete}
+              totalSections={SECTION_ORDER.length}
+            />
           </div>
 
-          <div className="space-y-3 pt-1">
-            <RefineCard />
-            <SendCard />
+          {/* Distinct zones below — generous gap between regions */}
+          <div className="mt-10 space-y-10">
+            <SectionProgressStrip
+              sections={ws.sections}
+              streamingSection={ws.streamingSection}
+            />
+
+            <div className="space-y-7">
+              {SECTION_ORDER.map(k => (
+                <PrdSection
+                  key={k}
+                  sectionKey={k}
+                  text={ws.sections[k] ?? ""}
+                  streaming={ws.streamingSection === k}
+                  onCommit={(newText) => {
+                    ws.appendSection(k, "");
+                    if (ws.prdId) persistPrdEdit(ws.prdId, k, newText);
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className="space-y-7">
+              <RefineCard />
+              <SendCard />
+            </div>
           </div>
         </div>
       </section>

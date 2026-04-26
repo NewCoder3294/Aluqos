@@ -27,7 +27,7 @@ export function PrdHeader({
 
   return (
     <Card tone="primary">
-      <CardContent className="space-y-4 !p-8">
+      <CardContent className="space-y-6 !p-8">
         <div className="flex items-start justify-between gap-3">
           <Serif as="h2" className="text-[24px] leading-tight text-ink truncate">
             {title || "Drafting…"}
@@ -49,7 +49,7 @@ export function PrdHeader({
         </div>
 
         {/* Properties table */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
           <PropRow label="Status">
             {isStreaming ? (
               <Badge variant="coral">
