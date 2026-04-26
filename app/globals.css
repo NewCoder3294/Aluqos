@@ -25,3 +25,24 @@ html, body { background: var(--color-paper); }
   50% { opacity: 0.5; transform: scale(1.4); }
 }
 .pulse-coral { animation: pulse-coral 1.6s infinite; }
+
+/* Slow ambient breathing for the final CTA card. coral/3 → coral/6 → coral/3 */
+@keyframes cta-breathe {
+  0%, 100% { background-color: rgba(196, 100, 73, 0.03); }
+  50%      { background-color: rgba(196, 100, 73, 0.06); }
+}
+.cta-breathe { animation: cta-breathe 8s ease-in-out infinite; }
+
+/* Respect reduced-motion across all keyframe animations. */
+@media (prefers-reduced-motion: reduce) {
+  .pulse-coral,
+  .cta-breathe {
+    animation: none !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

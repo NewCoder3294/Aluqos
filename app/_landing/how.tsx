@@ -1,6 +1,10 @@
+"use client";
+
+import { motion } from "motion/react";
 import { Serif } from "@/src/components/serif";
 import { Card, CardContent } from "@/src/components/ui/card";
 import { FileText, Hash } from "lucide-react";
+import { EASE, Reveal } from "./motion-primitives";
 
 function StepDescribeVisual() {
   return (
@@ -125,42 +129,86 @@ const STEPS = [
   },
 ];
 
+/**
+ * Subtle horizontal coral hairline behind the 3 step cards (desktop only).
+ * Animates pathLength 0 → 1 over 1.2s when scrolled into view.
+ */
+function ConnectorLine() {
+  return (
+    <svg
+      aria-hidden
+      className="hidden lg:block absolute left-0 right-0 top-[80px] w-full h-px pointer-events-none"
+      viewBox="0 0 100 1"
+      preserveAspectRatio="none"
+    >
+      <motion.line
+        x1="6"
+        x2="94"
+        y1="0.5"
+        y2="0.5"
+        stroke="var(--color-coral)"
+        strokeWidth="0.4"
+        strokeOpacity="0.35"
+        strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        whileInView={{ pathLength: 1 }}
+        viewport={{ once: true, margin: "-20%" }}
+        transition={{ duration: 1.2, ease: EASE }}
+      />
+    </svg>
+  );
+}
+
 export function LandingHow() {
   return (
     <section id="how" className="max-w-6xl mx-auto px-6 py-24 lg:py-32">
-      <div className="text-[12px] tracking-[0.14em] uppercase text-[--color-coral-deep] font-medium">
-        How it works
-      </div>
-      <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[20ch]">
-        Like onboarding{" "}
-        <span className="italic text-[--color-ink-faint]">a smart intern.</span>
-      </h2>
+      <Reveal>
+        <div className="text-[12px] tracking-[0.14em] uppercase text-[--color-coral-deep] font-medium">
+          How it works
+        </div>
+      </Reveal>
+      <Reveal delay={0.05}>
+        <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[20ch]">
+          Like onboarding{" "}
+          <span className="italic text-[--color-ink-faint]">a smart intern.</span>
+        </h2>
+      </Reveal>
 
-      <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {STEPS.map(s => {
+      <div className="relative mt-12 grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <ConnectorLine />
+        {STEPS.map((s, i) => {
           const Visual = s.Visual;
           return (
-            <Card key={s.n} className="flex flex-col">
-              <CardContent className="flex flex-col gap-4">
-                <div className="serif text-[36px] leading-none text-[--color-coral-deep] tracking-[-0.02em]">
-                  {s.n}
-                </div>
-                <div>
-                  <Serif as="h3" className="text-[22px] leading-tight">
-                    {s.title}
-                  </Serif>
-                  <div className="serif italic text-[14px] text-[--color-ink-muted] mt-1.5 leading-snug">
-                    {s.italic}
+            <motion.div
+              key={s.n}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: EASE }}
+              className="flex"
+            >
+              <Card className="flex flex-col w-full">
+                <CardContent className="flex flex-col gap-4">
+                  <div className="serif text-[36px] leading-none text-[--color-coral-deep] tracking-[-0.02em]">
+                    {s.n}
                   </div>
-                </div>
-                <p className="text-[14px] leading-[1.65] text-[--color-ink-muted]">
-                  {s.body}
-                </p>
-                <div className="mt-auto pt-2">
-                  <Visual />
-                </div>
-              </CardContent>
-            </Card>
+                  <div>
+                    <Serif as="h3" className="text-[22px] leading-tight">
+                      {s.title}
+                    </Serif>
+                    <div className="serif italic text-[14px] text-[--color-ink-muted] mt-1.5 leading-snug">
+                      {s.italic}
+                    </div>
+                  </div>
+                  <p className="text-[14px] leading-[1.65] text-[--color-ink-muted]">
+                    {s.body}
+                  </p>
+                  <div className="mt-auto pt-2">
+                    <Visual />
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           );
         })}
       </div>

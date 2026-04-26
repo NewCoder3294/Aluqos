@@ -1,3 +1,7 @@
+"use client";
+
+import { Reveal } from "./motion-primitives";
+
 const PRODUCT_LINKS: Array<{ href: string; label: string }> = [
   { href: "#roles", label: "Roles" },
   { href: "#pricing", label: "Pricing" },
@@ -15,28 +19,30 @@ const COMPANY_LINKS: Array<{ href: string; label: string }> = [
 export function LandingFooter() {
   return (
     <footer className="border-t border-[--color-paper-edge]">
-      <div className="max-w-6xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div>
-            <div className="serif text-[20px] tracking-[-0.01em] text-[--color-ink]">
-              Saathi
+      <Reveal fade duration={0.7}>
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div>
+              <div className="serif text-[20px] tracking-[-0.01em] text-[--color-ink]">
+                Saathi
+              </div>
+              <p className="mt-3 max-w-[36ch] text-[14px] leading-[1.6] text-[--color-ink-muted]">
+                AI employees that learn how you work.
+              </p>
+              <p className="mt-6 text-[12px] text-[--color-ink-faint]">
+                &copy; 2026 Saathi Labs, Inc.
+              </p>
             </div>
-            <p className="mt-3 max-w-[36ch] text-[14px] leading-[1.6] text-[--color-ink-muted]">
-              AI employees that learn how you work.
-            </p>
-            <p className="mt-6 text-[12px] text-[--color-ink-faint]">
-              &copy; 2026 Saathi Labs, Inc.
-            </p>
+
+            <FooterColumn title="Product" links={PRODUCT_LINKS} />
+            <FooterColumn title="Company" links={COMPANY_LINKS} />
           </div>
 
-          <FooterColumn title="Product" links={PRODUCT_LINKS} />
-          <FooterColumn title="Company" links={COMPANY_LINKS} />
+          <div className="mt-12 pt-6 border-t border-[--color-paper-edge] text-[12px] italic text-[--color-ink-faint] serif">
+            Made in San Francisco
+          </div>
         </div>
-
-        <div className="mt-12 pt-6 border-t border-[--color-paper-edge] text-[12px] italic text-[--color-ink-faint] serif">
-          Made in San Francisco
-        </div>
-      </div>
+      </Reveal>
     </footer>
   );
 }

@@ -1,6 +1,10 @@
+"use client";
+
+import { motion } from "motion/react";
 import { Check, X } from "lucide-react";
 import { Serif } from "@/src/components/serif";
 import { Card } from "@/src/components/ui/card";
+import { EASE, Reveal } from "./motion-primitives";
 
 const ROWS: Array<{ old: string; saathi: string }> = [
   { old: "Human learns prompts", saathi: "AI learns how YOU work" },
@@ -14,64 +18,97 @@ export function LandingFlip() {
   return (
     <section className="bg-[--color-paper-hi]/40 border-y border-[--color-paper-edge]">
       <div className="max-w-6xl mx-auto px-6 py-24 lg:py-32">
-        <div className="text-[12px] tracking-[0.14em] uppercase text-[--color-coral-deep] font-medium">
-          The flip
-        </div>
-        <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[20ch]">
-          We invert the model.{" "}
-          <span className="italic text-[--color-ink-faint]">The AI upskills itself.</span>
-        </h2>
-        <p className="mt-6 max-w-[60ch] text-[17px] leading-[1.6] text-[--color-ink-muted]">
-          Saathi flips the burden. Instead of teaching people to talk to AI, we
-          teach AI to learn from people &mdash; their tools, their patterns, their
-          taste. The way a new colleague would.
-        </p>
+        <Reveal>
+          <div className="text-[12px] tracking-[0.14em] uppercase text-[--color-coral-deep] font-medium">
+            The flip
+          </div>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[20ch]">
+            We invert the model.{" "}
+            <span className="italic text-[--color-ink-faint]">The AI upskills itself.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="mt-6 max-w-[60ch] text-[17px] leading-[1.6] text-[--color-ink-muted]">
+            Saathi flips the burden. Instead of teaching people to talk to AI, we
+            teach AI to learn from people &mdash; their tools, their patterns, their
+            taste. The way a new colleague would.
+          </p>
+        </Reveal>
 
-        <Card className="mt-12 overflow-hidden">
-          {/* Header row */}
-          <div className="grid grid-cols-2 border-b border-[--color-paper-edge] bg-white">
-            <div className="px-6 py-4 border-r border-[--color-paper-edge]">
-              <div className="text-[11px] uppercase tracking-[0.14em] text-[--color-ink-faint]">
-                Old AI tools
+        <Reveal delay={0.15}>
+          <Card className="mt-12 overflow-hidden">
+            {/* Header row */}
+            <div className="grid grid-cols-2 border-b border-[--color-paper-edge] bg-white">
+              <div className="px-6 py-4 border-r border-[--color-paper-edge]">
+                <div className="text-[11px] uppercase tracking-[0.14em] text-[--color-ink-faint]">
+                  Old AI tools
+                </div>
+              </div>
+              <div className="px-6 py-4">
+                <Serif className="text-[18px] text-[--color-coral-deep]">Saathi</Serif>
               </div>
             </div>
-            <div className="px-6 py-4">
-              <Serif className="text-[18px] text-[--color-coral-deep]">Saathi</Serif>
-            </div>
-          </div>
 
-          <ul>
-            {ROWS.map((row, i) => (
-              <li
-                key={row.old}
-                className={
-                  "grid grid-cols-2 transition-colors duration-200 hover:bg-[--color-paper-hi]/40 " +
-                  (i < ROWS.length - 1
-                    ? "border-b border-[--color-paper-edge]"
-                    : "")
-                }
-              >
-                <div className="px-6 py-5 border-r border-[--color-paper-edge] flex items-start gap-3 text-[--color-ink-muted]">
-                  <X
-                    className="w-4 h-4 mt-0.5 shrink-0 text-[--color-ink-faint]"
-                    aria-hidden
-                  />
-                  <span className="text-[15px] leading-snug">{row.old}</span>
-                </div>
-                <div className="px-6 py-5 flex items-start gap-3 text-[--color-ink]">
-                  <Check
-                    className="w-4 h-4 mt-0.5 shrink-0 text-[--color-coral-deep]"
-                    aria-hidden
-                  />
-                  <span className="serif text-[16px] leading-snug">
-                    {row.saathi}
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Card>
+            <ul>
+              {ROWS.map((row, i) => (
+                <FlipRow
+                  key={row.old}
+                  row={row}
+                  index={i}
+                  last={i === ROWS.length - 1}
+                />
+              ))}
+            </ul>
+          </Card>
+        </Reveal>
       </div>
     </section>
+  );
+}
+
+function FlipRow({
+  row,
+  index,
+  last,
+}: {
+  row: { old: string; saathi: string };
+  index: number;
+  last: boolean;
+}) {
+  return (
+    <motion.li
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: EASE }}
+      whileHover="hover"
+      className={
+        "group grid grid-cols-2 transition-colors duration-200 hover:bg-[--color-coral]/[0.05] " +
+        (!last ? "border-b border-[--color-paper-edge]" : "")
+      }
+    >
+      <div className="px-6 py-5 border-r border-[--color-paper-edge] flex items-start gap-3 text-[--color-ink-muted]">
+        <X
+          className="w-4 h-4 mt-0.5 shrink-0 text-[--color-ink-faint]"
+          aria-hidden
+        />
+        <span className="text-[15px] leading-snug">{row.old}</span>
+      </div>
+      <div className="px-6 py-5 flex items-start gap-3 text-[--color-ink]">
+        <motion.span
+          variants={{ hover: { x: 4 } }}
+          transition={{ duration: 0.25, ease: EASE }}
+          className="shrink-0"
+        >
+          <Check
+            className="w-4 h-4 mt-0.5 text-[--color-coral-deep]"
+            aria-hidden
+          />
+        </motion.span>
+        <span className="serif text-[16px] leading-snug">{row.saathi}</span>
+      </div>
+    </motion.li>
   );
 }

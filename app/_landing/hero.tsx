@@ -1,36 +1,47 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
 import { hireProductManager } from "@/src/server/hire";
-import { Serif } from "@/src/components/serif";
 import { Button } from "@/src/components/ui/button";
 import { WorkspaceMockup } from "./workspace-mockup";
 import { DemoDialog } from "./demo-dialog";
+import { EASE, Reveal } from "./motion-primitives";
 
 export function LandingHero() {
+  const reduced = useReducedMotion() ?? false;
+
   return (
     <section
       id="top"
-      className="relative max-w-6xl mx-auto px-6 pt-14 lg:pt-24 pb-16 lg:pb-24"
+      className="relative pt-24 pb-8 lg:pt-32 lg:pb-12"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-[44fr_56fr] gap-10 lg:gap-14 items-center">
-        {/* Left: copy */}
-        <div>
+      {/* Centered text block */}
+      <div className="max-w-[800px] mx-auto px-6 text-center">
+        <Reveal>
           <div className="text-[12px] tracking-[0.14em] uppercase text-[--color-coral-deep] font-medium">
             AI Employees that learn
           </div>
+        </Reveal>
 
-          <h1 className="serif mt-5 text-[clamp(44px,7vw,80px)] leading-[1.05] tracking-[-0.02em] text-[--color-ink]">
+        <Reveal delay={0.05}>
+          <h1 className="serif mt-6 text-[clamp(56px,8vw,96px)] leading-[1.02] tracking-[-0.025em] text-[--color-ink]">
             AI employees that learn how you work.{" "}
             <span className="italic text-[--color-ink-faint] block">
               Not the other way around.
             </span>
           </h1>
+        </Reveal>
 
-          <p className="mt-7 max-w-[56ch] text-[18px] lg:text-[20px] leading-[1.55] text-[--color-ink-muted]">
+        <Reveal delay={0.1}>
+          <p className="mt-7 mx-auto max-w-[56ch] text-[18px] lg:text-[20px] leading-[1.55] text-[--color-ink-muted]">
             Build AI employees in minutes. No prompts, no engineers, no
             upskilling &mdash; they shadow how you work and start contributing on
             day one.
           </p>
+        </Reveal>
 
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+        <Reveal delay={0.15}>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <form action={hireProductManager}>
               <Button variant="ink" size="lg" type="submit">
                 Get early access
@@ -38,23 +49,31 @@ export function LandingHero() {
             </form>
             <DemoDialog />
           </div>
+        </Reveal>
 
-          <p className="mt-6 text-[12px] text-[--color-ink-faint]">
-            Backed by YC &middot; 12 design partners onboarding now
+        <Reveal delay={0.2}>
+          <p className="mt-6 text-[12.5px] text-[--color-ink-faint]">
+            Trusted by teams at Nike, T-Mobile, Shipd, and HPE
           </p>
-        </div>
+        </Reveal>
+      </div>
 
-        {/* Right: product mockup */}
-        <div
+      {/* Mockup — full width, big, breathing */}
+      <div className="mt-16 lg:mt-20 max-w-[1280px] mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: reduced ? 0 : 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-10%" }}
+          transition={{ duration: reduced ? 0 : 0.8, delay: reduced ? 0 : 0.15, ease: EASE }}
           aria-hidden
           className="pointer-events-none select-none"
         >
           <div className="relative">
             {/* soft paper backdrop behind the screenshot */}
-            <div className="absolute -inset-6 bg-[--color-paper-hi] rounded-2xl -z-10" />
+            <div className="absolute -inset-6 lg:-inset-8 bg-[--color-paper-hi] rounded-2xl -z-10" />
             <WorkspaceMockup />
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
