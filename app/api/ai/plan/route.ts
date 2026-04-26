@@ -7,7 +7,7 @@ import {
   ActionPlan,
 } from "@/src/ai/prompts/propose-action-plan";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   const input = (await req.json()) as ActionPlanInput;
@@ -25,6 +25,8 @@ export async function POST(req: NextRequest) {
       headers: { "content-type": "text/plain; charset=utf-8" },
     });
   };
+
+  if (!process.env.ANTHROPIC_API_KEY) return canned();
 
   try {
     return await withFallback({ ttfbMs: 10000, live, canned });

@@ -1,6 +1,6 @@
 import { fetchWorkspaceState } from "@/src/server/run-prd";
+import { fakeEmployee } from "@/src/db/client";
 import { WorkspaceClient } from "./workspace-client";
-import { notFound } from "next/navigation";
 
 export default async function WorkPage({
   params,
@@ -11,11 +11,18 @@ export default async function WorkPage({
 }) {
   const { employeeId } = await params;
   const sp = await searchParams;
-  const state = await fetchWorkspaceState(employeeId);
-  if (!state.emp) notFound();
+
+  let state;
+  try {
+    state = await fetchWorkspaceState(employeeId);
+  } catch {
+    state = { emp: { ...fakeEmployee(), id: employeeId }, session: null, uploads: [], prds: [] };
+  }
+  const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
+
   return (
     <WorkspaceClient
-      employee={state.emp}
+      employee={emp}
       uploads={state.uploads}
       prds={state.prds}
       actionPlan={state.session?.action_plan ?? null}
