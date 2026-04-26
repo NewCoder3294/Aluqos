@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useWorkspace, type PrdSectionKey } from "@/src/store/workspace";
 import { persistPrdEdit } from "@/src/server/run-prd";
+import { Button } from "@/src/components/ui/button";
 
 const PRESETS = ["Add API spec", "Write engineering tickets", "Simplify", "Tighten scope"];
 
@@ -47,12 +48,15 @@ export function FollowUps({ employeeId }: { employeeId: string }) {
     <div className="space-y-3 pt-4">
       <div className="flex gap-2 flex-wrap">
         {PRESETS.map(p => (
-          <button
+          <Button
             key={p}
+            variant="outline"
+            size="chip"
             disabled={busy}
             onClick={() => refine(p)}
-            className="text-[12px] px-3 py-1.5 rounded-full border border-[--color-paper-edge] hover:border-[--color-coral] disabled:opacity-50"
-          >{p}</button>
+          >
+            {p}
+          </Button>
         ))}
       </div>
       <div className="flex gap-2">
@@ -63,11 +67,14 @@ export function FollowUps({ employeeId }: { employeeId: string }) {
           className="flex-1 bg-white border border-[--color-paper-edge] rounded px-3 py-2 text-[13px] focus:outline-none focus:border-[--color-coral]"
           onKeyDown={e => { if (e.key === "Enter" && custom.trim()) refine(custom.trim()); }}
         />
-        <button
+        <Button
+          variant="ink"
+          size="md"
           onClick={() => custom.trim() && refine(custom.trim())}
           disabled={busy || !custom.trim()}
-          className="px-4 py-2 text-[12px] uppercase tracking-[0.1em] text-[--color-paper] bg-[--color-ink] disabled:opacity-50"
-        >Send</button>
+        >
+          Send
+        </Button>
       </div>
     </div>
   );

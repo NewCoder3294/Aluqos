@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Serif } from "@/src/components/serif";
+import { Button } from "@/src/components/ui/button";
 import { useWalkthrough } from "@/src/store/walkthrough";
 import { startWorking } from "@/src/server/start-working";
 import type { ActionItem } from "@/src/ai/prompts/propose-action-plan";
@@ -57,11 +58,17 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
                   <div className="text-[12.5px] text-[--color-ink-faint] mt-1 italic">{it.rationale}</div>
                   <div className="flex gap-1 mt-2">
                     {(["approved","modified","removed"] as const).map(opt => (
-                      <button
+                      <Button
                         key={opt}
+                        variant="ghost"
+                        size="sm"
+                        aria-pressed={state === opt}
+                        data-state={state === opt ? "active" : "inactive"}
                         onClick={() => setApproval(k, opt)}
-                        className={`text-[11px] uppercase tracking-[0.1em] px-2 py-1 rounded ${state === opt ? "bg-[--color-ink] text-[--color-paper]" : "text-[--color-ink-faint]"}`}
-                      >{opt}</button>
+                        className={state === opt ? "bg-[--color-ink] text-[--color-paper] hover:bg-[--color-ink] hover:text-[--color-paper]" : ""}
+                      >
+                        {opt}
+                      </Button>
                     ))}
                   </div>
                 </li>
@@ -75,11 +82,15 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
         <div className="label">Autonomy</div>
         <div className="flex gap-2">
           {AUTONOMY.map(a => (
-            <button
+            <Button
               key={a.val}
+              variant={autonomy === a.val ? "ink" : "outline"}
+              size="chip"
+              aria-pressed={autonomy === a.val}
               onClick={() => setAutonomy(a.val)}
-              className={`px-3 py-1.5 text-[12px] rounded border ${autonomy === a.val ? "bg-[--color-ink] text-[--color-paper] border-[--color-ink]" : "border-[--color-paper-edge]"}`}
-            >{a.label}</button>
+            >
+              {a.label}
+            </Button>
           ))}
         </div>
       </div>
@@ -89,16 +100,17 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
       </p>
 
       <div className="flex justify-end">
-        <button
+        <Button
+          variant="ink"
+          size="lg"
           disabled={submitting}
           onClick={async () => {
             setSubmitting(true);
             await startWorking(employeeId, approvals, autonomy, mods);
           }}
-          className="px-7 py-3 text-[12px] uppercase tracking-[0.12em] text-[--color-paper] bg-[--color-ink] disabled:opacity-50"
         >
           {submitting ? "Starting…" : "Start working"}
-        </button>
+        </Button>
       </div>
     </section>
   );

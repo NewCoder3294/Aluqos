@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Dropzone } from "@/src/components/dropzone";
 import { Serif } from "@/src/components/serif";
+import { Button } from "@/src/components/ui/button";
 import { useWalkthrough } from "@/src/store/walkthrough";
 import { submitBrief, BriefData } from "@/src/server/onboarding-actions";
 import { seedDemoFixture } from "@/src/server/seed-demo-fixture";
@@ -61,14 +62,12 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
           onKeyDown={e => { if (e.key === "Enter") setStepIdx(stepIdx + 1); }}
         />
         <div className="flex justify-between items-center">
-          <button
-            onClick={() => setStepIdx(Math.max(0, stepIdx - 1))}
-            className="text-[12px] uppercase tracking-[0.12em] text-[--color-ink-faint]"
-          >Back</button>
-          <button
-            onClick={() => setStepIdx(stepIdx + 1)}
-            className="px-5 py-2 text-[12px] uppercase tracking-[0.12em] text-[--color-paper] bg-[--color-ink]"
-          >Next</button>
+          <Button variant="quiet" size="sm" onClick={() => setStepIdx(Math.max(0, stepIdx - 1))}>
+            Back
+          </Button>
+          <Button variant="ink" size="md" onClick={() => setStepIdx(stepIdx + 1)}>
+            Next
+          </Button>
         </div>
       </section>
     );
@@ -85,28 +84,32 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
         </ul>
       )}
       {showDemo && (
-        <button
+        <Button
+          variant="quiet"
+          size="sm"
           onClick={async () => {
             setSubmitting(true);
             await seedDemoFixture(employeeId);
             setPhase(2);
             setSubmitting(false);
           }}
-          className="text-[11px] underline text-[--color-ink-faint] mt-4"
-        >Use demo data</button>
+          className="mt-4 underline normal-case tracking-normal text-[11px]"
+        >
+          Use demo data
+        </Button>
       )}
       <div className="flex justify-between items-center pt-2">
-        <button
-          onClick={() => setStepIdx(STEPS.length - 1)}
-          className="text-[12px] uppercase tracking-[0.12em] text-[--color-ink-faint]"
-        >Back</button>
-        <button
+        <Button variant="quiet" size="sm" onClick={() => setStepIdx(STEPS.length - 1)}>
+          Back
+        </Button>
+        <Button
+          variant="ink"
+          size="md"
           disabled={files.length === 0 || submitting}
           onClick={onUpload}
-          className="px-5 py-2 text-[12px] uppercase tracking-[0.12em] text-[--color-paper] bg-[--color-ink] disabled:opacity-50"
         >
           {submitting ? "Reading…" : "Hand it over"}
-        </button>
+        </Button>
       </div>
     </section>
   );

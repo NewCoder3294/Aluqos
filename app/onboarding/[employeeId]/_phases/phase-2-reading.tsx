@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Serif } from "@/src/components/serif";
 import { TypewriterLine } from "@/src/components/typewriter-line";
+import { Button } from "@/src/components/ui/button";
 import { useWalkthrough } from "@/src/store/walkthrough";
 import { fetchOnboardingForUnderstand, persistUnderstood } from "@/src/server/run-understand";
 
@@ -73,14 +74,16 @@ export function Phase2Reading({ employeeId }: { employeeId: string }) {
       <SummaryBlock label="How you communicate" value={understood.how_you_communicate} editable={editMode} onChange={v => setUnderstood({ ...understood, how_you_communicate: v })} />
 
       <div className="flex gap-3 pt-4">
-        <button
+        <Button
+          variant="ink"
+          size="md"
           onClick={async () => { await persistUnderstood(employeeId, understood); setPhase(3); }}
-          className="px-5 py-2 text-[12px] uppercase tracking-[0.12em] text-[--color-paper] bg-[--color-ink]"
-        >That's right, keep going</button>
-        <button
-          onClick={() => setEditMode(true)}
-          className="px-5 py-2 text-[12px] uppercase tracking-[0.12em] border border-[--color-paper-edge]"
-        >Let me correct this</button>
+        >
+          That&apos;s right, keep going
+        </Button>
+        <Button variant="outline" size="md" onClick={() => setEditMode(true)}>
+          Let me correct this
+        </Button>
       </div>
     </section>
   );

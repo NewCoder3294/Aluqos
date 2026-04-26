@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Serif } from "@/src/components/serif";
 import { Dropzone } from "@/src/components/dropzone";
+import { Button } from "@/src/components/ui/button";
 import { useWalkthrough } from "@/src/store/walkthrough";
 import { updateOnboardingObservations } from "@/src/server/onboarding-actions";
 import { storeAndParseUpload } from "@/src/server/uploads";
@@ -75,8 +76,8 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
             onKeyDown={e => { if (e.key === "Enter") setStep(step + 1); }}
           />
         )}
-        <div className="flex justify-between">
-          <button onClick={() => setStep(Math.max(0, step - 1))} className="text-[12px] uppercase tracking-[0.12em] text-[--color-ink-faint]">Back</button>
+        <div className="flex justify-between items-center">
+          <Button variant="quiet" size="sm" onClick={() => setStep(Math.max(0, step - 1))}>Back</Button>
           <span className="label">{step + 1} / {total}</span>
         </div>
       </section>
@@ -101,9 +102,9 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
             </button>
           ))}
         </div>
-        <div className="flex justify-between">
-          <button onClick={() => setStep(step - 1)} className="text-[12px] uppercase tracking-[0.12em] text-[--color-ink-faint]">Back</button>
-          <button onClick={() => setStep(step + 1)} className="px-5 py-2 text-[12px] uppercase tracking-[0.12em] text-[--color-paper] bg-[--color-ink]">Next</button>
+        <div className="flex justify-between items-center">
+          <Button variant="quiet" size="sm" onClick={() => setStep(step - 1)}>Back</Button>
+          <Button variant="ink" size="md" onClick={() => setStep(step + 1)}>Next</Button>
         </div>
       </section>
     );
@@ -116,11 +117,11 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
         <p className="text-[14px] text-[--color-ink-muted]">Optional — but it's the fastest way for me to learn your bar.</p>
         <Dropzone onFiles={f => setSampleFile(f[0] ?? null)} multiple={false} />
         {sampleFile && <p className="text-[13px] text-[--color-ink-muted]">· {sampleFile.name}</p>}
-        <div className="flex justify-between">
-          <button onClick={() => setStep(step - 1)} className="text-[12px] uppercase tracking-[0.12em] text-[--color-ink-faint]">Back</button>
-          <button onClick={finish} disabled={submitting} className="px-5 py-2 text-[12px] uppercase tracking-[0.12em] text-[--color-paper] bg-[--color-ink] disabled:opacity-50">
+        <div className="flex justify-between items-center">
+          <Button variant="quiet" size="sm" onClick={() => setStep(step - 1)}>Back</Button>
+          <Button variant="ink" size="md" onClick={finish} disabled={submitting}>
             {submitting ? "Saving…" : "Show me what you'll do"}
-          </button>
+          </Button>
         </div>
       </section>
     );

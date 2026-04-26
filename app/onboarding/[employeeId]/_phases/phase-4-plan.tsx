@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Serif } from "@/src/components/serif";
 import { StatusPill } from "@/src/components/status-pill";
+import { Button } from "@/src/components/ui/button";
 import { useWalkthrough } from "@/src/store/walkthrough";
 import { fetchPlanInputs, persistPlan } from "@/src/server/run-plan";
 import type { ActionPlan, ActionItem } from "@/src/ai/prompts/propose-action-plan";
@@ -52,11 +53,14 @@ export function Phase4Plan({ employeeId }: { employeeId: string }) {
       )}
 
       <div className="flex justify-end pt-2">
-        <button
+        <Button
+          variant="ink"
+          size="md"
           disabled={!plan}
           onClick={async () => { if (!plan) return; await persistPlan(employeeId, plan); setPhase(5); }}
-          className="px-5 py-2 text-[12px] uppercase tracking-[0.12em] text-[--color-paper] bg-[--color-ink] disabled:opacity-50"
-        >Looks good — let me approve</button>
+        >
+          Looks good — let me approve
+        </Button>
       </div>
     </section>
   );

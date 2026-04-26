@@ -1,5 +1,6 @@
 import { hireProductManager } from "@/src/server/hire";
 import { Serif } from "@/src/components/serif";
+import { Button } from "@/src/components/ui/button";
 
 export default function Home() {
   return (
@@ -15,12 +16,9 @@ export default function Home() {
           </p>
         </div>
         <form action={hireProductManager}>
-          <button
-            type="submit"
-            className="px-7 py-3 rounded-sm text-[12px] uppercase tracking-[0.12em] text-[--color-paper] bg-[--color-ink] hover:bg-[--color-coral-deep] transition-colors"
-          >
+          <Button variant="ink" size="lg" type="submit">
             Hire an AI Product Manager
-          </button>
+          </Button>
         </form>
         <p className="label">More roles coming soon · Program Manager · Marketing</p>
       </div>
