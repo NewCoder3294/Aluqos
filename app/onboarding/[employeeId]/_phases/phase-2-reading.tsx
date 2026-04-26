@@ -6,6 +6,7 @@ import { TypewriterLine } from "@/src/components/typewriter-line";
 import { Button } from "@/src/components/ui/button";
 import { useWalkthrough } from "@/src/store/walkthrough";
 import { fetchOnboardingForUnderstand, persistUnderstood } from "@/src/server/run-understand";
+import { PhaseHeader, PhaseFooter } from "../_chrome/phase-header";
 
 type Understood = { project_context: string; role_and_priorities: string; how_you_communicate: string };
 
@@ -54,54 +55,124 @@ export function Phase2Reading({ employeeId }: { employeeId: string }) {
     })();
   }, [employeeId, setUnderstoodStore]);
 
-  if (!understood) {
-    return (
-      <section className="space-y-3">
-        {lines.map((l, i) => (
-          <div key={i} className="text-[15px] text-[--color-ink-muted]">
-            {i === lines.length - 1 ? <TypewriterLine text={l} /> : <span>· {l}</span>}
-          </div>
-        ))}
-      </section>
-    );
-  }
-
   return (
-    <section className="space-y-8">
-      <Serif as="h2" className="text-[28px]">Here's what I understood.</Serif>
-      <SummaryBlock label="Project context" value={understood.project_context} editable={editMode} onChange={v => setUnderstood({ ...understood, project_context: v })} />
-      <SummaryBlock label="Your role & priorities" value={understood.role_and_priorities} editable={editMode} onChange={v => setUnderstood({ ...understood, role_and_priorities: v })} />
-      <SummaryBlock label="How you communicate" value={understood.how_you_communicate} editable={editMode} onChange={v => setUnderstood({ ...understood, how_you_communicate: v })} />
+    <>
+      <PhaseHeader
+        phase={2}
+        title={understood ? "Here's what I understood." : "I'm reading everything."}
+        subtitle={
+          understood
+            ? "Confirm what landed. You can edit anything before we keep going."
+            : "Skimming your docs and picking up your style. This takes a moment."
+        }
+        estimate="~1 min"
+      />
 
-      <div className="flex gap-3 pt-4">
-        <Button
-          variant="ink"
-          size="md"
-          onClick={async () => { await persistUnderstood(employeeId, understood); setPhase(3); }}
-        >
-          That&apos;s right, keep going
-        </Button>
-        <Button variant="outline" size="md" onClick={() => setEditMode(true)}>
-          Let me correct this
-        </Button>
-      </div>
-    </section>
+      {!understood && (
+        <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
+          <div className="px-5 py-3 border-b border-[--color-paper-edge] flex items-center justify-between bg-[--color-paper-hi]">
+            <span className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+              Reading
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-[11px] text-[--color-coral-deep]">
+              <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[--color-coral] pulse-coral" />
+              live
+            </span>
+          </div>
+          <ol className="px-6 py-5 space-y-2">
+            {lines.map((l, i) => (
+              <li
+                key={i}
+                className={
+                  "text-[14px] leading-relaxed " +
+                  (i === lines.length - 1 ? "text-[--color-ink]" : "text-[--color-ink-muted]")
+                }
+              >
+                {i === lines.length - 1 ? (
+                  <TypewriterLine text={l} />
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <span aria-hidden className="text-[--color-coral]">✓</span>
+                    {l}
+                  </span>
+                )}
+              </li>
+            ))}
+            {lines.length === 0 && (
+              <li className="text-[13px] text-[--color-ink-faint] italic">Opening your docs…</li>
+            )}
+          </ol>
+        </div>
+      )}
+
+      {understood && (
+        <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] divide-y divide-[--color-paper-edge]">
+          <SummaryCard
+            label="Project context"
+            value={understood.project_context}
+            editable={editMode}
+            onChange={v => setUnderstood({ ...understood, project_context: v })}
+          />
+          <SummaryCard
+            label="Your role & priorities"
+            value={understood.role_and_priorities}
+            editable={editMode}
+            onChange={v => setUnderstood({ ...understood, role_and_priorities: v })}
+          />
+          <SummaryCard
+            label="How you communicate"
+            value={understood.how_you_communicate}
+            editable={editMode}
+            onChange={v => setUnderstood({ ...understood, how_you_communicate: v })}
+          />
+
+          <div className="px-6 py-4 flex flex-wrap gap-2 justify-end bg-[--color-paper-hi]/40">
+            <Button variant="outline" size="md" onClick={() => setEditMode(true)}>
+              Let me correct this
+            </Button>
+            <Button
+              variant="ink"
+              size="md"
+              onClick={async () => { await persistUnderstood(employeeId, understood); setPhase(3); }}
+            >
+              That&apos;s right, keep going
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <PhaseFooter phase={2} />
+    </>
   );
 }
 
-function SummaryBlock({ label, value, editable, onChange }: { label: string; value: string; editable: boolean; onChange: (v: string) => void }) {
+function SummaryCard({
+  label,
+  value,
+  editable,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  editable: boolean;
+  onChange: (v: string) => void;
+}) {
   return (
-    <div className="space-y-2">
-      <div className="label">{label}</div>
+    <div className="px-6 py-5 space-y-2">
+      <div className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+        {label}
+      </div>
       {editable ? (
         <textarea
           value={value}
           onChange={e => onChange(e.target.value)}
-          className="w-full bg-white border border-[--color-paper-edge] rounded p-3 text-[15px] leading-relaxed serif"
+          className="w-full bg-white border border-[--color-paper-edge] rounded p-3 text-[15px] leading-relaxed serif focus:outline-none focus:border-[--color-coral] transition-colors"
           rows={3}
         />
       ) : (
-        <p className="serif text-[16px] leading-relaxed">{value}</p>
+        <Serif className="text-[15.5px] leading-relaxed text-[--color-ink] block">
+          {value}
+        </Serif>
       )}
     </div>
   );

@@ -7,6 +7,7 @@ import { Button } from "@/src/components/ui/button";
 import { useWalkthrough } from "@/src/store/walkthrough";
 import { updateOnboardingObservations } from "@/src/server/onboarding-actions";
 import { storeAndParseUpload } from "@/src/server/uploads";
+import { PhaseHeader, PhaseFooter } from "../_chrome/phase-header";
 
 const QUESTIONS = [
   { key: "prd_depth", q: "Should your PRDs be 1-pagers or full specs?", options: ["1-pager", "Full spec", "Depends on the feature"] },
@@ -14,6 +15,8 @@ const QUESTIONS = [
   { key: "done_definition", q: "What does a 'done' PRD look like to you?", placeholder: "Approved by eng lead and design lead, scope reviewed" },
   { key: "scope_creep", q: "How do you handle scope creep?", options: ["Strict — push back hard", "Flexible — capture for v2", "Depends on who's asking"] },
 ] as const;
+
+const STEP_LABELS = ["PRD depth", "Stakeholders", "Done bar", "Scope", "Autonomy", "Sample"];
 
 const DECISION_STYLE = [
   { val: "ask_always", label: "Ask everything", sub: "I want to approve before any send" },
@@ -49,83 +52,158 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
     setPhase(4);
   };
 
-  if (isQ) {
-    const cur = QUESTIONS[step];
-    return (
-      <section className="space-y-6">
-        <Serif as="h2" className="text-[28px]">{cur.q}</Serif>
-        {"options" in cur ? (
-          <div className="space-y-2">
-            {cur.options.map(o => (
-              <button
-                key={o}
-                onClick={() => { setAnswers(a => ({ ...a, [cur.key]: o })); setStep(step + 1); }}
-                className={`w-full text-left px-4 py-3 rounded border ${
-                  answers[cur.key] === o ? "border-[--color-coral] bg-[--color-paper-hi]" : "border-[--color-paper-edge] bg-white"
-                }`}
-              >{o}</button>
-            ))}
+  return (
+    <>
+      <PhaseHeader
+        phase={3}
+        title="How do you work?"
+        subtitle="Five quick questions to calibrate how I write, what I ask, and when I ship without you."
+        estimate="~3 min"
+      />
+
+      <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
+        {/* Step indicator */}
+        <div className="px-6 pt-5 pb-3 border-b border-[--color-paper-edge]">
+          <ol className="flex items-center gap-1.5">
+            {STEP_LABELS.map((label, i) => {
+              const done = i < step;
+              const current = i === step;
+              return (
+                <li key={label} className="flex-1 min-w-0 flex items-center gap-1.5">
+                  <span
+                    className={
+                      "h-1 flex-1 rounded-full transition-colors " +
+                      (done
+                        ? "bg-[--color-coral]"
+                        : current
+                          ? "bg-[--color-coral]/50"
+                          : "bg-[--color-paper-edge]/70")
+                    }
+                  />
+                </li>
+              );
+            })}
+          </ol>
+          <div className="flex items-center justify-between mt-2">
+            <span className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+              Step {step + 1} of {total} · {STEP_LABELS[step] ?? "—"}
+            </span>
+            <span className="text-[10.5px] tabular-nums text-[--color-ink-faint]">
+              {Math.round((step / total) * 100)}%
+            </span>
           </div>
-        ) : (
-          <input
-            autoFocus
-            className="w-full bg-transparent border-b border-[--color-paper-edge] py-3 text-[18px] focus:outline-none focus:border-[--color-coral]"
-            placeholder={(cur as { placeholder: string }).placeholder}
-            value={answers[cur.key] ?? ""}
-            onChange={e => setAnswers(a => ({ ...a, [cur.key]: e.target.value }))}
-            onKeyDown={e => { if (e.key === "Enter") setStep(step + 1); }}
-          />
-        )}
-        <div className="flex justify-between items-center">
-          <Button variant="quiet" size="sm" onClick={() => setStep(Math.max(0, step - 1))}>Back</Button>
-          <span className="label">{step + 1} / {total}</span>
         </div>
-      </section>
-    );
-  }
 
-  if (isDecision) {
-    return (
-      <section className="space-y-6">
-        <Serif as="h2" className="text-[28px]">How much do you want to be in the loop?</Serif>
-        <div className="space-y-2">
-          {DECISION_STYLE.map(d => (
-            <button
-              key={d.val}
-              onClick={() => setDecisionStyle(d.val)}
-              className={`w-full text-left px-4 py-3 rounded border ${
-                decisionStyle === d.val ? "border-[--color-coral] bg-[--color-paper-hi]" : "border-[--color-paper-edge] bg-white"
-              }`}
-            >
-              <div className="text-[14px]">{d.label}</div>
-              <div className="text-[12.5px] text-[--color-ink-faint]">{d.sub}</div>
-            </button>
-          ))}
-        </div>
-        <div className="flex justify-between items-center">
-          <Button variant="quiet" size="sm" onClick={() => setStep(step - 1)}>Back</Button>
-          <Button variant="ink" size="md" onClick={() => setStep(step + 1)}>Next</Button>
-        </div>
-      </section>
-    );
-  }
+        <div className="px-6 py-7">
+          {isQ && (() => {
+            const cur = QUESTIONS[step];
+            return (
+              <div className="space-y-5">
+                <Serif as="h2" className="text-[24px] leading-tight">{cur.q}</Serif>
+                {"options" in cur ? (
+                  <div className="space-y-2">
+                    {cur.options.map(o => {
+                      const selected = answers[cur.key] === o;
+                      return (
+                        <button
+                          key={o}
+                          onClick={() => { setAnswers(a => ({ ...a, [cur.key]: o })); setStep(step + 1); }}
+                          className={
+                            "group w-full text-left px-4 py-3 rounded border transition-colors cursor-pointer " +
+                            (selected
+                              ? "border-[--color-coral] bg-[--color-paper-hi]"
+                              : "border-[--color-paper-edge] bg-white hover:border-[--color-coral]/50 hover:bg-[--color-paper-hi]/40")
+                          }
+                        >
+                          <span className="text-[14px] text-[--color-ink]">{o}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <input
+                    autoFocus
+                    className="w-full bg-transparent border-b border-[--color-paper-edge] py-3 text-[18px] focus:outline-none focus:border-[--color-coral] transition-colors"
+                    placeholder={(cur as { placeholder: string }).placeholder}
+                    value={answers[cur.key] ?? ""}
+                    onChange={e => setAnswers(a => ({ ...a, [cur.key]: e.target.value }))}
+                    onKeyDown={e => { if (e.key === "Enter") setStep(step + 1); }}
+                  />
+                )}
+              </div>
+            );
+          })()}
 
-  if (isSample) {
-    return (
-      <section className="space-y-6">
-        <Serif as="h2" className="text-[28px]">Drop a PRD you're proud of.</Serif>
-        <p className="text-[14px] text-[--color-ink-muted]">Optional — but it's the fastest way for me to learn your bar.</p>
-        <Dropzone onFiles={f => setSampleFile(f[0] ?? null)} multiple={false} />
-        {sampleFile && <p className="text-[13px] text-[--color-ink-muted]">· {sampleFile.name}</p>}
-        <div className="flex justify-between items-center">
-          <Button variant="quiet" size="sm" onClick={() => setStep(step - 1)}>Back</Button>
-          <Button variant="ink" size="md" onClick={finish} disabled={submitting}>
-            {submitting ? "Saving…" : "Show me what you'll do"}
+          {isDecision && (
+            <div className="space-y-5">
+              <Serif as="h2" className="text-[24px] leading-tight">How much do you want to be in the loop?</Serif>
+              <div className="space-y-2">
+                {DECISION_STYLE.map(d => {
+                  const selected = decisionStyle === d.val;
+                  return (
+                    <button
+                      key={d.val}
+                      onClick={() => setDecisionStyle(d.val)}
+                      className={
+                        "group w-full text-left px-4 py-3 rounded border transition-colors cursor-pointer " +
+                        (selected
+                          ? "border-[--color-coral] bg-[--color-paper-hi]"
+                          : "border-[--color-paper-edge] bg-white hover:border-[--color-coral]/50 hover:bg-[--color-paper-hi]/40")
+                      }
+                    >
+                      <div className="text-[14px] text-[--color-ink]">{d.label}</div>
+                      <div className="text-[12.5px] text-[--color-ink-faint] mt-0.5">{d.sub}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {isSample && (
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <Serif as="h2" className="text-[24px] leading-tight">Drop a PRD you&apos;re proud of.</Serif>
+                <p className="text-[13.5px] text-[--color-ink-muted]">
+                  Optional — but it&apos;s the fastest way for me to learn your bar.
+                </p>
+              </div>
+              <Dropzone onFiles={f => setSampleFile(f[0] ?? null)} multiple={false} />
+              {sampleFile && (
+                <p className="text-[13px] text-[--color-ink-muted]">· {sampleFile.name}</p>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="px-6 pb-5 flex items-center justify-between">
+          <Button
+            variant="quiet"
+            size="sm"
+            onClick={() => setStep(Math.max(0, step - 1))}
+            disabled={step === 0}
+          >
+            Back
           </Button>
+          {isQ && (
+            <Button variant="ink" size="md" onClick={() => setStep(step + 1)}>
+              Next
+            </Button>
+          )}
+          {isDecision && (
+            <Button variant="ink" size="md" onClick={() => setStep(step + 1)}>
+              Next
+            </Button>
+          )}
+          {isSample && (
+            <Button variant="ink" size="md" onClick={finish} disabled={submitting}>
+              {submitting ? "Saving…" : "Show me what you'll do"}
+            </Button>
+          )}
         </div>
-      </section>
-    );
-  }
+      </div>
 
-  return null;
+      <PhaseFooter phase={3} />
+    </>
+  );
 }
