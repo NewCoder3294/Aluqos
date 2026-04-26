@@ -82,7 +82,7 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
       >
         <Card className="flex flex-col h-full">
           {/* Header band */}
-          <div className="px-5 py-4 bg-[--color-paper-hi] border-b border-[--color-paper-edge] flex items-center gap-3">
+          <div className="px-5 py-4 bg-paper-hi border-b border-paper-edge flex items-center gap-3">
             <motion.div
               variants={{ hover: { rotate: 8 } }}
               transition={{ duration: 0.45, ease: EASE }}
@@ -96,7 +96,7 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
               <Serif className="text-[17px] block leading-tight">
                 {role.name}
               </Serif>
-              <div className="text-[11px] uppercase tracking-[0.12em] text-[--color-ink-faint] mt-0.5">
+              <div className="text-[11px] uppercase tracking-[0.12em] text-ink-faint mt-0.5">
                 {role.role}
               </div>
             </div>
@@ -113,10 +113,10 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
                       transition: { delay: i * 0.05, duration: 0.25, ease: EASE },
                     },
                   }}
-                  className="flex items-start gap-2.5 text-[14px] leading-snug text-[--color-ink-muted]"
+                  className="flex items-start gap-2.5 text-[14px] leading-snug text-ink-muted"
                 >
                   <Check
-                    className="w-4 h-4 mt-0.5 shrink-0 text-[--color-coral-deep]"
+                    className="w-4 h-4 mt-0.5 shrink-0 text-coral-deep"
                     aria-hidden
                   />
                   <span>{cap}</span>
@@ -146,14 +146,14 @@ export function LandingTeam() {
   return (
     <section id="roles" className="max-w-6xl mx-auto px-6 py-24 lg:py-32">
       <Reveal>
-        <div className="text-[12px] tracking-[0.14em] uppercase text-[--color-coral-deep] font-medium">
+        <div className="text-[12px] tracking-[0.14em] uppercase text-coral-deep font-medium">
           The starting team
         </div>
       </Reveal>
       <Reveal delay={0.05}>
         <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[24ch]">
           Three colleagues.{" "}
-          <span className="italic text-[--color-ink-faint]">
+          <span className="italic text-ink-faint">
             Hire any of them today.
           </span>
         </h2>

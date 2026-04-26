@@ -27,26 +27,26 @@ export function LandingNav() {
     <header
       className={cn(
         "sticky top-0 z-40 transition-colors duration-200",
-        "bg-[--color-paper]/85 backdrop-blur",
+        "bg-paper/85 backdrop-blur",
         scrolled
-          ? "border-b border-[--color-paper-edge]"
+          ? "border-b border-paper-edge"
           : "border-b border-transparent",
       )}
     >
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
-        <a href="#top" className="serif text-[18px] tracking-[-0.01em] text-[--color-ink]">
+        <a href="#top" className="serif text-[18px] tracking-[-0.01em] text-ink">
           Aluqos
         </a>
 
         <nav
           aria-label="Primary"
-          className="hidden lg:flex items-center gap-8 text-[13px] text-[--color-ink-muted]"
+          className="hidden lg:flex items-center gap-8 text-[13px] text-ink-muted"
         >
           {NAV_LINKS.map(link => (
             <a
               key={link.href}
               href={link.href}
-              className="hover:text-[--color-coral-deep] transition-colors duration-200"
+              className="hover:text-coral-deep transition-colors duration-200"
             >
               {link.label}
             </a>
@@ -56,7 +56,7 @@ export function LandingNav() {
         <div className="flex items-center gap-3">
           <a
             href="#"
-            className="hidden sm:inline-block text-[13px] text-[--color-ink-faint] hover:text-[--color-ink] transition-colors duration-200"
+            className="hidden sm:inline-block text-[13px] text-ink-faint hover:text-ink transition-colors duration-200"
           >
             Sign in
           </a>

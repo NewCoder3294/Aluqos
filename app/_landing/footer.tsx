@@ -18,18 +18,18 @@ const COMPANY_LINKS: Array<{ href: string; label: string }> = [
 
 export function LandingFooter() {
   return (
-    <footer className="border-t border-[--color-paper-edge]">
+    <footer className="border-t border-paper-edge">
       <Reveal fade duration={0.7}>
         <div className="max-w-6xl mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div>
-              <div className="serif text-[20px] tracking-[-0.01em] text-[--color-ink]">
+              <div className="serif text-[20px] tracking-[-0.01em] text-ink">
                 Aluqos
               </div>
-              <p className="mt-3 max-w-[36ch] text-[14px] leading-[1.6] text-[--color-ink-muted]">
+              <p className="mt-3 max-w-[36ch] text-[14px] leading-[1.6] text-ink-muted">
                 AI employees that learn how you work.
               </p>
-              <p className="mt-6 text-[12px] text-[--color-ink-faint]">
+              <p className="mt-6 text-[12px] text-ink-faint">
                 &copy; 2026 Aluqos Labs, Inc.
               </p>
             </div>
@@ -38,7 +38,7 @@ export function LandingFooter() {
             <FooterColumn title="Company" links={COMPANY_LINKS} />
           </div>
 
-          <div className="mt-12 pt-6 border-t border-[--color-paper-edge] text-[12px] italic text-[--color-ink-faint] serif">
+          <div className="mt-12 pt-6 border-t border-paper-edge text-[12px] italic text-ink-faint serif">
             Made in San Francisco
           </div>
         </div>
@@ -56,7 +56,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <div className="text-[11px] uppercase tracking-[0.14em] text-[--color-ink-faint] font-medium">
+      <div className="text-[11px] uppercase tracking-[0.14em] text-ink-faint font-medium">
         {title}
       </div>
       <ul className="mt-4 space-y-2.5">
@@ -64,7 +64,7 @@ function FooterColumn({
           <li key={link.label}>
             <a
               href={link.href}
-              className="text-[14px] text-[--color-ink-muted] hover:text-[--color-coral-deep] transition-colors duration-200"
+              className="text-[14px] text-ink-muted hover:text-coral-deep transition-colors duration-200"
             >
               {link.label}
             </a>

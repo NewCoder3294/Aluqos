@@ -52,9 +52,9 @@ export function LeftRail({
   const recentPrds = (prds ?? []).slice(0, 3);
 
   return (
-    <aside className="bg-[--color-paper-hi] border-r border-[--color-paper-edge] h-full overflow-y-auto flex flex-col">
+    <aside className="bg-paper-hi border-r border-paper-edge h-full overflow-y-auto flex flex-col">
       {/* Header band — identity anchor */}
-      <div className="px-4 pt-4 pb-3 border-b border-[--color-paper-edge]">
+      <div className="px-4 pt-4 pb-3 border-b border-paper-edge">
         <div className="flex items-center gap-3">
           <div
             className="w-10 h-10 rounded-full text-white grid place-items-center shrink-0"
@@ -64,7 +64,7 @@ export function LeftRail({
           </div>
           <div className="min-w-0">
             <Serif className="text-[15px] block truncate leading-tight">{employeeName}</Serif>
-            <div className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium leading-tight mt-0.5">
+            <div className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium leading-tight mt-0.5">
               AI Product Manager
             </div>
           </div>
@@ -82,7 +82,7 @@ export function LeftRail({
         <Card tone="muted">
           <CardHeader className="!py-2.5 !px-4">
             <CardTitle className="text-[13px]">Today</CardTitle>
-            <span className="text-[10.5px] tabular-nums text-[--color-ink-faint]">
+            <span className="text-[10.5px] tabular-nums text-ink-faint">
               {events.length} events
             </span>
           </CardHeader>
@@ -90,16 +90,16 @@ export function LeftRail({
             <ol className="relative pl-4">
               <span
                 aria-hidden
-                className="absolute left-[5px] top-1 bottom-1 w-px bg-[--color-paper-edge]"
+                className="absolute left-[5px] top-1 bottom-1 w-px bg-paper-edge"
               />
               {events.map(e => (
                 <li key={e.id} className="relative pb-2.5 last:pb-0">
                   <span
                     aria-hidden
-                    className="absolute -left-[11px] top-[5px] w-[7px] h-[7px] rounded-full bg-[--color-coral]"
+                    className="absolute -left-[11px] top-[5px] w-[7px] h-[7px] rounded-full bg-coral"
                   />
-                  <div className="text-[12.5px] text-[--color-ink] leading-snug">{e.verb}</div>
-                  <div className="text-[10.5px] text-[--color-ink-faint] mt-0.5">{e.when}</div>
+                  <div className="text-[12.5px] text-ink leading-snug">{e.verb}</div>
+                  <div className="text-[10.5px] text-ink-faint mt-0.5">{e.when}</div>
                 </li>
               ))}
             </ol>
@@ -123,17 +123,17 @@ export function LeftRail({
                   <li key={u.id} className="space-y-1">
                     <div className="flex items-center gap-2">
                       <FileGlyph />
-                      <span className="flex-1 truncate text-[--color-ink]">{u.filename}</span>
-                      <span className="text-[10.5px] tabular-nums text-[--color-ink-faint] shrink-0">
+                      <span className="flex-1 truncate text-ink">{u.filename}</span>
+                      <span className="text-[10.5px] tabular-nums text-ink-faint shrink-0">
                         {meta.size}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 pl-[16px]">
-                      <span className="flex-1 h-1 bg-[--color-paper-edge]/70 rounded-full overflow-hidden">
+                      <span className="flex-1 h-1 bg-paper-edge/70 rounded-full overflow-hidden">
                         <span
                           className={
                             "block h-full rounded-full transition-all " +
-                            (reading ? "bg-[--color-coral] pulse-coral" : "bg-[--color-coral]/70")
+                            (reading ? "bg-coral pulse-coral" : "bg-coral/70")
                           }
                           style={{ width: `${meta.progress}%` }}
                         />
@@ -141,7 +141,7 @@ export function LeftRail({
                       <span
                         className={
                           "text-[9.5px] uppercase tracking-[0.1em] shrink-0 " +
-                          (reading ? "text-[--color-coral-deep]" : "text-[--color-ink-faint]")
+                          (reading ? "text-coral-deep" : "text-ink-faint")
                         }
                       >
                         {reading ? "reading…" : "✓ read"}
@@ -175,7 +175,7 @@ export function LeftRail({
           </CardHeader>
           <CardContent compact className="!p-4">
             {recentPrds.length === 0 ? (
-              <div className="text-[11.5px] text-[--color-ink-faint] italic leading-relaxed">
+              <div className="text-[11.5px] text-ink-faint italic leading-relaxed">
                 No PRDs yet — your work will collect here.
               </div>
             ) : (
@@ -183,17 +183,17 @@ export function LeftRail({
                 {recentPrds.map(p => (
                   <li
                     key={p.id}
-                    className="group bg-white border border-[--color-paper-edge] rounded px-2.5 py-1.5 hover:border-[--color-coral] transition-colors cursor-pointer flex items-center gap-2"
+                    className="group bg-white border border-paper-edge rounded px-2.5 py-1.5 hover:border-coral transition-colors cursor-pointer flex items-center gap-2"
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="text-[12.5px] text-[--color-ink] truncate">
+                      <div className="text-[12.5px] text-ink truncate">
                         {p.title || "Untitled PRD"}
                       </div>
-                      <div className="text-[10.5px] text-[--color-ink-faint] mt-0.5">
+                      <div className="text-[10.5px] text-ink-faint mt-0.5">
                         shipped 3m ago
                       </div>
                     </div>
-                    <ChevronRight className="size-3 text-[--color-ink-faint] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ChevronRight className="size-3 text-ink-faint opacity-0 group-hover:opacity-100 transition-opacity" />
                   </li>
                 ))}
               </ul>
@@ -250,7 +250,7 @@ function FileGlyph() {
       height="13"
       viewBox="0 0 11 13"
       aria-hidden
-      className="text-[--color-ink-faint] shrink-0"
+      className="text-ink-faint shrink-0"
     >
       <path
         d="M1 1h6l3 3v8H1z"
@@ -290,7 +290,7 @@ function Tier({
           className="w-[7px] h-[7px] rounded-full"
           style={{ background: dotColor }}
         />
-        <Serif italic className="text-[12px] text-[--color-ink-faint]">
+        <Serif italic className="text-[12px] text-ink-faint">
           {label}
         </Serif>
       </div>
@@ -299,10 +299,10 @@ function Tier({
           <div
             key={i}
             onClick={() => onPickTask?.(it.title)}
-            className="group flex items-center gap-2 text-[12px] bg-white border border-[--color-paper-edge] rounded px-2 py-1.5 cursor-pointer hover:border-[--color-coral] hover:bg-[--color-paper-hi] transition-colors"
+            className="group flex items-center gap-2 text-[12px] bg-white border border-paper-edge rounded px-2 py-1.5 cursor-pointer hover:border-coral hover:bg-paper-hi transition-colors"
           >
             <span className="flex-1 min-w-0 truncate">{it.title}</span>
-            <ChevronRight className="size-3 text-[--color-ink-faint] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+            <ChevronRight className="size-3 text-ink-faint opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
           </div>
         ))}
       </div>

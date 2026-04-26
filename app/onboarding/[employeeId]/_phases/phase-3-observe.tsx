@@ -61,9 +61,9 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
         estimate="~3 min"
       />
 
-      <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
+      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
         {/* Step indicator */}
-        <div className="px-6 pt-5 pb-3 border-b border-[--color-paper-edge]">
+        <div className="px-6 pt-5 pb-3 border-b border-paper-edge">
           <ol className="flex items-center gap-1.5">
             {STEP_LABELS.map((label, i) => {
               const done = i < step;
@@ -74,10 +74,10 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
                     className={
                       "h-1 flex-1 rounded-full transition-colors " +
                       (done
-                        ? "bg-[--color-coral]"
+                        ? "bg-coral"
                         : current
-                          ? "bg-[--color-coral]/50"
-                          : "bg-[--color-paper-edge]/70")
+                          ? "bg-coral/50"
+                          : "bg-paper-edge/70")
                     }
                   />
                 </li>
@@ -85,10 +85,10 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
             })}
           </ol>
           <div className="flex items-center justify-between mt-2">
-            <span className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+            <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
               Step {step + 1} of {total} · {STEP_LABELS[step] ?? "—"}
             </span>
-            <span className="text-[10.5px] tabular-nums text-[--color-ink-faint]">
+            <span className="text-[10.5px] tabular-nums text-ink-faint">
               {Math.round((step / total) * 100)}%
             </span>
           </div>
@@ -112,10 +112,10 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
                           aria-pressed={selected}
                           onClick={() => { setAnswers(a => ({ ...a, [cur.key]: o })); setStep(step + 1); }}
                           className={
-                            "w-full justify-start text-left px-4 py-3 rounded normal-case tracking-normal text-[14px] text-[--color-ink] " +
+                            "w-full justify-start text-left px-4 py-3 rounded normal-case tracking-normal text-[14px] text-ink " +
                             (selected
-                              ? "border-[--color-coral] bg-[--color-paper-hi]"
-                              : "hover:bg-[--color-paper-hi]/40")
+                              ? "border-coral bg-paper-hi"
+                              : "hover:bg-paper-hi/40")
                           }
                         >
                           {o}
@@ -126,7 +126,7 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
                 ) : (
                   <input
                     autoFocus
-                    className="w-full bg-transparent border-b border-[--color-paper-edge] py-3 text-[18px] focus:outline-none focus:border-[--color-coral] transition-colors"
+                    className="w-full bg-transparent border-b border-paper-edge py-3 text-[18px] focus:outline-none focus:border-coral transition-colors"
                     placeholder={(cur as { placeholder: string }).placeholder}
                     value={answers[cur.key] ?? ""}
                     onChange={e => setAnswers(a => ({ ...a, [cur.key]: e.target.value }))}
@@ -153,12 +153,12 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
                       className={
                         "w-full text-left px-4 py-3 rounded normal-case tracking-normal h-auto items-start flex-col [&_div]:w-full " +
                         (selected
-                          ? "border-[--color-coral] bg-[--color-paper-hi]"
-                          : "hover:bg-[--color-paper-hi]/40")
+                          ? "border-coral bg-paper-hi"
+                          : "hover:bg-paper-hi/40")
                       }
                     >
-                      <div className="text-[14px] text-[--color-ink]">{d.label}</div>
-                      <div className="text-[12.5px] text-[--color-ink-faint] mt-0.5">{d.sub}</div>
+                      <div className="text-[14px] text-ink">{d.label}</div>
+                      <div className="text-[12.5px] text-ink-faint mt-0.5">{d.sub}</div>
                     </Button>
                   );
                 })}
@@ -170,13 +170,13 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <Serif as="h2" className="text-[24px] leading-tight">Drop a PRD you&apos;re proud of.</Serif>
-                <p className="text-[13.5px] text-[--color-ink-muted]">
+                <p className="text-[13.5px] text-ink-muted">
                   Optional — but it&apos;s the fastest way for me to learn your bar.
                 </p>
               </div>
               <Dropzone onFiles={f => setSampleFile(f[0] ?? null)} multiple={false} />
               {sampleFile && (
-                <p className="text-[13px] text-[--color-ink-muted]">· {sampleFile.name}</p>
+                <p className="text-[13px] text-ink-muted">· {sampleFile.name}</p>
               )}
             </div>
           )}

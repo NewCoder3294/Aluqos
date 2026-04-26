@@ -23,7 +23,7 @@ export function SectionProgressStrip({
   const filled = ORDER.filter(s => (sections[s.key] ?? "").trim().length > 0 && streamingSection !== s.key).length;
   return (
     <div className="flex items-center gap-3 py-1.5 px-1">
-      <span className="text-[10px] uppercase tracking-[0.14em] text-[--color-ink-faint] font-medium">
+      <span className="text-[10px] uppercase tracking-[0.14em] text-ink-faint font-medium">
         Sections
       </span>
       <div className="flex items-center gap-1.5">
@@ -35,7 +35,7 @@ export function SectionProgressStrip({
           return <ProgressPill key={s.key} state={state} label={s.label} />;
         })}
       </div>
-      <span className="ml-auto text-[11px] tabular-nums text-[--color-ink-faint]">
+      <span className="ml-auto text-[11px] tabular-nums text-ink-faint">
         {filled} / {total} complete
       </span>
     </div>

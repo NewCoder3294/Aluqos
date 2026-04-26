@@ -51,33 +51,33 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
         estimate="~2 min"
       />
 
-      <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] divide-y divide-[--color-paper-edge]">
+      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] divide-y divide-paper-edge">
         {tiers.map(t => {
           const meta = TIER_META[t.tier];
           return (
             <section key={t.tier}>
-              <header className="flex items-center justify-between px-5 py-2.5 bg-[--color-paper-hi] border-b border-[--color-paper-edge]">
+              <header className="flex items-center justify-between px-5 py-2.5 bg-paper-hi border-b border-paper-edge">
                 <div className="flex items-center gap-2">
                   <span
                     aria-hidden
                     className="w-[7px] h-[7px] rounded-full"
                     style={{ background: meta.dotColor }}
                   />
-                  <Serif italic className="text-[13px] text-[--color-ink-muted]">
+                  <Serif italic className="text-[13px] text-ink-muted">
                     {meta.label}
                   </Serif>
                 </div>
-                <span className="text-[10.5px] tabular-nums text-[--color-ink-faint]">
+                <span className="text-[10.5px] tabular-nums text-ink-faint">
                   {t.items.length} {t.items.length === 1 ? "item" : "items"}
                 </span>
               </header>
 
               {t.items.length === 0 ? (
-                <div className="px-5 py-3 text-[12.5px] text-[--color-ink-faint] italic">
+                <div className="px-5 py-3 text-[12.5px] text-ink-faint italic">
                   Nothing in this tier.
                 </div>
               ) : (
-                <ul className="divide-y divide-[--color-paper-edge]/70">
+                <ul className="divide-y divide-paper-edge/70">
                   {t.items.map((it, i) => {
                     const k = `${t.tier}-${i}`;
                     const state = approvals[k] ?? "approved";
@@ -86,7 +86,7 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
                       <li
                         key={k}
                         className={
-                          "group px-5 py-3 transition-colors hover:bg-[--color-paper-hi]/40 " +
+                          "group px-5 py-3 transition-colors hover:bg-paper-hi/40 " +
                           (removed ? "opacity-60" : "")
                         }
                       >
@@ -101,12 +101,12 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
                               <input
                                 defaultValue={mods[k] ?? it.title}
                                 onChange={e => setMods(m => ({ ...m, [k]: e.target.value }))}
-                                className="w-full bg-transparent border-b border-[--color-paper-edge] text-[14px] text-[--color-ink] focus:outline-none focus:border-[--color-coral] transition-colors"
+                                className="w-full bg-transparent border-b border-paper-edge text-[14px] text-ink focus:outline-none focus:border-coral transition-colors"
                               />
                             ) : (
                               <div
                                 className={
-                                  "text-[14px] text-[--color-ink] leading-snug " +
+                                  "text-[14px] text-ink leading-snug " +
                                   (removed ? "line-through" : "")
                                 }
                               >
@@ -114,7 +114,7 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
                               </div>
                             )}
                             {it.rationale && (
-                              <div className="text-[12px] text-[--color-ink-faint] mt-1 italic leading-snug">
+                              <div className="text-[12px] text-ink-faint mt-1 italic leading-snug">
                                 {it.rationale}
                               </div>
                             )}
@@ -122,7 +122,7 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
                           <div
                             role="group"
                             aria-label="Approval"
-                            className="inline-flex items-center bg-[--color-paper-hi] border border-[--color-paper-edge] rounded-md p-0.5 shrink-0"
+                            className="inline-flex items-center bg-paper-hi border border-paper-edge rounded-md p-0.5 shrink-0"
                           >
                             {(["approved", "modified", "removed"] as const).map(opt => {
                               const active = state === opt;
@@ -137,8 +137,8 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
                                   className={
                                     "px-2.5 py-1 text-[10.5px] uppercase tracking-[0.1em] rounded " +
                                     (active
-                                      ? "bg-[--color-ink] text-[--color-paper] hover:bg-[--color-ink] hover:text-[--color-paper]"
-                                      : "hover:text-[--color-ink] hover:bg-white")
+                                      ? "bg-ink text-paper hover:bg-ink hover:text-paper"
+                                      : "hover:text-ink hover:bg-white")
                                   }
                                 >
                                   {opt}
@@ -158,9 +158,9 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
       </div>
 
       {/* Autonomy + summary */}
-      <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] p-5 space-y-4">
+      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] p-5 space-y-4">
         <div className="space-y-2">
-          <div className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+          <div className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
             Autonomy
           </div>
           <div className="flex flex-wrap gap-2">
@@ -178,13 +178,13 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
           </div>
         </div>
 
-        <p className="text-[13.5px] text-[--color-ink-muted] leading-relaxed">
-          Alex will own <strong className="text-[--color-ink]">{counts.own}</strong> tasks,
-          assist on <strong className="text-[--color-ink]">{counts.assist}</strong>, and flag{" "}
-          <strong className="text-[--color-ink]">{counts.flag}</strong> things.
+        <p className="text-[13.5px] text-ink-muted leading-relaxed">
+          Alex will own <strong className="text-ink">{counts.own}</strong> tasks,
+          assist on <strong className="text-ink">{counts.assist}</strong>, and flag{" "}
+          <strong className="text-ink">{counts.flag}</strong> things.
         </p>
 
-        <div className="flex justify-end pt-2 border-t border-[--color-paper-edge]">
+        <div className="flex justify-end pt-2 border-t border-paper-edge">
           <Button
             variant="ink"
             size="lg"

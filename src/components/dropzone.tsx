@@ -25,11 +25,11 @@ export function Dropzone({
     <div
       {...getRootProps()}
       className={`border-2 border-dashed rounded-lg p-10 text-center cursor-pointer transition-colors ${
-        isDragActive ? "border-[--color-coral] bg-[--color-paper-hi]" : "border-[--color-paper-edge] bg-white"
+        isDragActive ? "border-coral bg-paper-hi" : "border-paper-edge bg-white"
       }`}
     >
       <input {...getInputProps()} />
-      <p className="text-[14px] text-[--color-ink-muted]">{hint}</p>
+      <p className="text-[14px] text-ink-muted">{hint}</p>
       <p className="label mt-2">.pdf · .docx · .md · .txt</p>
     </div>
   );

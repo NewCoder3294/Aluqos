@@ -69,13 +69,13 @@ export function Phase2Reading({ employeeId }: { employeeId: string }) {
       />
 
       {!understood && (
-        <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
-          <div className="px-5 py-3 border-b border-[--color-paper-edge] flex items-center justify-between bg-[--color-paper-hi]">
-            <span className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+        <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
+          <div className="px-5 py-3 border-b border-paper-edge flex items-center justify-between bg-paper-hi">
+            <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
               Reading
             </span>
-            <span className="inline-flex items-center gap-1.5 text-[11px] text-[--color-coral-deep]">
-              <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[--color-coral] pulse-coral" />
+            <span className="inline-flex items-center gap-1.5 text-[11px] text-coral-deep">
+              <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-coral pulse-coral" />
               live
             </span>
           </div>
@@ -85,28 +85,28 @@ export function Phase2Reading({ employeeId }: { employeeId: string }) {
                 key={i}
                 className={
                   "text-[14px] leading-relaxed " +
-                  (i === lines.length - 1 ? "text-[--color-ink]" : "text-[--color-ink-muted]")
+                  (i === lines.length - 1 ? "text-ink" : "text-ink-muted")
                 }
               >
                 {i === lines.length - 1 ? (
                   <TypewriterLine text={l} />
                 ) : (
                   <span className="flex items-center gap-2">
-                    <span aria-hidden className="text-[--color-coral]">✓</span>
+                    <span aria-hidden className="text-coral">✓</span>
                     {l}
                   </span>
                 )}
               </li>
             ))}
             {lines.length === 0 && (
-              <li className="text-[13px] text-[--color-ink-faint] italic">Opening your docs…</li>
+              <li className="text-[13px] text-ink-faint italic">Opening your docs…</li>
             )}
           </ol>
         </div>
       )}
 
       {understood && (
-        <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] divide-y divide-[--color-paper-edge]">
+        <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] divide-y divide-paper-edge">
           <SummaryCard
             label="Project context"
             value={understood.project_context}
@@ -126,7 +126,7 @@ export function Phase2Reading({ employeeId }: { employeeId: string }) {
             onChange={v => setUnderstood({ ...understood, how_you_communicate: v })}
           />
 
-          <div className="px-6 py-4 flex flex-wrap gap-2 justify-end bg-[--color-paper-hi]/40">
+          <div className="px-6 py-4 flex flex-wrap gap-2 justify-end bg-paper-hi/40">
             <Button variant="outline" size="md" onClick={() => setEditMode(true)}>
               Let me correct this
             </Button>
@@ -159,18 +159,18 @@ function SummaryCard({
 }) {
   return (
     <div className="px-6 py-5 space-y-2">
-      <div className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+      <div className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
         {label}
       </div>
       {editable ? (
         <textarea
           value={value}
           onChange={e => onChange(e.target.value)}
-          className="w-full bg-white border border-[--color-paper-edge] rounded p-3 text-[15px] leading-relaxed serif focus:outline-none focus:border-[--color-coral] transition-colors"
+          className="w-full bg-white border border-paper-edge rounded p-3 text-[15px] leading-relaxed serif focus:outline-none focus:border-coral transition-colors"
           rows={3}
         />
       ) : (
-        <Serif className="text-[15.5px] leading-relaxed text-[--color-ink] block">
+        <Serif className="text-[15.5px] leading-relaxed text-ink block">
           {value}
         </Serif>
       )}

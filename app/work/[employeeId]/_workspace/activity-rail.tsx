@@ -57,7 +57,7 @@ const INITIAL_TASKS: Task[] = [
 ];
 
 function iconFor(type: EventType) {
-  const cls = "size-3.5 text-[--color-ink-faint] shrink-0";
+  const cls = "size-3.5 text-ink-faint shrink-0";
   switch (type) {
     case "draft":
       return <FileText className={cls} />;
@@ -81,7 +81,7 @@ export function ActivityRail() {
   return (
     <Card tone="default" className="flex flex-col h-full">
       <Tabs defaultValue="activity" className="flex flex-col flex-1 min-h-0">
-        <div className="px-3 pt-2 bg-[--color-paper-hi] border-b border-[--color-paper-edge]">
+        <div className="px-3 pt-2 bg-paper-hi border-b border-paper-edge">
           <TabsList className="border-b-0 -mb-px">
             <TabsTrigger value="activity">Activity</TabsTrigger>
             <TabsTrigger value="comments" count={1}>
@@ -112,19 +112,19 @@ export function ActivityRail() {
               </span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-[12.5px] text-[--color-ink] font-medium">Marie</span>
-                  <span className="text-[10.5px] text-[--color-ink-faint]">2m ago</span>
+                  <span className="text-[12.5px] text-ink font-medium">Marie</span>
+                  <span className="text-[10.5px] text-ink-faint">2m ago</span>
                 </div>
-                <p className="text-[12.5px] text-[--color-ink-muted] leading-relaxed mt-0.5">
+                <p className="text-[12.5px] text-ink-muted leading-relaxed mt-0.5">
                   Looks good. Add the API spec section before sharing.
                 </p>
               </div>
             </div>
-            <div className="border-t border-[--color-paper-edge] pt-3">
+            <div className="border-t border-paper-edge pt-3">
               <div className="flex gap-2">
                 <input
                   placeholder="Reply to Marie…"
-                  className="flex-1 min-w-0 bg-white border border-[--color-paper-edge] rounded px-3 py-1.5 text-[12.5px] focus:outline-none focus:border-[--color-coral] focus:ring-2 focus:ring-[--color-coral]/20"
+                  className="flex-1 min-w-0 bg-white border border-paper-edge rounded px-3 py-1.5 text-[12.5px] focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral/20"
                   onKeyDown={e => {
                     if (e.key === "Enter") {
                       toast.info("Coming soon");
@@ -140,30 +140,30 @@ export function ActivityRail() {
           </TabsContent>
 
           <TabsContent value="versions">
-            <ul className="divide-y divide-[--color-paper-edge]/60">
+            <ul className="divide-y divide-paper-edge/60">
               {VERSIONS.map(v => (
                 <li
                   key={v.id}
-                  className="px-4 py-2.5 flex items-center gap-3 hover:bg-[--color-paper-hi]/40 cursor-pointer transition-colors"
+                  className="px-4 py-2.5 flex items-center gap-3 hover:bg-paper-hi/40 cursor-pointer transition-colors"
                   onClick={() => toast.info("Coming soon", { description: `Restore ${v.label}` })}
                 >
-                  <GitBranch className="size-3.5 text-[--color-ink-faint] shrink-0" />
+                  <GitBranch className="size-3.5 text-ink-faint shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="text-[12.5px] text-[--color-ink] truncate">{v.label}</div>
-                    <div className="text-[11px] text-[--color-ink-faint] truncate">{v.note}</div>
+                    <div className="text-[12.5px] text-ink truncate">{v.label}</div>
+                    <div className="text-[11px] text-ink-faint truncate">{v.note}</div>
                   </div>
-                  <span className="text-[10.5px] text-[--color-ink-faint] shrink-0">{v.when}</span>
+                  <span className="text-[10.5px] text-ink-faint shrink-0">{v.when}</span>
                 </li>
               ))}
             </ul>
           </TabsContent>
 
           <TabsContent value="tasks">
-            <ul className="divide-y divide-[--color-paper-edge]/60">
+            <ul className="divide-y divide-paper-edge/60">
               {tasks.map(t => (
                 <li
                   key={t.id}
-                  className="px-4 py-2.5 flex items-center gap-3 hover:bg-[--color-paper-hi]/40 transition-colors"
+                  className="px-4 py-2.5 flex items-center gap-3 hover:bg-paper-hi/40 transition-colors"
                 >
                   <Button
                     type="button"
@@ -176,16 +176,16 @@ export function ActivityRail() {
                     }
                     aria-label={t.done ? "Mark incomplete" : "Mark complete"}
                     aria-pressed={t.done}
-                    className="size-4 rounded p-0 [&_svg]:size-3 hover:border-[--color-coral]"
+                    className="size-4 rounded p-0 [&_svg]:size-3 hover:border-coral"
                   >
-                    {t.done ? <Check className="text-[--color-coral-deep]" /> : null}
+                    {t.done ? <Check className="text-coral-deep" /> : null}
                   </Button>
                   <span
                     className={
                       "flex-1 min-w-0 text-[12.5px] " +
                       (t.done
-                        ? "line-through text-[--color-ink-faint]"
-                        : "text-[--color-ink]")
+                        ? "line-through text-ink-faint"
+                        : "text-ink")
                     }
                   >
                     {t.title}
@@ -205,27 +205,27 @@ function FeedGroup({ label, items }: { label: string; items: FeedItem[] }) {
   if (items.length === 0) return null;
   return (
     <div>
-      <div className="px-4 pt-3 pb-1 text-[10px] uppercase tracking-[0.14em] text-[--color-ink-faint] font-medium">
+      <div className="px-4 pt-3 pb-1 text-[10px] uppercase tracking-[0.14em] text-ink-faint font-medium">
         {label}
       </div>
-      <ul className="divide-y divide-[--color-paper-edge]/40">
+      <ul className="divide-y divide-paper-edge/40">
         {items.map(e => (
           <li
             key={e.id}
-            className="flex items-start gap-2.5 px-4 py-2 hover:bg-[--color-paper-hi]/40 transition-colors"
+            className="flex items-start gap-2.5 px-4 py-2 hover:bg-paper-hi/40 transition-colors"
           >
             <span className="mt-0.5">{iconFor(e.type)}</span>
             <div className="flex-1 min-w-0">
-              <div className="text-[12.5px] text-[--color-ink] leading-snug truncate">
+              <div className="text-[12.5px] text-ink leading-snug truncate">
                 {e.verb}
               </div>
               {e.detail && (
-                <div className="text-[11px] text-[--color-ink-faint] leading-snug truncate">
+                <div className="text-[11px] text-ink-faint leading-snug truncate">
                   {e.detail}
                 </div>
               )}
             </div>
-            <span className="text-[10.5px] text-[--color-ink-faint] shrink-0 mt-0.5">
+            <span className="text-[10.5px] text-ink-faint shrink-0 mt-0.5">
               {e.when}
             </span>
           </li>

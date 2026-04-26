@@ -40,11 +40,11 @@ export function LandingTrust() {
   return (
     <section
       aria-label="Customers"
-      className="border-y border-[--color-paper-edge]"
+      className="border-y border-paper-edge"
     >
       <Reveal>
         <div className="max-w-5xl mx-auto px-6 py-10 flex flex-col items-center gap-5 lg:flex-row lg:gap-10">
-          <div className="serif italic text-[13px] text-[--color-ink-faint] shrink-0">
+          <div className="serif italic text-[13px] text-ink-faint shrink-0">
             Building with teams at
           </div>
           <ul className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-y-5 gap-x-6 lg:gap-x-10 items-center justify-items-center">
@@ -53,7 +53,7 @@ export function LandingTrust() {
                 key={p.name}
                 aria-label={p.name}
                 className={
-                  "text-[22px] lg:text-[24px] leading-none text-[--color-ink-faint] " +
+                  "text-[22px] lg:text-[24px] leading-none text-ink-faint " +
                   "opacity-60 hover:opacity-100 transition-opacity duration-200 whitespace-nowrap " +
                   p.className
                 }

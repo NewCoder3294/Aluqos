@@ -50,12 +50,12 @@ export function PrdSection({
   return (
     <Card tone="default">
       <CardHeader>
-        <h3 className="serif text-[12px] uppercase tracking-[0.14em] text-[--color-coral-deep]">
+        <h3 className="serif text-[12px] uppercase tracking-[0.14em] text-coral-deep">
           {LABELS[sectionKey] ?? sectionKey}
         </h3>
         {streaming ? (
           <Badge variant="coral">
-            <span className="w-[6px] h-[6px] rounded-full bg-[--color-coral] pulse-coral" />
+            <span className="w-[6px] h-[6px] rounded-full bg-coral pulse-coral" />
             Streaming
           </Badge>
         ) : editing ? (
@@ -73,13 +73,13 @@ export function PrdSection({
       <CardContent compact>
         {showSkeleton ? (
           <div className="space-y-2 py-1" aria-label="Loading section content">
-            <div className="h-3 rounded w-full bg-gradient-to-r from-[--color-paper-hi] via-[--color-paper-edge]/40 to-[--color-paper-hi] animate-pulse" />
-            <div className="h-3 rounded w-[92%] bg-gradient-to-r from-[--color-paper-hi] via-[--color-paper-edge]/40 to-[--color-paper-hi] animate-pulse" />
-            <div className="h-3 rounded w-[78%] bg-gradient-to-r from-[--color-paper-hi] via-[--color-paper-edge]/40 to-[--color-paper-hi] animate-pulse" />
-            <div className="h-3 rounded w-[64%] bg-gradient-to-r from-[--color-paper-hi] via-[--color-paper-edge]/40 to-[--color-paper-hi] animate-pulse" />
+            <div className="h-3 rounded w-full bg-gradient-to-r from-paper-hi via-paper-edge/40 to-paper-hi animate-pulse" />
+            <div className="h-3 rounded w-[92%] bg-gradient-to-r from-paper-hi via-paper-edge/40 to-paper-hi animate-pulse" />
+            <div className="h-3 rounded w-[78%] bg-gradient-to-r from-paper-hi via-paper-edge/40 to-paper-hi animate-pulse" />
+            <div className="h-3 rounded w-[64%] bg-gradient-to-r from-paper-hi via-paper-edge/40 to-paper-hi animate-pulse" />
           </div>
         ) : showPreStream ? (
-          <div className="text-[12px] text-[--color-ink-faint] italic py-1">
+          <div className="text-[12px] text-ink-faint italic py-1">
             Alex will draft this once the previous section settles…
           </div>
         ) : editing ? (
@@ -88,9 +88,9 @@ export function PrdSection({
             className="serif text-[15px] leading-[1.65] prose prose-stone max-w-none"
           />
         ) : (
-          <p className="serif text-[15px] leading-[1.65] whitespace-pre-wrap text-[--color-ink]">
+          <p className="serif text-[15px] leading-[1.65] whitespace-pre-wrap text-ink">
             {text}
-            {streaming && <span className="text-[--color-coral]">▍</span>}
+            {streaming && <span className="text-coral">▍</span>}
           </p>
         )}
       </CardContent>

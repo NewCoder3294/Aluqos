@@ -6,18 +6,18 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/src/lib/cn";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-sans transition-all disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-coral] focus-visible:ring-offset-2 focus-visible:ring-offset-[--color-paper] [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-sans transition-all disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-paper [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        ink: "bg-[--color-ink] text-[--color-paper] hover:bg-[--color-coral-deep]",
+        ink: "bg-ink text-paper hover:bg-coral-deep",
         outline:
-          "bg-white border border-[--color-paper-edge] text-[--color-ink] hover:border-[--color-coral] hover:text-[--color-coral-deep]",
+          "bg-white border border-paper-edge text-ink hover:border-coral hover:text-coral-deep",
         ghost:
-          "text-[--color-ink-faint] hover:text-[--color-ink] hover:bg-[--color-paper-hi]",
-        coral: "bg-[--color-coral] text-white hover:bg-[--color-coral-deep]",
+          "text-ink-faint hover:text-ink hover:bg-paper-hi",
+        coral: "bg-coral text-white hover:bg-coral-deep",
         quiet:
-          "text-[--color-ink-faint] hover:text-[--color-coral-deep] underline-offset-4 hover:underline",
+          "text-ink-faint hover:text-coral-deep underline-offset-4 hover:underline",
       },
       size: {
         sm: "px-3 py-1.5 text-[12px] uppercase tracking-[0.1em] rounded-sm",

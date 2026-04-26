@@ -63,9 +63,9 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
         estimate="~2 min"
       />
 
-      <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
+      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
         {/* Stepped horizontal indicator */}
-        <div className="px-6 pt-5 pb-3 border-b border-[--color-paper-edge]">
+        <div className="px-6 pt-5 pb-3 border-b border-paper-edge">
           <ol className="flex items-center gap-1.5">
             {STEP_TITLES.map((label, i) => {
               const done = i < stepIdx;
@@ -76,10 +76,10 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
                     className={
                       "h-1 flex-1 rounded-full transition-colors " +
                       (done
-                        ? "bg-[--color-coral]"
+                        ? "bg-coral"
                         : current
-                          ? "bg-[--color-coral]/50"
-                          : "bg-[--color-paper-edge]/70")
+                          ? "bg-coral/50"
+                          : "bg-paper-edge/70")
                     }
                   />
                 </li>
@@ -87,10 +87,10 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
             })}
           </ol>
           <div className="flex items-center justify-between mt-2">
-            <span className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+            <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
               Step {Math.min(stepIdx + 1, totalSteps)} of {totalSteps} · {STEP_TITLES[stepIdx] ?? "Files"}
             </span>
-            <span className="text-[10.5px] tabular-nums text-[--color-ink-faint]">
+            <span className="text-[10.5px] tabular-nums text-ink-faint">
               {Math.round(((stepIdx) / totalSteps) * 100)}%
             </span>
           </div>
@@ -105,7 +105,7 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
                 <Serif as="h2" className="text-[24px] leading-tight">{step.q}</Serif>
                 <input
                   autoFocus
-                  className="w-full bg-transparent border-b border-[--color-paper-edge] py-3 text-[18px] focus:outline-none focus:border-[--color-coral] transition-colors"
+                  className="w-full bg-transparent border-b border-paper-edge py-3 text-[18px] focus:outline-none focus:border-coral transition-colors"
                   placeholder={step.placeholder}
                   value={answers[step.key] ?? ""}
                   onChange={e => setAnswers(a => ({ ...a, [step.key]: e.target.value }))}
@@ -119,7 +119,7 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <Serif as="h2" className="text-[24px] leading-tight">Drop in anything I should read.</Serif>
-                <p className="text-[13.5px] text-[--color-ink-muted]">
+                <p className="text-[13.5px] text-ink-muted">
                   PRDs, briefs, meeting notes, your roadmap. The more, the better.
                 </p>
               </div>
@@ -127,7 +127,7 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
               {files.length > 0 && (
                 <ul className="text-[13px] space-y-1">
                   {files.map((f, i) => (
-                    <li key={i} className="text-[--color-ink-muted]">· {f.name}</li>
+                    <li key={i} className="text-ink-muted">· {f.name}</li>
                   ))}
                 </ul>
               )}

@@ -16,7 +16,7 @@ import { ScrollProgress } from "./_landing/motion-primitives";
 export default function Home() {
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen bg-[--color-paper] text-[--color-ink]">
+      <div className="min-h-screen bg-paper text-ink">
         <ScrollProgress />
         <LandingNav />
         <main>

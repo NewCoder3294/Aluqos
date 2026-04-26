@@ -8,10 +8,10 @@ export const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "bg-white border border-[--color-paper-edge] rounded-lg overflow-hidden",
+      "bg-white border border-paper-edge rounded-lg overflow-hidden",
       tone === "default" && "shadow-[0_1px_2px_rgba(31,29,26,0.04)]",
       tone === "primary" && "shadow-[0_2px_8px_rgba(31,29,26,0.06)]",
-      tone === "muted" && "bg-[--color-paper-hi]/40",
+      tone === "muted" && "bg-paper-hi/40",
       className,
     )}
     {...props}
@@ -24,7 +24,7 @@ export const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
     <div
       ref={ref}
       className={cn(
-        "flex items-center justify-between gap-3 px-5 py-3.5 bg-[--color-paper-hi] border-b border-[--color-paper-edge]",
+        "flex items-center justify-between gap-3 px-5 py-3.5 bg-paper-hi border-b border-paper-edge",
         className,
       )}
       {...props}
@@ -37,7 +37,7 @@ export const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttribut
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn("serif text-[15px] tracking-[-0.01em] text-[--color-ink]", className)}
+      className={cn("serif text-[15px] tracking-[-0.01em] text-ink", className)}
       {...props}
     />
   ),
@@ -46,7 +46,7 @@ CardTitle.displayName = "CardTitle";
 
 export const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-[12px] text-[--color-ink-faint]", className)} {...props} />
+    <p ref={ref} className={cn("text-[12px] text-ink-faint", className)} {...props} />
   ),
 );
 CardDescription.displayName = "CardDescription";
@@ -64,7 +64,7 @@ export const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
     <div
       ref={ref}
       className={cn(
-        "flex items-center justify-between gap-3 px-5 py-3 bg-[--color-paper-hi] border-t border-[--color-paper-edge]",
+        "flex items-center justify-between gap-3 px-5 py-3 bg-paper-hi border-t border-paper-edge",
         className,
       )}
       {...props}

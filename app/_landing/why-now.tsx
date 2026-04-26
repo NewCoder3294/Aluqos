@@ -69,14 +69,14 @@ function ReasonCard({
             }}
             animate={pulse ? { scale: [1, 1.05, 1] } : { scale: 1 }}
             transition={{ duration: 0.6, ease: EASE }}
-            className="text-[--color-coral-deep] w-5 h-5"
+            className="text-coral-deep w-5 h-5"
           >
             <reason.Icon className="w-5 h-5" aria-hidden />
           </motion.div>
           <Serif as="h3" className="text-[20px] leading-snug">
             {reason.title}
           </Serif>
-          <p className="text-[14px] leading-[1.65] text-[--color-ink-muted]">
+          <p className="text-[14px] leading-[1.65] text-ink-muted">
             {reason.body}
           </p>
         </CardContent>
@@ -103,21 +103,21 @@ export function LandingWhyNow() {
   return (
     <section
       id="why"
-      className="bg-[--color-paper-hi]/40 border-y border-[--color-paper-edge]"
+      className="bg-paper-hi/40 border-y border-paper-edge"
     >
       <div className="max-w-6xl mx-auto px-6 py-24 lg:py-32">
         <Reveal>
-          <div className="text-[12px] tracking-[0.14em] uppercase text-[--color-coral-deep] font-medium">
+          <div className="text-[12px] tracking-[0.14em] uppercase text-coral-deep font-medium">
             Why now
           </div>
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[18ch]">
-            The window <span className="italic text-[--color-ink-faint]">is open.</span>
+            The window <span className="italic text-ink-faint">is open.</span>
           </h2>
         </Reveal>
         <Reveal delay={0.1}>
-          <p className="mt-6 max-w-[60ch] text-[17px] leading-[1.6] text-[--color-ink-muted]">
+          <p className="mt-6 max-w-[60ch] text-[17px] leading-[1.6] text-ink-muted">
             Four shifts arrived in the last eighteen months. Together, they make
             AI employees practical for the first time.
           </p>

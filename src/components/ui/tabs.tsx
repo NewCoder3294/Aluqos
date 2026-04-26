@@ -57,7 +57,7 @@ export function TabsList({
     <div
       role="tablist"
       className={cn(
-        "flex items-center gap-1 border-b border-[--color-paper-edge]",
+        "flex items-center gap-1 border-b border-paper-edge",
         className,
       )}
     >
@@ -86,10 +86,10 @@ export function TabsTrigger({
       aria-selected={isActive}
       onClick={() => setValue(value)}
       className={cn(
-        "relative px-3 py-2 text-[12px] uppercase tracking-[0.1em] font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-coral]/40 rounded-sm",
+        "relative px-3 py-2 text-[12px] uppercase tracking-[0.1em] font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/40 rounded-sm",
         isActive
-          ? "text-[--color-ink]"
-          : "text-[--color-ink-faint] hover:text-[--color-ink-muted]",
+          ? "text-ink"
+          : "text-ink-faint hover:text-ink-muted",
         className,
       )}
     >
@@ -100,8 +100,8 @@ export function TabsTrigger({
             className={cn(
               "inline-flex items-center justify-center min-w-[18px] h-[16px] px-1 rounded-full text-[10px] tracking-normal normal-case",
               isActive
-                ? "bg-[--color-coral]/15 text-[--color-coral-deep]"
-                : "bg-[--color-paper-hi] text-[--color-ink-faint] border border-[--color-paper-edge]",
+                ? "bg-coral/15 text-coral-deep"
+                : "bg-paper-hi text-ink-faint border border-paper-edge",
             )}
           >
             {count}
@@ -112,7 +112,7 @@ export function TabsTrigger({
         aria-hidden
         className={cn(
           "absolute left-0 right-0 -bottom-[1px] h-[2px] rounded-full transition-colors",
-          isActive ? "bg-[--color-coral]" : "bg-transparent",
+          isActive ? "bg-coral" : "bg-transparent",
         )}
       />
     </button>

@@ -26,10 +26,10 @@ export function LandingCTA() {
             >
               Stop asking humans to learn AI.
             </Serif>
-            <p className="serif italic text-[clamp(22px,3vw,32px)] leading-[1.2] text-[--color-coral-deep] mt-3 max-w-[20ch] mx-auto">
+            <p className="serif italic text-[clamp(22px,3vw,32px)] leading-[1.2] text-coral-deep mt-3 max-w-[20ch] mx-auto">
               Let AI learn humans.
             </p>
-            <p className="mt-6 text-[16px] text-[--color-ink-muted]">
+            <p className="mt-6 text-[16px] text-ink-muted">
               Free for the first 12 design partners.
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">

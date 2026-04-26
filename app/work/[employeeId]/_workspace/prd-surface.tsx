@@ -85,7 +85,7 @@ export function PrdSurface({
   return (
     <>
       {/* Center column — work surface */}
-      <section className="h-full overflow-y-auto bg-[--color-paper]">
+      <section className="h-full overflow-y-auto bg-paper">
         <div className="px-6 py-5 space-y-4 max-w-[920px] mx-auto">
           <KpiStrip />
 
@@ -125,7 +125,7 @@ export function PrdSurface({
       </section>
 
       {/* Right column — activity rail */}
-      <aside className="h-full overflow-y-auto bg-[--color-paper-hi] border-l border-[--color-paper-edge] p-3">
+      <aside className="h-full overflow-y-auto bg-paper-hi border-l border-paper-edge p-3">
         <ActivityRail />
       </aside>
     </>

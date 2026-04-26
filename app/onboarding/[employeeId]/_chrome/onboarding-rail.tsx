@@ -30,9 +30,9 @@ export function OnboardingRail({
   const phase = useWalkthrough(s => s.phase);
 
   return (
-    <aside className="bg-[--color-paper-hi] border-r border-[--color-paper-edge] h-full overflow-y-auto flex flex-col">
+    <aside className="bg-paper-hi border-r border-paper-edge h-full overflow-y-auto flex flex-col">
       {/* Header band — identity anchor */}
-      <div className="px-4 pt-4 pb-3 border-b border-[--color-paper-edge]">
+      <div className="px-4 pt-4 pb-3 border-b border-paper-edge">
         <div className="flex items-center gap-3">
           <div
             className="w-10 h-10 rounded-full text-white grid place-items-center shrink-0"
@@ -42,7 +42,7 @@ export function OnboardingRail({
           </div>
           <div className="min-w-0">
             <Serif className="text-[15px] block truncate leading-tight">{employeeName}</Serif>
-            <div className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium leading-tight mt-0.5">
+            <div className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium leading-tight mt-0.5">
               AI Product Manager
             </div>
           </div>
@@ -55,13 +55,13 @@ export function OnboardingRail({
       <div className="flex flex-col gap-3 p-3 flex-1">
         {/* Phase progress */}
         <Card tone="muted">
-          <div className="flex items-center justify-between !py-2.5 !px-4 border-b border-[--color-paper-edge]/70">
+          <div className="flex items-center justify-between !py-2.5 !px-4 border-b border-paper-edge/70">
             <div className="flex items-center gap-2">
-              <span className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+              <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
                 Onboarding
               </span>
             </div>
-            <span className="text-[10.5px] tabular-nums text-[--color-ink-faint]">
+            <span className="text-[10.5px] tabular-nums text-ink-faint">
               Phase {phase} of 6
             </span>
           </div>
@@ -76,7 +76,7 @@ export function OnboardingRail({
                     {showConnector && (
                       <span
                         aria-hidden
-                        className="absolute left-[10px] top-[26px] bottom-[-6px] w-px bg-[--color-paper-edge]"
+                        className="absolute left-[10px] top-[26px] bottom-[-6px] w-px bg-paper-edge"
                       />
                     )}
                     <span
@@ -84,10 +84,10 @@ export function OnboardingRail({
                       className={
                         "absolute left-0 top-[6px] w-[22px] h-[22px] rounded-full grid place-items-center text-[10.5px] tabular-nums font-medium " +
                         (completed
-                          ? "bg-[--color-coral] text-white"
+                          ? "bg-coral text-white"
                           : current
-                            ? "bg-white border-2 border-[--color-coral] text-[--color-coral-deep]"
-                            : "bg-white border border-[--color-paper-edge] text-[--color-ink-faint]")
+                            ? "bg-white border-2 border-coral text-coral-deep"
+                            : "bg-white border border-paper-edge text-ink-faint")
                       }
                     >
                       {completed ? <Check className="size-3" strokeWidth={3} /> : p.n}
@@ -98,10 +98,10 @@ export function OnboardingRail({
                           className={
                             "text-[13.5px] leading-tight block truncate " +
                             (current
-                              ? "text-[--color-ink]"
+                              ? "text-ink"
                               : completed
-                                ? "text-[--color-ink-muted]"
-                                : "text-[--color-ink-faint]")
+                                ? "text-ink-muted"
+                                : "text-ink-faint")
                           }
                         >
                           {p.name}
@@ -109,7 +109,7 @@ export function OnboardingRail({
                         <div
                           className={
                             "text-[11px] mt-0.5 leading-tight truncate " +
-                            (current ? "text-[--color-ink-muted]" : "text-[--color-ink-faint]")
+                            (current ? "text-ink-muted" : "text-ink-faint")
                           }
                         >
                           {p.subtitle}
@@ -120,9 +120,9 @@ export function OnboardingRail({
                         className={
                           "text-[11px] shrink-0 " +
                           (completed
-                            ? "text-[--color-coral-deep]"
+                            ? "text-coral-deep"
                             : current
-                              ? "text-[--color-coral]"
+                              ? "text-coral"
                               : "text-transparent")
                         }
                       >
@@ -174,11 +174,11 @@ export function OnboardingRail({
 
 function MiniKpi({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-white border border-[--color-paper-edge] rounded px-2 py-2 transition-colors hover:border-[--color-coral]/40">
-      <div className="text-[9.5px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium leading-tight">
+    <div className="bg-white border border-paper-edge rounded px-2 py-2 transition-colors hover:border-coral/40">
+      <div className="text-[9.5px] uppercase tracking-[0.12em] text-ink-faint font-medium leading-tight">
         {label}
       </div>
-      <div className="serif text-[16px] leading-tight text-[--color-ink] mt-1 tabular-nums">
+      <div className="serif text-[16px] leading-tight text-ink mt-1 tabular-nums">
         {value}
       </div>
     </div>

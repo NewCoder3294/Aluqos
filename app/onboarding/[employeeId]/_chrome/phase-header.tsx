@@ -27,19 +27,19 @@ export function PhaseHeader({
   right?: React.ReactNode;
 }) {
   return (
-    <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_2px_8px_rgba(31,29,26,0.06)] px-6 py-5">
+    <div className="bg-white border border-paper-edge rounded-lg shadow-[0_2px_8px_rgba(31,29,26,0.06)] px-6 py-5">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <Serif italic className="text-[12px] text-[--color-ink-faint] block">
+          <Serif italic className="text-[12px] text-ink-faint block">
             {DAY_LABELS[phase]}
           </Serif>
-          <div className="text-[10.5px] uppercase tracking-[0.14em] text-[--color-coral-deep] font-medium mt-1.5">
+          <div className="text-[10.5px] uppercase tracking-[0.14em] text-coral-deep font-medium mt-1.5">
             Phase {phase}
           </div>
-          <Serif as="h1" className="text-[26px] leading-tight mt-1 text-[--color-ink]">
+          <Serif as="h1" className="text-[26px] leading-tight mt-1 text-ink">
             {title}
           </Serif>
-          <p className="text-[13.5px] text-[--color-ink-muted] mt-1.5 leading-snug">
+          <p className="text-[13.5px] text-ink-muted mt-1.5 leading-snug">
             {subtitle}
           </p>
         </div>
@@ -63,14 +63,14 @@ export function PhaseFooter({
 }) {
   const pct = Math.min(100, Math.round((phase / total) * 100));
   return (
-    <div className="bg-white border border-[--color-paper-edge] rounded-lg px-5 py-3 flex items-center gap-4">
+    <div className="bg-white border border-paper-edge rounded-lg px-5 py-3 flex items-center gap-4">
       <div className="flex items-center gap-3 flex-1 min-w-0">
-        <span className="text-[11px] uppercase tracking-[0.12em] text-[--color-ink-faint] tabular-nums shrink-0">
+        <span className="text-[11px] uppercase tracking-[0.12em] text-ink-faint tabular-nums shrink-0">
           {phase} / {total}
         </span>
-        <span className="flex-1 h-[3px] bg-[--color-paper-edge]/60 rounded-full overflow-hidden">
+        <span className="flex-1 h-[3px] bg-paper-edge/60 rounded-full overflow-hidden">
           <span
-            className="block h-full bg-[--color-coral] rounded-full transition-all"
+            className="block h-full bg-coral rounded-full transition-all"
             style={{ width: `${pct}%` }}
           />
         </span>

@@ -18,22 +18,22 @@ export function LandingHero() {
       {/* Centered text block */}
       <div className="max-w-[800px] mx-auto px-6 text-center">
         <Reveal>
-          <div className="text-[12px] tracking-[0.14em] uppercase text-[--color-coral-deep] font-medium">
+          <div className="text-[12px] tracking-[0.14em] uppercase text-coral-deep font-medium">
             AI Employees that learn
           </div>
         </Reveal>
 
         <Reveal delay={0.05}>
-          <h1 className="serif mt-6 text-[clamp(56px,8vw,96px)] leading-[1.02] tracking-[-0.025em] text-[--color-ink]">
+          <h1 className="serif mt-6 text-[clamp(56px,8vw,96px)] leading-[1.02] tracking-[-0.025em] text-ink">
             AI employees that learn how you work.{" "}
-            <span className="italic text-[--color-ink-faint] block">
+            <span className="italic text-ink-faint block">
               Not the other way around.
             </span>
           </h1>
         </Reveal>
 
         <Reveal delay={0.1}>
-          <p className="mt-7 mx-auto max-w-[56ch] text-[18px] lg:text-[20px] leading-[1.55] text-[--color-ink-muted]">
+          <p className="mt-7 mx-auto max-w-[56ch] text-[18px] lg:text-[20px] leading-[1.55] text-ink-muted">
             Build AI employees in minutes. No prompts, no engineers, no
             upskilling &mdash; they shadow how you work and start contributing on
             day one.
@@ -52,7 +52,7 @@ export function LandingHero() {
         </Reveal>
 
         <Reveal delay={0.2}>
-          <p className="mt-6 text-[12.5px] text-[--color-ink-faint]">
+          <p className="mt-6 text-[12.5px] text-ink-faint">
             Trusted by teams at Nike, T-Mobile, Shipd, and HPE
           </p>
         </Reveal>
@@ -70,7 +70,7 @@ export function LandingHero() {
         >
           <div className="relative">
             {/* soft paper backdrop behind the screenshot */}
-            <div className="absolute -inset-6 lg:-inset-8 bg-[--color-paper-hi] rounded-2xl -z-10" />
+            <div className="absolute -inset-6 lg:-inset-8 bg-paper-hi rounded-2xl -z-10" />
             <WorkspaceMockup />
           </div>
         </motion.div>

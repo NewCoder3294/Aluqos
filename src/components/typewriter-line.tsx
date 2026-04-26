@@ -17,5 +17,5 @@ export function TypewriterLine({
     const t = setTimeout(() => setI(i + 1), speedMs);
     return () => clearTimeout(t);
   }, [i, text, speedMs, onDone]);
-  return <span>{text.slice(0, i)}<span className="text-[--color-coral]">▍</span></span>;
+  return <span>{text.slice(0, i)}<span className="text-coral">▍</span></span>;
 }

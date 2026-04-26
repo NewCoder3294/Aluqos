@@ -65,7 +65,7 @@ export function ScrollProgress() {
       style={{ scaleX, transformOrigin: "0% 50%" }}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 h-[2px]",
-        "bg-[--color-coral]",
+        "bg-coral",
         "pointer-events-none",
       )}
     />

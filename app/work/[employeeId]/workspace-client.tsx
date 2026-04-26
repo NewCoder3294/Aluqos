@@ -24,7 +24,7 @@ export function WorkspaceClient({
   const centerLabel = prdId ? title || "Drafting…" : "Workspace";
 
   return (
-    <main className="h-screen overflow-hidden flex flex-col bg-[--color-paper]">
+    <main className="h-screen overflow-hidden flex flex-col bg-paper">
       <TopToolbar employeeName={employee.name} centerLabel={centerLabel} />
       <div className="grid grid-cols-[280px_1fr_360px] flex-1 min-h-0 overflow-hidden">
         <LeftRail

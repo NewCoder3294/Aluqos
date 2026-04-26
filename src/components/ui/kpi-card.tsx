@@ -5,9 +5,9 @@ type TrendVariant = "up" | "down" | "neutral" | "warning";
 
 const TREND_CLASSES: Record<TrendVariant, string> = {
   up: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  down: "bg-[--color-paper-hi] text-[--color-ink-muted] border-[--color-paper-edge]",
-  neutral: "bg-[--color-paper-hi] text-[--color-ink-muted] border-[--color-paper-edge]",
-  warning: "bg-[--color-coral]/10 text-[--color-coral-deep] border-[--color-coral]/20",
+  down: "bg-paper-hi text-ink-muted border-paper-edge",
+  neutral: "bg-paper-hi text-ink-muted border-paper-edge",
+  warning: "bg-coral/10 text-coral-deep border-coral/20",
 };
 
 export function KpiCard({
@@ -28,19 +28,19 @@ export function KpiCard({
   return (
     <div
       className={cn(
-        "relative flex-1 min-w-0 bg-white border border-[--color-paper-edge] rounded-md px-4 py-3 transition-colors hover:border-[--color-coral]/40 hover:bg-[--color-paper-hi]/30",
+        "relative flex-1 min-w-0 bg-white border border-paper-edge rounded-md px-4 py-3 transition-colors hover:border-coral/40 hover:bg-paper-hi/30",
         className,
       )}
     >
       {icon && (
-        <span className="absolute top-3 right-3 text-[--color-ink-faint]">
+        <span className="absolute top-3 right-3 text-ink-faint">
           {icon}
         </span>
       )}
-      <div className="text-[10px] uppercase tracking-[0.12em] text-[--color-ink-faint] font-medium">
+      <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint font-medium">
         {label}
       </div>
-      <div className="serif text-[24px] leading-tight text-[--color-ink] mt-1 tabular-nums">
+      <div className="serif text-[24px] leading-tight text-ink mt-1 tabular-nums">
         {value}
       </div>
       {trend && (

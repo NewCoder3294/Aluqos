@@ -50,10 +50,10 @@ export function RefineCard() {
     <Card tone="primary">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-[14px]">
-          <Sparkles className="size-3.5 text-[--color-coral-deep]" />
+          <Sparkles className="size-3.5 text-coral-deep" />
           Refine
         </CardTitle>
-        <span className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint]">
+        <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint">
           Powered by Alex
         </span>
       </CardHeader>
@@ -76,7 +76,7 @@ export function RefineCard() {
             value={custom}
             onChange={e => setCustom(e.target.value)}
             placeholder="Ask Alex to revise something specific…"
-            className="flex-1 min-w-0 bg-white border border-[--color-paper-edge] rounded px-3 py-2 text-[13px] focus:outline-none focus:border-[--color-coral] focus:ring-2 focus:ring-[--color-coral]/20"
+            className="flex-1 min-w-0 bg-white border border-paper-edge rounded px-3 py-2 text-[13px] focus:outline-none focus:border-coral focus:ring-2 focus:ring-coral/20"
             onKeyDown={e => {
               if (e.key === "Enter" && custom.trim()) refine(custom.trim());
             }}

@@ -70,10 +70,10 @@ export function SendCard() {
     <Card tone="default">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-[14px]">
-          <Send className="size-3.5 text-[--color-coral-deep]" />
+          <Send className="size-3.5 text-coral-deep" />
           Send
         </CardTitle>
-        <span className="text-[10.5px] uppercase tracking-[0.12em] text-[--color-ink-faint]">
+        <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint">
           Mock destinations
         </span>
       </CardHeader>
@@ -85,20 +85,20 @@ export function SendCard() {
             variant="outline"
             size="md"
             onClick={() => handleSend(d)}
-            className="group w-full justify-start gap-3 px-3 py-2.5 rounded-md normal-case tracking-normal h-auto hover:border-[--color-coral]/60 hover:bg-[--color-paper-hi]/30"
+            className="group w-full justify-start gap-3 px-3 py-2.5 rounded-md normal-case tracking-normal h-auto hover:border-coral/60 hover:bg-paper-hi/30"
           >
-            <span className="size-7 rounded-md bg-[--color-paper-hi] border border-[--color-paper-edge] grid place-items-center shrink-0 group-hover:bg-white">
+            <span className="size-7 rounded-md bg-paper-hi border border-paper-edge grid place-items-center shrink-0 group-hover:bg-white">
               {d.glyph}
             </span>
             <span className="flex-1 min-w-0 text-left">
-              <span className="block text-[13px] text-[--color-ink] leading-tight truncate">
+              <span className="block text-[13px] text-ink leading-tight truncate">
                 {d.name}
               </span>
-              <span className="block text-[11px] text-[--color-ink-faint] leading-tight mt-0.5 truncate">
+              <span className="block text-[11px] text-ink-faint leading-tight mt-0.5 truncate">
                 {d.context}
               </span>
             </span>
-            <span className="flex items-center gap-1 text-[10.5px] uppercase tracking-[0.1em] text-[--color-ink-faint] shrink-0">
+            <span className="flex items-center gap-1 text-[10.5px] uppercase tracking-[0.1em] text-ink-faint shrink-0">
               {d.sub}
               <ArrowUpRight className="size-3" />
             </span>

@@ -65,9 +65,9 @@ export function Phase4Plan({ employeeId }: { employeeId: string }) {
         right={streaming ? <StatusPill active>Drafting</StatusPill> : undefined}
       />
 
-      <div className="bg-white border border-[--color-paper-edge] rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] p-5 space-y-4">
+      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] p-5 space-y-4">
         {!plan && (
-          <p className="serif italic text-[--color-ink-faint] text-[15px]">Putting it together…</p>
+          <p className="serif italic text-ink-faint text-[15px]">Putting it together…</p>
         )}
 
         {plan && (
@@ -78,7 +78,7 @@ export function Phase4Plan({ employeeId }: { employeeId: string }) {
           </>
         )}
 
-        <div className="flex justify-end pt-2 border-t border-[--color-paper-edge]">
+        <div className="flex justify-end pt-2 border-t border-paper-edge">
           <Button
             variant="ink"
             size="md"
@@ -98,31 +98,31 @@ export function Phase4Plan({ employeeId }: { employeeId: string }) {
 function Tier({ tier, items }: { tier: "own" | "assist" | "flag"; items: ActionItem[] }) {
   const meta = TIER_META[tier];
   return (
-    <div className="bg-[--color-paper-hi]/40 border border-[--color-paper-edge] rounded-md overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[--color-paper-edge] bg-[--color-paper-hi]">
+    <div className="bg-paper-hi/40 border border-paper-edge rounded-md overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-paper-edge bg-paper-hi">
         <div className="flex items-center gap-2 min-w-0">
           <span
             aria-hidden
             className="w-[7px] h-[7px] rounded-full shrink-0"
             style={{ background: meta.dotColor }}
           />
-          <Serif italic className="text-[13px] text-[--color-ink-muted]">
+          <Serif italic className="text-[13px] text-ink-muted">
             {meta.label}
           </Serif>
-          <span className="text-[10.5px] text-[--color-ink-faint] truncate hidden sm:inline">
+          <span className="text-[10.5px] text-ink-faint truncate hidden sm:inline">
             · {meta.subtitle}
           </span>
         </div>
-        <span className="text-[10.5px] tabular-nums text-[--color-ink-faint] shrink-0">
+        <span className="text-[10.5px] tabular-nums text-ink-faint shrink-0">
           {items.length} {items.length === 1 ? "item" : "items"}
         </span>
       </div>
       {items.length === 0 ? (
-        <div className="px-4 py-3 text-[12.5px] text-[--color-ink-faint] italic">
+        <div className="px-4 py-3 text-[12.5px] text-ink-faint italic">
           Nothing in this tier yet.
         </div>
       ) : (
-        <ul className="divide-y divide-[--color-paper-edge]">
+        <ul className="divide-y divide-paper-edge">
           {items.map((it, i) => (
             <li key={i} className="px-4 py-3 flex items-start gap-3 bg-white">
               <span
@@ -131,9 +131,9 @@ function Tier({ tier, items }: { tier: "own" | "assist" | "flag"; items: ActionI
                 style={{ background: meta.dotColor }}
               />
               <div className="min-w-0 flex-1">
-                <div className="text-[14px] text-[--color-ink] leading-snug">{it.title}</div>
+                <div className="text-[14px] text-ink leading-snug">{it.title}</div>
                 {it.rationale && (
-                  <div className="text-[12px] text-[--color-ink-faint] mt-1 italic leading-snug">
+                  <div className="text-[12px] text-ink-faint mt-1 italic leading-snug">
                     {it.rationale}
                   </div>
                 )}

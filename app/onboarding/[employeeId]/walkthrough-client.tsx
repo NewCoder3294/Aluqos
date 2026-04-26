@@ -44,7 +44,7 @@ export function WalkthroughClient({
   }, [phase, uploads.length]);
 
   return (
-    <main className="h-screen overflow-hidden flex flex-col bg-[--color-paper]">
+    <main className="h-screen overflow-hidden flex flex-col bg-paper">
       <TopToolbar
         employeeName={employee.name}
         centerLabel="Onboarding"

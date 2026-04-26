@@ -42,7 +42,7 @@ export function VoiceButton({ onTranscript }: { onTranscript: (text: string) => 
       aria-pressed={recording}
       className={
         recording
-          ? "bg-[--color-coral] border-[--color-coral] hover:bg-[--color-coral] hover:border-[--color-coral]"
+          ? "bg-coral border-coral hover:bg-coral hover:border-coral"
           : ""
       }
     >

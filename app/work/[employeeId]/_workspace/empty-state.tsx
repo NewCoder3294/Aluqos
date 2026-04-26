@@ -23,7 +23,7 @@ export function EmptyState() {
             <Serif as="h2" className="text-[32px] leading-tight">
               Ready when you are.
             </Serif>
-            <p className="text-[14px] text-[--color-ink-faint] leading-relaxed">
+            <p className="text-[14px] text-ink-faint leading-relaxed">
               Pick a task on the left, or start something new.
             </p>
           </div>
@@ -37,10 +37,10 @@ export function EmptyState() {
                   variant="outline"
                   size="md"
                   onClick={() => toast.info("Coming soon", { description: qt.title })}
-                  className="text-left p-4 rounded-md normal-case tracking-normal h-auto items-start flex-col hover:bg-[--color-paper-hi]/40"
+                  className="text-left p-4 rounded-md normal-case tracking-normal h-auto items-start flex-col hover:bg-paper-hi/40"
                 >
-                  <Icon className="w-4 h-4 text-[--color-coral-deep] mb-2" />
-                  <div className="text-[13px] text-[--color-ink] leading-snug">
+                  <Icon className="w-4 h-4 text-coral-deep mb-2" />
+                  <div className="text-[13px] text-ink leading-snug">
                     {qt.title}
                   </div>
                 </Button>
@@ -53,7 +53,7 @@ export function EmptyState() {
               value={draft}
               onChange={e => setDraft(e.target.value)}
               placeholder="What should I work on?"
-              className="flex-1 bg-white border border-[--color-paper-edge] rounded px-3 py-2.5 text-[13px] focus:outline-none focus:border-[--color-coral]"
+              className="flex-1 bg-white border border-paper-edge rounded px-3 py-2.5 text-[13px] focus:outline-none focus:border-coral"
               onKeyDown={e => {
                 if (e.key === "Enter" && draft.trim()) {
                   toast.info("Coming soon", { description: draft });
