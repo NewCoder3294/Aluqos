@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Serif } from "@/src/components/serif";
+import { Button } from "@/src/components/ui/button";
+import { toast } from "@/src/components/toast";
 import { PrdSection } from "./prd-section";
 import { ExportRow } from "./export-row";
 import { FollowUps } from "./follow-ups";
@@ -67,11 +69,7 @@ export function PrdSurface({
   }
 
   if (!ws.prdId) {
-    return (
-      <section className="p-10">
-        <p className="serif italic text-[--color-ink-faint]">Pick a task on the left to start.</p>
-      </section>
-    );
+    return <EmptyState />;
   }
 
   return (
@@ -98,6 +96,84 @@ export function PrdSurface({
 
       <FollowUps employeeId={employeeId} />
       <ExportRow />
+      <ActivityFeed />
     </section>
+  );
+}
+
+function EmptyState() {
+  const [draft, setDraft] = useState("");
+  return (
+    <section className="p-10 grid place-items-center min-h-[60vh]">
+      <div className="max-w-[440px] w-full text-center space-y-6 bg-[--color-paper-hi] border border-[--color-paper-edge] rounded-md p-10">
+        <div className="flex justify-center">
+          <div
+            className="w-12 h-12 rounded-full text-white grid place-items-center"
+            style={{ background: "linear-gradient(135deg,#e07a5f,#c46449)" }}
+          >
+            <Serif className="text-[18px]">A</Serif>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Serif as="h2" className="text-[22px] leading-tight">
+            I&apos;m here when you&apos;re ready.
+          </Serif>
+          <p className="text-[13.5px] text-[--color-ink-faint] leading-relaxed">
+            Pick a task from the left, or tell me what&apos;s next.
+          </p>
+        </div>
+        <div className="flex gap-2 pt-1">
+          <input
+            value={draft}
+            onChange={e => setDraft(e.target.value)}
+            placeholder="What should I work on?"
+            className="flex-1 bg-white border border-[--color-paper-edge] rounded px-3 py-2 text-[13px] focus:outline-none focus:border-[--color-coral]"
+            onKeyDown={e => {
+              if (e.key === "Enter" && draft.trim()) {
+                toast.info("Coming soon", { description: draft });
+                setDraft("");
+              }
+            }}
+          />
+          <Button
+            variant="ink"
+            size="md"
+            disabled={!draft.trim()}
+            onClick={() => {
+              toast.info("Coming soon", { description: draft });
+              setDraft("");
+            }}
+          >
+            Go
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ActivityFeed() {
+  const events = [
+    { id: "a-1", verb: "Drafted Issue #47 PRD", when: "just now" },
+    { id: "a-2", verb: "Read q2-roadmap.pdf", when: "2m ago" },
+    { id: "a-3", verb: "Read saathi-mvp/README.md", when: "3m ago" },
+    { id: "a-4", verb: "Onboarding completed", when: "5m ago" },
+  ];
+  return (
+    <div className="pt-6 mt-6 border-t border-[--color-paper-edge]">
+      <div className="label mb-3">Activity</div>
+      <ul className="space-y-2">
+        {events.map(e => (
+          <li key={e.id} className="flex items-center gap-3 text-[13px]">
+            <span
+              aria-hidden
+              className="w-[7px] h-[7px] rounded-full bg-[--color-coral] shrink-0"
+            />
+            <span className="text-[--color-ink]">{e.verb}</span>
+            <span className="text-[--color-ink-faint] text-[11.5px] ml-auto">{e.when}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
