@@ -85,7 +85,7 @@ function FlipRow({
       transition={{ duration: 0.55, delay: index * 0.08, ease: EASE }}
       whileHover="hover"
       className={
-        "group grid grid-cols-2 transition-colors duration-200 hover:bg-coral/[0.05] " +
+        "group grid grid-cols-2 transition-colors duration-200 hover:bg-coral/[0.12] " +
         (!last ? "border-b border-paper-edge" : "")
       }
     >

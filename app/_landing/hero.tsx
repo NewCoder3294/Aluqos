@@ -1,8 +1,10 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { Clock } from "lucide-react";
 import { hireProductManager } from "@/src/server/hire";
 import { Button } from "@/src/components/ui/button";
+import { Badge } from "@/src/components/ui/badge";
 import { WorkspaceMockup } from "./workspace-mockup";
 import { DemoDialog } from "./demo-dialog";
 import { EASE, Reveal } from "./motion-primitives";
@@ -18,8 +20,14 @@ export function LandingHero() {
       {/* Centered text block */}
       <div className="max-w-[800px] mx-auto px-6 text-center">
         <Reveal>
-          <div className="text-[12px] tracking-[0.14em] uppercase text-coral-deep font-medium">
-            AI Employees that learn
+          <div className="flex flex-col items-center gap-3">
+            <div className="text-[12px] tracking-[0.14em] uppercase text-coral-deep font-medium">
+              AI Employees that learn
+            </div>
+            <Badge variant="outline" className="gap-1.5 px-2.5 py-1 uppercase tracking-[0.14em] text-[10.5px] text-ink-faint">
+              <Clock className="w-3 h-3" aria-hidden />
+              5-min onboarding
+            </Badge>
           </div>
         </Reveal>
 
@@ -53,7 +61,16 @@ export function LandingHero() {
 
         <Reveal delay={0.2}>
           <p className="mt-6 text-[12.5px] text-ink-faint">
-            Trusted by teams at Nike, T-Mobile, Shipd, and HPE
+            Trusted by teams at{" "}
+            <span className="font-medium text-ink-muted">Nike</span>
+            <span aria-hidden> &middot; </span>
+            <span className="font-medium text-ink-muted">UCSD</span>
+            <span aria-hidden> &middot; </span>
+            <span className="font-medium text-ink-muted">T-Mobile</span>
+            <span aria-hidden> &middot; </span>
+            <span className="font-medium text-ink-muted">Shipd</span>
+            <span aria-hidden> &middot; </span>
+            <span className="font-medium text-ink-muted">HPE</span>
           </p>
         </Reveal>
       </div>

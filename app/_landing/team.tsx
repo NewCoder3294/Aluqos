@@ -86,13 +86,13 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
             <motion.div
               variants={{ hover: { rotate: 8 } }}
               transition={{ duration: 0.45, ease: EASE }}
-              className="w-11 h-11 rounded-full text-white grid place-items-center serif text-[18px]"
+              className="w-11 h-11 rounded-full text-white grid place-items-center serif text-[18px] shrink-0"
               style={{ background: role.gradient }}
               aria-hidden
             >
               {role.initial}
             </motion.div>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <Serif className="text-[17px] block leading-tight">
                 {role.name}
               </Serif>
@@ -100,6 +100,15 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
                 {role.role}
               </div>
             </div>
+            {"comingSoon" in role.cta ? (
+              <Badge variant="outline" className="shrink-0">
+                Coming soon
+              </Badge>
+            ) : (
+              <Badge variant="coral" className="shrink-0">
+                Available now
+              </Badge>
+            )}
           </div>
 
           <CardContent className="flex-1 flex flex-col gap-5">

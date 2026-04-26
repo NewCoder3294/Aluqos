@@ -5,8 +5,15 @@ import { Reveal } from "./motion-primitives";
 const PRODUCT_LINKS: Array<{ href: string; label: string }> = [
   { href: "#roles", label: "Roles" },
   { href: "#pricing", label: "Pricing" },
+  { href: "#how", label: "How it works" },
+  { href: "#why", label: "Why now" },
+];
+
+const RESOURCES_LINKS: Array<{ href: string; label: string }> = [
+  { href: "#", label: "Documentation" },
   { href: "#", label: "Changelog" },
   { href: "#", label: "Status" },
+  { href: "#", label: "API" },
 ];
 
 const COMPANY_LINKS: Array<{ href: string; label: string }> = [
@@ -21,8 +28,8 @@ export function LandingFooter() {
     <footer className="border-t border-paper-edge">
       <Reveal fade duration={0.7}>
         <div className="max-w-6xl mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+            <div className="col-span-2 md:col-span-1">
               <div className="serif text-[20px] tracking-[-0.01em] text-ink">
                 Aluqos
               </div>
@@ -35,6 +42,7 @@ export function LandingFooter() {
             </div>
 
             <FooterColumn title="Product" links={PRODUCT_LINKS} />
+            <FooterColumn title="Resources" links={RESOURCES_LINKS} />
             <FooterColumn title="Company" links={COMPANY_LINKS} />
           </div>
 

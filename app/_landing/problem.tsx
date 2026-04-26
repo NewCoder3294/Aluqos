@@ -178,18 +178,6 @@ export function LandingProblem() {
           ))}
         </div>
       </div>
-
-      {/* Pull quote */}
-      <Reveal delay={0.05}>
-        <figure className="mt-16 lg:mt-20 max-w-3xl border-l-2 border-coral pl-6 lg:pl-8">
-          <blockquote className="serif italic text-[clamp(24px,3vw,36px)] leading-[1.25] text-ink">
-            &ldquo;We bought ChatGPT Enterprise. Nobody uses it.&rdquo;
-          </blockquote>
-          <figcaption className="mt-4 text-[12px] tracking-[0.12em] uppercase text-ink-faint">
-            &mdash; Head of Ops, 150-person SaaS company
-          </figcaption>
-        </figure>
-      </Reveal>
     </section>
   );
 }

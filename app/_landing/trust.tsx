@@ -34,6 +34,12 @@ const PARTNERS: Partner[] = [
     // Blocky, bold, slightly tracked — like the Hewlett Packard Enterprise mark.
     className: "font-extrabold tracking-[0.05em]",
   },
+  {
+    name: "UC San Diego",
+    // UCSD's wordmark cadence: spare "UC" + bold "SAN DIEGO".
+    render: "UC SAN DIEGO",
+    className: "font-semibold tracking-[0.03em]",
+  },
 ];
 
 export function LandingTrust() {
@@ -47,7 +53,7 @@ export function LandingTrust() {
           <div className="serif italic text-[13px] text-ink-faint shrink-0">
             Building with teams at
           </div>
-          <ul className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-y-5 gap-x-6 lg:gap-x-10 items-center justify-items-center">
+          <ul className="flex-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-5 gap-x-6 lg:gap-x-10 items-center justify-items-center">
             {PARTNERS.map(p => (
               <li
                 key={p.name}
