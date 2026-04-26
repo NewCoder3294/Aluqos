@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
+import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/lib/cn";
 
 type Event = { time: string; title: string; muted?: boolean };
@@ -15,12 +16,7 @@ export function Today() {
     <Card className="h-full">
       <CardHeader>
         <CardTitle>Today</CardTitle>
-        <button
-          type="button"
-          className="text-[11.5px] uppercase tracking-[0.12em] text-ink-faint hover:text-coral-deep transition-colors"
-        >
-          Calendar →
-        </button>
+        <Button variant="outline" size="sm">Calendar →</Button>
       </CardHeader>
       <CardContent compact className="p-0">
         <ul>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { cn } from "@/src/lib/cn";
 import { Card, CardHeader, CardTitle, CardContent } from "@/src/components/ui/card";
+import { Button } from "@/src/components/ui/button";
 
 type PipelineCard = {
   id: string;
@@ -89,12 +90,7 @@ export function Pipeline({ employeeId }: { employeeId: string }) {
     <Card>
       <CardHeader>
         <CardTitle>Pipeline</CardTitle>
-        <button
-          type="button"
-          className="text-[11.5px] uppercase tracking-[0.12em] text-ink-faint hover:text-coral-deep transition-colors"
-        >
-          View all →
-        </button>
+        <Button variant="outline" size="sm">View all →</Button>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-5 gap-4">
