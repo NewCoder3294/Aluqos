@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Newsreader } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/src/components/toast";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const serif = Newsreader({
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${inter.variable} ${serif.variable}`}>
       <body className="bg-[--color-paper] text-[--color-ink] font-sans antialiased">
         {children}
+        <Toaster />
       </body>
     </html>
   );
