@@ -17,12 +17,17 @@ import {
   BarChart,
 } from "lucide-react";
 import { cn } from "@/src/lib/cn";
+import { toast } from "@/src/components/toast";
+
+export type ActiveNavKey = "dashboard" | "prds" | "backlog" | "calendar" | "goals";
 
 type NavItem = {
+  key?: ActiveNavKey;
   label: string;
   icon: React.ReactNode;
   href?: string;
   comingSoon?: boolean;
+  onClick?: () => void;
 };
 
 type NavSection = {
@@ -43,11 +48,11 @@ function buildSections(employeeId: string): NavSection[] {
       label: "Alex (PM)",
       defaultOpen: true,
       items: [
-        { label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}` },
-        { label: "PRDs", icon: <FileText {...ICON_PROPS} /> },
-        { label: "Backlog", icon: <ListTodo {...ICON_PROPS} /> },
-        { label: "Calendar", icon: <Calendar {...ICON_PROPS} /> },
-        { label: "Goals", icon: <Target {...ICON_PROPS} /> },
+        { key: "dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}` },
+        { key: "prds", label: "PRDs", icon: <FileText {...ICON_PROPS} />, href: `/work/${employeeId}/prds` },
+        { key: "backlog", label: "Backlog", icon: <ListTodo {...ICON_PROPS} />, href: `/work/${employeeId}/backlog` },
+        { key: "calendar", label: "Calendar", icon: <Calendar {...ICON_PROPS} />, href: `/work/${employeeId}/calendar` },
+        { key: "goals", label: "Goals", icon: <Target {...ICON_PROPS} />, href: `/work/${employeeId}/goals` },
       ],
     },
     {
@@ -75,14 +80,17 @@ function buildSections(employeeId: string): NavSection[] {
   ];
 }
 
+const COMING_SOON_TOAST: Record<string, string> = {
+  jordan: "Jordan launches next month — you'll get an email.",
+  sam: "Sam launches next month — you'll get an email.",
+};
+
 export function TreeNav({
   employeeId,
-  activeKey = "Dashboard",
-  activeSectionId = "alex",
+  activeNav = "dashboard",
 }: {
   employeeId: string;
-  activeKey?: string;
-  activeSectionId?: string;
+  activeNav?: ActiveNavKey;
 }) {
   const sections = buildSections(employeeId);
   const [open, setOpen] = useState<Record<string, boolean>>(() =>
@@ -90,14 +98,14 @@ export function TreeNav({
   );
 
   return (
-    <aside className="w-[220px] shrink-0 h-full bg-paper border-r border-paper-edge flex flex-col">
-      <div className="px-5 pt-5 pb-4">
+    <aside className="w-[220px] shrink-0 bg-paper border-r border-paper-edge flex flex-col h-screen sticky top-0">
+      <div className="px-5 pt-5 pb-4 shrink-0">
         <Link href={`/work/${employeeId}`} className="serif text-[18px] tracking-[-0.01em] text-ink hover:text-coral-deep">
           Aluqos
         </Link>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-2 pb-2">
+      <nav className="flex-1 overflow-y-auto px-2 pb-2 min-h-0">
         {sections.map((section) => {
           const isOpen = open[section.id];
           return (
@@ -129,13 +137,13 @@ export function TreeNav({
                 <ul className="mt-0.5 ml-1.5 border-l border-paper-edge">
                   {section.items.map((item) => {
                     const isActive =
-                      section.id === activeSectionId && item.label === activeKey && !item.comingSoon;
+                      section.id === "alex" && item.key === activeNav && !item.comingSoon;
                     const inner = (
                       <span
                         className={cn(
                           "flex items-center gap-2 px-2.5 py-1.5 ml-1 rounded-sm text-[13px] transition-colors",
                           item.comingSoon
-                            ? "text-ink-faint/60 cursor-not-allowed"
+                            ? "text-ink-faint/70 hover:bg-paper-edge/30 cursor-pointer"
                             : isActive
                               ? "bg-coral/10 text-coral-deep"
                               : "text-ink-muted hover:bg-paper-edge/40 hover:text-ink",
@@ -152,12 +160,24 @@ export function TreeNav({
                         )}
                       </span>
                     );
+                    const handleComingSoonClick = () => {
+                      toast.info(
+                        COMING_SOON_TOAST[section.id] ??
+                          "Coming soon — you'll get an email when it launches.",
+                      );
+                    };
                     return (
                       <li key={item.label}>
                         {item.href && !item.comingSoon ? (
                           <Link href={item.href}>{inner}</Link>
                         ) : (
-                          <span aria-disabled={item.comingSoon}>{inner}</span>
+                          <button
+                            type="button"
+                            onClick={item.comingSoon ? handleComingSoonClick : undefined}
+                            className="block w-full text-left"
+                          >
+                            {inner}
+                          </button>
                         )}
                       </li>
                     );
@@ -169,9 +189,10 @@ export function TreeNav({
         })}
       </nav>
 
-      <div className="border-t border-paper-edge px-3 py-3">
+      <div className="border-t border-paper-edge px-3 py-3 shrink-0 mt-auto">
         <button
           type="button"
+          onClick={() => toast.info("Demo mode — sign out coming soon.")}
           className="w-full flex items-center justify-between px-2 py-1.5 rounded-sm text-[13px] text-ink-faint hover:text-ink hover:bg-paper-edge/40 transition-colors"
         >
           <span>Sign out</span>

@@ -27,10 +27,10 @@ const COLUMNS: PipelineColumn[] = [
     dotColor: "bg-paper-edge",
     totalCount: 4,
     cards: [
-      { id: "b1", title: "Add filter saved-views", sub: "Backlog · proposed by Alex" },
-      { id: "b2", title: "Improve onboarding completion", sub: "Backlog · 2 supporters" },
-      { id: "b3", title: "Slack import for status updates", sub: "Backlog · idea" },
-      { id: "b4", title: "Sprint planning automation", sub: "Backlog · idea" },
+      { id: "b1", title: "Add filter saved-views", sub: "Backlog · proposed by Alex", href: "prd/issue-b1" },
+      { id: "b2", title: "Improve onboarding completion", sub: "Backlog · 2 supporters", href: "prd/issue-b2" },
+      { id: "b3", title: "Slack import for status updates", sub: "Backlog · idea", href: "prd/issue-b3" },
+      { id: "b4", title: "Sprint planning automation", sub: "Backlog · idea", href: "prd/issue-b4" },
     ],
   },
   {
@@ -54,8 +54,8 @@ const COLUMNS: PipelineColumn[] = [
     dotColor: "bg-coral-light",
     totalCount: 2,
     cards: [
-      { id: "r1", title: "Issue #44 — Quick filters on dashboard", sub: "Issue #44 · 2 reviewers" },
-      { id: "r2", title: "Issue #41 — Rename workspace flow", sub: "Issue #41 · 1 reviewer" },
+      { id: "r1", title: "Issue #44 — Quick filters on dashboard", sub: "Issue #44 · 2 reviewers", href: "prd/issue-44" },
+      { id: "r2", title: "Issue #41 — Rename workspace flow", sub: "Issue #41 · 1 reviewer", href: "prd/issue-41" },
     ],
   },
   {
@@ -64,9 +64,9 @@ const COLUMNS: PipelineColumn[] = [
     dotColor: "bg-[#7a8b5c]",
     totalCount: 3,
     cards: [
-      { id: "a1", title: "Issue #38 — Saved searches API", sub: "Issue #38 · approved 2d ago" },
-      { id: "a2", title: "Issue #36 — Mobile detail view", sub: "Issue #36 · approved 4d ago" },
-      { id: "a3", title: "Issue #35 — Daily summaries", sub: "Issue #35 · approved 1w ago" },
+      { id: "a1", title: "Issue #38 — Saved searches API", sub: "Issue #38 · approved 2d ago", href: "prd/issue-38" },
+      { id: "a2", title: "Issue #36 — Mobile detail view", sub: "Issue #36 · approved 4d ago", href: "prd/issue-36" },
+      { id: "a3", title: "Issue #35 — Daily summaries", sub: "Issue #35 · approved 1w ago", href: "prd/issue-35" },
     ],
   },
   {
@@ -75,9 +75,9 @@ const COLUMNS: PipelineColumn[] = [
     dotColor: "bg-ink-muted",
     totalCount: 12,
     cards: [
-      { id: "s1", title: "Issue #34 — Onboarding gating", sub: "shipped 1w ago" },
-      { id: "s2", title: "Issue #32 — Notion export", sub: "shipped 2w ago" },
-      { id: "s3", title: "Issue #31 — Voice notes", sub: "shipped 3w ago" },
+      { id: "s1", title: "Issue #34 — Onboarding gating", sub: "shipped 1w ago", href: "prd/issue-34" },
+      { id: "s2", title: "Issue #32 — Notion export", sub: "shipped 2w ago", href: "prd/issue-32" },
+      { id: "s3", title: "Issue #31 — Voice notes", sub: "shipped 3w ago", href: "prd/issue-31" },
     ],
     truncatedExtra: 9,
   },

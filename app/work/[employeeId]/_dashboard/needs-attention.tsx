@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/lib/cn";
+import { toast } from "@/src/components/toast";
 
 type AttentionItem = {
   id: string;
@@ -13,6 +14,7 @@ type AttentionItem = {
   cta: "Review" | "Resolve" | "Reply" | "Draft" | "Refresh";
   blocker?: boolean;
   href?: string;
+  toastMessage?: string;
 };
 
 const ITEMS: AttentionItem[] = [
@@ -32,6 +34,7 @@ const ITEMS: AttentionItem[] = [
     context: "flagged 12m ago",
     cta: "Resolve",
     blocker: true,
+    toastMessage: "Marked as resolved.",
   },
   {
     id: "i3",
@@ -39,6 +42,7 @@ const ITEMS: AttentionItem[] = [
     title: "Marie asked about CSV format in #product-feedback",
     context: "45m ago",
     cta: "Reply",
+    toastMessage: "Drafted a reply for your review.",
   },
   {
     id: "i4",
@@ -46,6 +50,7 @@ const ITEMS: AttentionItem[] = [
     title: "Sprint review tomorrow — no agenda yet",
     context: "yesterday",
     cta: "Draft",
+    toastMessage: "Drafting a sprint-review agenda…",
   },
   {
     id: "i5",
@@ -53,6 +58,7 @@ const ITEMS: AttentionItem[] = [
     title: "PRD #44 stale — last edited 5 days ago",
     context: "5d ago",
     cta: "Refresh",
+    href: "prd/issue-44",
   },
 ];
 
@@ -69,13 +75,8 @@ export function NeedsAttention({ employeeId }: { employeeId: string }) {
       <CardContent compact className="p-0">
         <ul>
           {ITEMS.map((item, idx) => {
-            const row = (
-              <div
-                className={cn(
-                  "flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-paper-hi/40",
-                  idx !== ITEMS.length - 1 && "border-b border-paper-edge",
-                )}
-              >
+            const rowInner = (
+              <>
                 <span
                   className={cn(
                     "size-2 rounded-full shrink-0 mt-1.5 self-start",
@@ -91,19 +92,31 @@ export function NeedsAttention({ employeeId }: { employeeId: string }) {
                   </div>
                   <div className="text-[12px] text-ink-faint mt-0.5">{item.context}</div>
                 </div>
-                <Button variant="outline" size="sm" className="shrink-0">
-                  {item.cta}
+                <Button variant="outline" size="sm" className="shrink-0" asChild>
+                  <span>{item.cta}</span>
                 </Button>
-              </div>
+              </>
+            );
+            const rowClass = cn(
+              "flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-paper-hi/40 w-full text-left",
+              idx !== ITEMS.length - 1 && "border-b border-paper-edge",
             );
             return (
               <li key={item.id}>
                 {item.href ? (
-                  <Link href={`/work/${employeeId}/${item.href}`} className="block">
-                    {row}
+                  <Link href={`/work/${employeeId}/${item.href}`} className={cn(rowClass, "block")}>
+                    <span className="flex items-center gap-3 w-full">{rowInner}</span>
                   </Link>
                 ) : (
-                  row
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (item.toastMessage) toast.info(item.toastMessage);
+                    }}
+                    className={rowClass}
+                  >
+                    {rowInner}
+                  </button>
                 )}
               </li>
             );
