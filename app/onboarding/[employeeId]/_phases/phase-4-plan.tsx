@@ -65,20 +65,22 @@ export function Phase4Plan({ employeeId }: { employeeId: string }) {
         right={streaming ? <StatusPill active>Drafting</StatusPill> : undefined}
       />
 
-      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] p-5 space-y-4">
-        {!plan && (
-          <p className="serif italic text-ink-faint text-[15px]">Putting it together…</p>
-        )}
+      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] p-5 flex flex-col min-h-[560px]">
+        <div className="flex-1 flex flex-col space-y-4">
+          {!plan && (
+            <p className="serif italic text-ink-faint text-[15px]">Putting it together…</p>
+          )}
 
-        {plan && (
-          <>
-            <Tier tier="own" items={plan.own ?? []} />
-            <Tier tier="assist" items={plan.assist ?? []} />
-            <Tier tier="flag" items={plan.flag ?? []} />
-          </>
-        )}
+          {plan && (
+            <>
+              <Tier tier="own" items={plan.own ?? []} />
+              <Tier tier="assist" items={plan.assist ?? []} />
+              <Tier tier="flag" items={plan.flag ?? []} />
+            </>
+          )}
+        </div>
 
-        <div className="flex justify-end pt-2 border-t border-paper-edge">
+        <div className="flex justify-end pt-3 mt-4 border-t border-paper-edge shrink-0">
           <Button
             variant="ink"
             size="md"

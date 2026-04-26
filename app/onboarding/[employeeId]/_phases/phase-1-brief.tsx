@@ -63,9 +63,9 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
         estimate="~2 min"
       />
 
-      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
+      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] flex flex-col min-h-[520px]">
         {/* Stepped horizontal indicator */}
-        <div className="px-6 pt-5 pb-3 border-b border-paper-edge">
+        <div className="px-6 pt-5 pb-3 border-b border-paper-edge shrink-0">
           <ol className="flex items-center gap-1.5">
             {STEP_TITLES.map((label, i) => {
               const done = i < stepIdx;
@@ -97,7 +97,7 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
         </div>
 
         {/* Question / files content */}
-        <div className="px-6 py-7">
+        <div className="px-6 py-7 flex-1 flex flex-col">
           {!onFiles && (() => {
             const step = STEPS[stepIdx];
             return (
@@ -151,7 +151,7 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
         </div>
 
         {/* Per-step controls (kept inside the content card) */}
-        <div className="px-6 pb-5 flex items-center justify-between">
+        <div className="px-6 pb-5 flex items-center justify-between shrink-0">
           <Button
             variant="quiet"
             size="sm"

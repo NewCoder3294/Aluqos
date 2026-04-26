@@ -61,9 +61,9 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
         estimate="~3 min"
       />
 
-      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)]">
+      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] flex flex-col min-h-[520px]">
         {/* Step indicator */}
-        <div className="px-6 pt-5 pb-3 border-b border-paper-edge">
+        <div className="px-6 pt-5 pb-3 border-b border-paper-edge shrink-0">
           <ol className="flex items-center gap-1.5">
             {STEP_LABELS.map((label, i) => {
               const done = i < step;
@@ -94,7 +94,7 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
           </div>
         </div>
 
-        <div className="px-6 py-7">
+        <div className="px-6 py-7 flex-1 flex flex-col">
           {isQ && (() => {
             const cur = QUESTIONS[step];
             return (
@@ -182,7 +182,7 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
           )}
         </div>
 
-        <div className="px-6 pb-5 flex items-center justify-between">
+        <div className="px-6 pb-5 flex items-center justify-between shrink-0">
           <Button
             variant="quiet"
             size="sm"

@@ -51,7 +51,7 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
         estimate="~2 min"
       />
 
-      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] divide-y divide-paper-edge">
+      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] divide-y divide-paper-edge flex flex-col min-h-[560px]">
         {tiers.map(t => {
           const meta = TIER_META[t.tier];
           return (
