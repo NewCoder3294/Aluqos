@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Dropzone } from "@/src/components/dropzone";
 import { Serif } from "@/src/components/serif";
 import { useWalkthrough } from "@/src/store/walkthrough";
 import { submitBrief, BriefData } from "@/src/server/onboarding-actions";
+import { seedDemoFixture } from "@/src/server/seed-demo-fixture";
 
 const STEPS = [
   { key: "project", q: "What are you building?", placeholder: "Saathi — AI employees that learn how you work" },
@@ -22,6 +24,8 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [files, setFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const searchParams = useSearchParams();
+  const showDemo = searchParams.get("demo") === "1";
 
   const onUpload = async () => {
     if (!files.length) return;
@@ -79,6 +83,17 @@ export function Phase1Brief({ employeeId }: { employeeId: string }) {
         <ul className="text-[13px] space-y-1">
           {files.map((f, i) => <li key={i} className="text-[--color-ink-muted]">· {f.name}</li>)}
         </ul>
+      )}
+      {showDemo && (
+        <button
+          onClick={async () => {
+            setSubmitting(true);
+            await seedDemoFixture(employeeId);
+            setPhase(2);
+            setSubmitting(false);
+          }}
+          className="text-[11px] underline text-[--color-ink-faint] mt-4"
+        >Use demo data</button>
       )}
       <div className="flex justify-between items-center pt-2">
         <button
