@@ -30,28 +30,36 @@ export function WalkthroughClient({
   }, [session.phase, setPhase]);
 
   return (
-    <main className="bg-paper min-h-screen relative">
-      <OnboardingProgress
-        phase={phase}
-        stepWithinPhase={subStep}
-        totalStepsInPhase={subStepTotal}
+    <main className="bg-paper min-h-screen relative overflow-hidden">
+      {/* Editorial dot grid — same treatment as the landing hero */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 [background-image:radial-gradient(circle,#9a9388_1.2px,transparent_1.2px)] [background-size:20px_20px]"
       />
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={phase}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {phase === 1 && <Phase1Brief employeeId={employee.id} />}
-          {phase === 2 && <Phase2Reading employeeId={employee.id} />}
-          {phase === 3 && <Phase3Observe employeeId={employee.id} />}
-          {phase === 4 && <Phase4Plan employeeId={employee.id} />}
-          {phase === 5 && <Phase5Approve employeeId={employee.id} />}
-        </motion.div>
-      </AnimatePresence>
+      <div className="relative z-10">
+        <OnboardingProgress
+          phase={phase}
+          stepWithinPhase={subStep}
+          totalStepsInPhase={subStepTotal}
+        />
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={phase}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {phase === 1 && <Phase1Brief employeeId={employee.id} />}
+            {phase === 2 && <Phase2Reading employeeId={employee.id} />}
+            {phase === 3 && <Phase3Observe employeeId={employee.id} />}
+            {phase === 4 && <Phase4Plan employeeId={employee.id} />}
+            {phase === 5 && <Phase5Approve employeeId={employee.id} />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </main>
   );
 }

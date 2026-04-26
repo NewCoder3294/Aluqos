@@ -2,12 +2,8 @@
 
 import { MotionConfig } from "motion/react";
 import { LandingNav } from "./_landing/nav";
-import { LandingHero } from "./_landing/hero";
+import { LandingHeroEditorial } from "./_landing/hero-editorial";
 import { LandingTrust } from "./_landing/trust";
-import { LandingCustomerWins } from "./_landing/customer-wins";
-import { LandingProblem } from "./_landing/problem";
-import { LandingFlip } from "./_landing/flip";
-import { LandingUseCases } from "./_landing/use-cases";
 import { LandingBento } from "./_landing/bento";
 import { LandingHow } from "./_landing/how";
 import { LandingTeam } from "./_landing/team";
@@ -23,12 +19,8 @@ export default function Home() {
         <ScrollProgress />
         <LandingNav />
         <main>
-          <LandingHero />
+          <LandingHeroEditorial />
           <LandingTrust />
-          <LandingCustomerWins />
-          <LandingProblem />
-          <LandingFlip />
-          <LandingUseCases />
           <LandingBento />
           <LandingHow />
           <LandingTeam />

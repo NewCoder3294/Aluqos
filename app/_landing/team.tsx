@@ -43,7 +43,7 @@ const ROLES: Role[] = [
       "Auto-generates weekly status reports",
       "Updates Jira, Notion & Asana in real time",
     ],
-    cta: { label: "Coming soon", comingSoon: true },
+    cta: { label: "Hire Jordan", action: hireProductManager },
   },
   {
     initial: "S",
@@ -56,7 +56,7 @@ const ROLES: Role[] = [
       "Pulls & summarizes performance analytics",
       "Schedules & publishes content automatically",
     ],
-    cta: { label: "Coming soon", comingSoon: true },
+    cta: { label: "Hire Sam", action: hireProductManager },
   },
 ];
 

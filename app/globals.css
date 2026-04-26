@@ -5,8 +5,8 @@
   --color-paper-hi: #f9f3e6;
   --color-paper-edge: #e6dcc6;
   --color-ink: #1f1d1a;
-  --color-ink-muted: #5a4f3d;
-  --color-ink-faint: #7a6f5c;
+  --color-ink-muted: #4b4334;
+  --color-ink-faint: #6b604e;
   --color-coral: #c46449;
   --color-coral-deep: #9c4a2a;
   --color-coral-light: #e07a5f;
@@ -14,9 +14,12 @@
   --font-serif: var(--font-serif), Georgia, "Iowan Old Style", serif;
 }
 
-html, body { background: var(--color-paper); }
+html, body { 
+  background-color: var(--color-paper); 
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+}
 
-.serif { font-family: var(--font-serif); letter-spacing: -0.01em; }
+.serif { font-family: var(--font-serif); letter-spacing: -0.03em; }
 .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-ink-faint); }
 .italic-serif { font-family: var(--font-serif); font-style: italic; }
 
@@ -33,10 +36,33 @@ html, body { background: var(--color-paper); }
 }
 .cta-breathe { animation: cta-breathe 8s ease-in-out infinite; }
 
+/* Cursor-driven spotlight: JS writes --hero-mx / --hero-my via rAF; CSS owns shape. */
+@property --hero-mx { syntax: '<percentage>'; initial-value: 50%;    inherits: false; }
+@property --hero-my { syntax: '<percentage>'; initial-value: 40%;    inherits: false; }
+@property --hero-rx { syntax: '<length>';     initial-value: 44vmin; inherits: false; }
+@property --hero-ry { syntax: '<length>';     initial-value: 28vmin; inherits: false; }
+
+.hero-glow-mask {
+  --hero-mx: 50%; --hero-my: 40%; --hero-rx: 44vmin; --hero-ry: 28vmin;
+  mask-image: radial-gradient(ellipse var(--hero-rx) var(--hero-ry) at var(--hero-mx) var(--hero-my), black 0%, black 45%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse var(--hero-rx) var(--hero-ry) at var(--hero-mx) var(--hero-my), black 0%, black 45%, transparent 80%);
+  will-change: mask-image;
+}
+
+/* Soft warm halo that fills the space *between* the lit dots, slightly larger
+   than the mask radius for halo bleed. */
+.hero-glow-ambient {
+  --hero-mx: 50%; --hero-my: 40%; --hero-rx: 44vmin; --hero-ry: 28vmin;
+  background: radial-gradient(ellipse calc(var(--hero-rx) * 1.20) calc(var(--hero-ry) * 1.20) at var(--hero-mx) var(--hero-my), rgba(224, 122, 95, 0.50) 0%, rgba(224, 122, 95, 0.20) 40%, transparent 72%);
+  will-change: background;
+}
+
 /* Respect reduced-motion across all keyframe animations. */
 @media (prefers-reduced-motion: reduce) {
   .pulse-coral,
-  .cta-breathe {
+  .cta-breathe,
+  .hero-glow-mask,
+  .hero-glow-ambient {
     animation: none !important;
   }
   *, *::before, *::after {

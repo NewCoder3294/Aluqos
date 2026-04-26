@@ -22,6 +22,21 @@ const STATUSES = [
   "Adding API spec",
 ];
 
+// Which section the agent is "drafting" on each cycle — drives the coral
+// left-rail accent on the PRD body.
+const SECTION_FOCUS: Array<"problem" | "solution" | "goals"> = [
+  "problem",
+  "solution",
+  "goals",
+];
+
+const SOURCES = [
+  "q2-roadmap.pdf",
+  "issue-47.json",
+  "slack-#analytics",
+  "design-doc-v3",
+];
+
 const FEED_POOL: Array<{ t: string; s: string }> = [
   { t: "Drafted goals section", s: "just now" },
   { t: "Read q2-roadmap.pdf", s: "just now" },
@@ -68,6 +83,42 @@ export function WorkspaceMockup() {
 
   const title = useTypewriter(TITLES[cycle]!, 1400, reduced);
   const status = STATUSES[cycle]!;
+  const focusedSection = SECTION_FOCUS[cycle]!;
+
+  // Active source — cycles faster than the title (every 2.4s) so the agent
+  // feels like it's pulling from different references continuously.
+  const [activeSource, setActiveSource] = React.useState(0);
+  React.useEffect(() => {
+    if (reduced) return;
+    const id = setInterval(
+      () => setActiveSource(s => (s + 1) % SOURCES.length),
+      2400,
+    );
+    return () => clearInterval(id);
+  }, [reduced]);
+
+  // Confidence — ticks up from 87 → 93 across each cycle, then resets at the
+  // start of the next title. Easing is linear to feel like a meter, not a counter.
+  const [confidence, setConfidence] = React.useState(87);
+  React.useEffect(() => {
+    if (reduced) {
+      setConfidence(92);
+      return;
+    }
+    setConfidence(87);
+    let raf = 0;
+    const start = performance.now();
+    const target = 93;
+    const baseline = 87;
+    const dur = 5400; // close to one cycle
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / dur);
+      setConfidence(Math.round(baseline + (target - baseline) * t));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [cycle, reduced]);
 
   // Activity feed — prepend a new event every 6s; cap at 4 visible.
   const [feed, setFeed] = React.useState<Array<{ id: number; t: string; s: string }>>(() => [
@@ -202,23 +253,32 @@ export function WorkspaceMockup() {
             <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint mb-2">
               Sources
             </div>
-            <ul className="space-y-2 text-[11.5px] text-ink-muted">
-              <li className="flex items-center gap-1.5 truncate">
-                <FileText className="w-3 h-3 shrink-0" />
-                <span className="truncate">q2-roadmap.pdf</span>
-              </li>
-              <li className="flex items-center gap-1.5 truncate">
-                <FileText className="w-3 h-3 shrink-0" />
-                <span className="truncate">issue-47.json</span>
-              </li>
-              <li className="flex items-center gap-1.5 truncate">
-                <FileText className="w-3 h-3 shrink-0" />
-                <span className="truncate">slack-#analytics</span>
-              </li>
-              <li className="flex items-center gap-1.5 truncate">
-                <FileText className="w-3 h-3 shrink-0" />
-                <span className="truncate">design-doc-v3</span>
-              </li>
+            <ul className="space-y-1 text-[11.5px] text-ink-muted">
+              {SOURCES.map((src, i) => {
+                const active = i === activeSource;
+                return (
+                  <li
+                    key={src}
+                    className={
+                      "flex items-center gap-1.5 truncate rounded px-1.5 -mx-1.5 py-0.5 transition-colors duration-300 " +
+                      (active ? "bg-coral/10 text-ink" : "")
+                    }
+                  >
+                    <FileText
+                      className={
+                        "w-3 h-3 shrink-0 " + (active ? "text-coral" : "")
+                      }
+                    />
+                    <span className="truncate">{src}</span>
+                    {active && (
+                      <span className="ml-auto flex items-center gap-1 text-[9px] uppercase tracking-[0.1em] text-coral">
+                        <span className="size-1 rounded-full bg-coral pulse-coral" />
+                        reading
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
@@ -239,7 +299,7 @@ export function WorkspaceMockup() {
             {[
               { label: "Sources", value: "4" },
               { label: "Sections", value: "6" },
-              { label: "Confidence", value: "92%" },
+              { label: "Confidence", value: `${confidence}%` },
             ].map(k => (
               <div
                 key={k.label}
@@ -276,41 +336,43 @@ export function WorkspaceMockup() {
               </div>
               <span className="text-[10px] text-ink-faint tabular-nums">2:14</span>
             </div>
-            <div className="p-5 space-y-3">
-              <Serif as="h4" className="text-[18px] leading-tight">
+            <div className="p-5 space-y-2">
+              <Serif as="h4" className="text-[18px] leading-tight mb-2">
                 Bulk export for the analytics dashboard
               </Serif>
-              <div className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint">
-                Problem
-              </div>
-              <p className="text-[12.5px] leading-relaxed text-ink-muted">
-                Ops users on enterprise plans regularly need to pull{" "}
-                <span className="bg-coral/10 px-0.5">90 days of</span>{" "}
-                dashboard data for board prep. Today they screenshot panels one at
-                a time.
-              </p>
-              <div className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint pt-1">
-                Proposed solution
-              </div>
-              <p className="text-[12.5px] leading-relaxed text-ink-muted">
-                Add a <span className="serif italic">Bulk export</span> action to
-                the dashboard header. CSV + PDF, server-rendered, scoped to the
-                current filter set.
-              </p>
-              <div className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint pt-1">
-                Goals
-              </div>
-              <ul className="space-y-1.5 text-[12.5px] leading-relaxed text-ink-muted">
-                <li className="flex items-start gap-2">
-                  <span className="w-1 h-1 rounded-full bg-coral mt-2 shrink-0" />
-                  Reduce board-prep time from 4 hours to under 15 minutes.
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-1 h-1 rounded-full bg-coral mt-2 shrink-0" />
-                  Server-side rendering so exports match the live dashboard.
-                  <span className="inline-block w-[2px] h-3 bg-coral align-middle ml-0.5 animate-pulse" />
-                </li>
-              </ul>
+
+              <SectionBlock label="Problem" active={focusedSection === "problem"}>
+                <p className="text-[12.5px] leading-relaxed text-ink-muted">
+                  Ops users on enterprise plans regularly need to pull{" "}
+                  <span className="bg-coral/10 px-0.5">90 days of</span>{" "}
+                  dashboard data for board prep. Today they screenshot panels one
+                  at a time.
+                </p>
+              </SectionBlock>
+
+              <SectionBlock label="Proposed solution" active={focusedSection === "solution"}>
+                <p className="text-[12.5px] leading-relaxed text-ink-muted">
+                  Add a <span className="serif italic">Bulk export</span> action
+                  to the dashboard header. CSV + PDF, server-rendered, scoped to
+                  the current filter set.
+                </p>
+              </SectionBlock>
+
+              <SectionBlock label="Goals" active={focusedSection === "goals"}>
+                <ul className="space-y-1.5 text-[12.5px] leading-relaxed text-ink-muted">
+                  <li className="flex items-start gap-2">
+                    <span className="w-1 h-1 rounded-full bg-coral mt-2 shrink-0" />
+                    Reduce board-prep time from 4 hours to under 15 minutes.
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1 h-1 rounded-full bg-coral mt-2 shrink-0" />
+                    Server-side rendering so exports match the live dashboard.
+                    {focusedSection === "goals" && (
+                      <span className="inline-block w-[2px] h-3 bg-coral align-middle ml-0.5 animate-pulse" />
+                    )}
+                  </li>
+                </ul>
+              </SectionBlock>
             </div>
           </div>
         </section>
@@ -398,6 +460,53 @@ function ProgressStrip({ reduced }: { reduced: boolean }) {
         })}
       </div>
     </div>
+  );
+}
+
+// Active-aware PRD section block. When the agent is "drafting" this section,
+// it gets a coral left rule, a faint warm background, and a "drafting" badge
+// next to the label.
+function SectionBlock({
+  label,
+  active,
+  children,
+}: {
+  label: string;
+  active: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <motion.div
+      animate={{
+        backgroundColor: active ? "rgba(196,100,73,0.04)" : "rgba(196,100,73,0)",
+      }}
+      transition={{ duration: 0.4, ease: EASE }}
+      className={
+        "relative pl-3 pr-2 py-2 -mx-1 rounded-md border-l-2 transition-colors duration-300 " +
+        (active ? "border-coral" : "border-transparent")
+      }
+    >
+      <div className="flex items-center gap-2 mb-1.5">
+        <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint">
+          {label}
+        </span>
+        <AnimatePresence>
+          {active && (
+            <motion.span
+              initial={{ opacity: 0, x: -4 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -4 }}
+              transition={{ duration: 0.25, ease: EASE }}
+              className="flex items-center gap-1 text-[9px] uppercase tracking-[0.1em] text-coral"
+            >
+              <span className="size-1 rounded-full bg-coral pulse-coral" />
+              drafting
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </div>
+      {children}
+    </motion.div>
   );
 }
 

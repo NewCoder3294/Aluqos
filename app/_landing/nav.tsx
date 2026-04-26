@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { hireProductManager } from "@/src/server/hire";
-import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/lib/cn";
+import { LogoMark } from "./logo";
 
 const NAV_LINKS: Array<{ href: string; label: string }> = [
   { href: "#product", label: "Product" },
@@ -26,48 +25,68 @@ export function LandingNav() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 transition-colors duration-200",
-        "bg-paper/85 backdrop-blur",
+        "sticky top-0 z-40 transition-all duration-300 ease-out",
         scrolled
-          ? "border-b border-paper-edge"
-          : "border-b border-transparent",
+          ? "py-3 bg-transparent"
+          : "py-0 bg-paper/40 backdrop-blur-md border-b border-paper-edge/30",
       )}
     >
-      <div className="max-w-6xl mx-auto px-6 h-14 grid grid-cols-[1fr_auto_1fr] items-center gap-6">
-        <a
-          href="#top"
-          className="serif text-[18px] tracking-[-0.01em] text-ink justify-self-start"
+      <div
+        className={cn(
+          "mx-auto transition-all duration-300 ease-out",
+          scrolled
+            ? // Pill — liquid glass: heavy blur, saturated bg, paper-edge ring,
+              // soft outer drop shadow + thin inset highlight on the top edge.
+              "max-w-3xl h-11 px-5 rounded-full " +
+              "bg-paper-hi/60 backdrop-blur-xl backdrop-saturate-150 " +
+              "border border-paper-edge/70 " +
+              "shadow-[0_10px_30px_-12px_rgba(31,29,26,0.20),inset_0_1px_0_0_rgba(255,255,255,0.55)]"
+            : // Full-width bar — flush, transparent, lets the hero glow show through
+              "max-w-6xl h-14 px-6 rounded-none bg-transparent border-transparent",
+        )}
+      >
+        <div
+          className={cn(
+            "h-full grid grid-cols-[1fr_auto_1fr] items-center transition-all duration-300",
+            scrolled ? "gap-4" : "gap-6",
+          )}
         >
-          Aluqos
-        </a>
-
-        <nav
-          aria-label="Primary"
-          className="hidden lg:flex items-center justify-self-center gap-8 text-[13px] text-ink-muted"
-        >
-          {NAV_LINKS.map(link => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="hover:text-coral-deep transition-colors duration-200"
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-5 justify-self-end">
           <a
-            href="#"
-            className="hidden sm:inline-block text-[13px] text-ink-faint hover:text-ink transition-colors duration-200"
+            href="#top"
+            className={cn(
+              "inline-flex items-center justify-self-start serif tracking-[-0.01em] text-ink transition-all duration-300",
+              scrolled ? "gap-2 text-[15px]" : "gap-2.5 text-[18px]",
+            )}
           >
-            Sign in
+            <LogoMark
+              className="rounded-[5px]"
+              style={{
+                width: scrolled ? 18 : 22,
+                height: scrolled ? 18 : 22,
+              }}
+            />
+            Aluqos
           </a>
-          <form action={hireProductManager}>
-            <Button variant="ink" size="md" type="submit">
-              Get early access
-            </Button>
-          </form>
+
+          <nav
+            aria-label="Primary"
+            className={cn(
+              "hidden lg:flex items-center justify-self-center text-ink-muted transition-all duration-300",
+              scrolled ? "gap-5 text-[12px]" : "gap-8 text-[13px]",
+            )}
+          >
+            {NAV_LINKS.map(link => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="hover:text-coral-deep transition-colors duration-200"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          <span aria-hidden className="justify-self-end" />
         </div>
       </div>
     </header>
