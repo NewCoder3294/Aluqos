@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { Button } from "@/src/components/ui/button";
 
 export function VoiceButton({ onTranscript }: { onTranscript: (text: string) => void }) {
   const [recording, setRecording] = useState(false);
@@ -31,14 +32,21 @@ export function VoiceButton({ onTranscript }: { onTranscript: (text: string) => 
   }
 
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      size="icon"
       onClick={recording ? stop : start}
       title={recording ? "Stop recording" : "Speak instead"}
-      className={`w-9 h-9 rounded-full grid place-items-center border ${recording ? "bg-[--color-coral] border-[--color-coral]" : "bg-white border-[--color-paper-edge]"}`}
+      aria-label={recording ? "Stop recording" : "Speak instead"}
       aria-pressed={recording}
+      className={
+        recording
+          ? "bg-[--color-coral] border-[--color-coral] hover:bg-[--color-coral] hover:border-[--color-coral]"
+          : ""
+      }
     >
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={recording ? "#fff" : "currentColor"} strokeWidth="2"><path d="M12 19v3M8 22h8"/><rect x="9" y="3" width="6" height="13" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/></svg>
-    </button>
+    </Button>
   );
 }

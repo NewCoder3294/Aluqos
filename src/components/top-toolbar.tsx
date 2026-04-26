@@ -42,11 +42,13 @@ export function TopToolbar({
       </nav>
 
       {/* Command palette trigger */}
-      <button
+      <Button
         type="button"
+        variant="outline"
+        size="sm"
         onClick={() => toast.info("Coming soon")}
-        className="group flex items-center gap-2 w-[420px] max-w-[44vw] h-8 px-3 bg-[--color-paper-hi] border border-[--color-paper-edge] rounded-md text-[12.5px] text-[--color-ink-faint] hover:border-[--color-coral]/50 hover:bg-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-coral]/40"
         aria-label="Search or run a command"
+        className="group w-[420px] max-w-[44vw] h-8 px-3 bg-[--color-paper-hi] rounded-md text-[12.5px] text-[--color-ink-faint] normal-case tracking-normal justify-start gap-2 hover:border-[--color-coral]/50 hover:bg-white"
       >
         <Search className="size-3.5 shrink-0" />
         <span className="flex-1 text-left truncate">Search or run a command…</span>
@@ -54,7 +56,7 @@ export function TopToolbar({
           <span className="text-[11px] leading-none">⌘</span>
           <span>K</span>
         </kbd>
-      </button>
+      </Button>
 
       {/* Action icons */}
       <div className="flex items-center justify-end gap-0.5">

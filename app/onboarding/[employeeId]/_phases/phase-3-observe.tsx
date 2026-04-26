@@ -105,18 +105,21 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
                     {cur.options.map(o => {
                       const selected = answers[cur.key] === o;
                       return (
-                        <button
+                        <Button
                           key={o}
+                          variant="outline"
+                          size="md"
+                          aria-pressed={selected}
                           onClick={() => { setAnswers(a => ({ ...a, [cur.key]: o })); setStep(step + 1); }}
                           className={
-                            "group w-full text-left px-4 py-3 rounded border transition-colors cursor-pointer " +
+                            "w-full justify-start text-left px-4 py-3 rounded normal-case tracking-normal text-[14px] text-[--color-ink] " +
                             (selected
                               ? "border-[--color-coral] bg-[--color-paper-hi]"
-                              : "border-[--color-paper-edge] bg-white hover:border-[--color-coral]/50 hover:bg-[--color-paper-hi]/40")
+                              : "hover:bg-[--color-paper-hi]/40")
                           }
                         >
-                          <span className="text-[14px] text-[--color-ink]">{o}</span>
-                        </button>
+                          {o}
+                        </Button>
                       );
                     })}
                   </div>
@@ -141,19 +144,22 @@ export function Phase3Observe({ employeeId }: { employeeId: string }) {
                 {DECISION_STYLE.map(d => {
                   const selected = decisionStyle === d.val;
                   return (
-                    <button
+                    <Button
                       key={d.val}
+                      variant="outline"
+                      size="md"
+                      aria-pressed={selected}
                       onClick={() => setDecisionStyle(d.val)}
                       className={
-                        "group w-full text-left px-4 py-3 rounded border transition-colors cursor-pointer " +
+                        "w-full text-left px-4 py-3 rounded normal-case tracking-normal h-auto items-start flex-col [&_div]:w-full " +
                         (selected
                           ? "border-[--color-coral] bg-[--color-paper-hi]"
-                          : "border-[--color-paper-edge] bg-white hover:border-[--color-coral]/50 hover:bg-[--color-paper-hi]/40")
+                          : "hover:bg-[--color-paper-hi]/40")
                       }
                     >
                       <div className="text-[14px] text-[--color-ink]">{d.label}</div>
                       <div className="text-[12.5px] text-[--color-ink-faint] mt-0.5">{d.sub}</div>
-                    </button>
+                    </Button>
                   );
                 })}
               </div>

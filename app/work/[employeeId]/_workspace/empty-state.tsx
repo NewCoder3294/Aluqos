@@ -32,16 +32,18 @@ export function EmptyState() {
             {QUICK_TASKS.map(qt => {
               const Icon = qt.icon;
               return (
-                <button
+                <Button
                   key={qt.id}
+                  variant="outline"
+                  size="md"
                   onClick={() => toast.info("Coming soon", { description: qt.title })}
-                  className="text-left p-4 bg-white border border-[--color-paper-edge] rounded-md hover:border-[--color-coral] hover:bg-[--color-paper-hi]/40 transition-colors"
+                  className="text-left p-4 rounded-md normal-case tracking-normal h-auto items-start flex-col hover:bg-[--color-paper-hi]/40"
                 >
                   <Icon className="w-4 h-4 text-[--color-coral-deep] mb-2" />
                   <div className="text-[13px] text-[--color-ink] leading-snug">
                     {qt.title}
                   </div>
-                </button>
+                </Button>
               );
             })}
           </div>

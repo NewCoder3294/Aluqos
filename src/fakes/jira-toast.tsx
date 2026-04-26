@@ -1,6 +1,7 @@
 "use client";
 
 import { toast } from "@/src/components/toast";
+import { Button } from "@/src/components/ui/button";
 
 let nextKey = 1248;
 
@@ -21,12 +22,14 @@ export function JiraSendButton({
   project?: string;
 }) {
   return (
-    <button
+    <Button
+      variant="outline"
+      size="sm"
       onClick={() => fakeJiraCreate(project)}
-      className="px-3 py-1.5 text-xs rounded border border-[--color-paper-edge] bg-white hover:border-[#0052cc] text-[--color-ink]"
+      className="gap-1.5 text-xs normal-case tracking-normal hover:border-[#0052cc]"
     >
-      <span className="inline-flex items-center gap-1.5"><JiraGlyph /> {label}</span>
-    </button>
+      <JiraGlyph /> {label}
+    </Button>
   );
 }
 

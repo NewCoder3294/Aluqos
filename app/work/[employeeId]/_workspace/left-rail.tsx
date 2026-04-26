@@ -214,14 +214,16 @@ export function LeftRail({
 
         {/* Footer */}
         <div className="mt-auto pt-2 pb-1">
-          <button
+          <Button
             type="button"
+            variant="quiet"
+            size="sm"
             onClick={() => toast.info("Coming soon")}
-            className="inline-flex items-center gap-1 text-[11px] text-[--color-ink-faint] hover:text-[--color-coral-deep] transition-colors cursor-pointer"
+            className="gap-1 text-[11px] normal-case tracking-normal px-0 py-0"
           >
             Need a hand? Docs
             <ExternalLink className="size-3" />
-          </button>
+          </Button>
         </div>
       </div>
     </aside>

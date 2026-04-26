@@ -2,6 +2,7 @@
 
 import { useWorkspace, type PrdSectionKey } from "@/src/store/workspace";
 import { Card, CardHeader, CardTitle, CardContent } from "@/src/components/ui/card";
+import { Button } from "@/src/components/ui/button";
 import { fakeNotionExport } from "@/src/fakes/notion-export";
 import { fakeJiraCreate } from "@/src/fakes/jira-toast";
 import { toast } from "@/src/components/toast";
@@ -78,16 +79,18 @@ export function SendCard() {
       </CardHeader>
       <CardContent compact className="space-y-2 !p-3">
         {DESTINATIONS.map(d => (
-          <button
+          <Button
             key={d.id}
             type="button"
+            variant="outline"
+            size="md"
             onClick={() => handleSend(d)}
-            className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-md bg-white border border-[--color-paper-edge] hover:border-[--color-coral]/60 hover:bg-[--color-paper-hi]/30 transition-colors text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-coral]/30"
+            className="group w-full justify-start gap-3 px-3 py-2.5 rounded-md normal-case tracking-normal h-auto hover:border-[--color-coral]/60 hover:bg-[--color-paper-hi]/30"
           >
             <span className="size-7 rounded-md bg-[--color-paper-hi] border border-[--color-paper-edge] grid place-items-center shrink-0 group-hover:bg-white">
               {d.glyph}
             </span>
-            <span className="flex-1 min-w-0">
+            <span className="flex-1 min-w-0 text-left">
               <span className="block text-[13px] text-[--color-ink] leading-tight truncate">
                 {d.name}
               </span>
@@ -99,7 +102,7 @@ export function SendCard() {
               {d.sub}
               <ArrowUpRight className="size-3" />
             </span>
-          </button>
+          </Button>
         ))}
       </CardContent>
     </Card>

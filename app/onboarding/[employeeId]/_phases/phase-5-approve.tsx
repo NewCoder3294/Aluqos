@@ -127,20 +127,22 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
                             {(["approved", "modified", "removed"] as const).map(opt => {
                               const active = state === opt;
                               return (
-                                <button
+                                <Button
                                   key={opt}
                                   type="button"
+                                  variant="ghost"
+                                  size="sm"
                                   aria-pressed={active}
                                   onClick={() => setApproval(k, opt)}
                                   className={
-                                    "px-2.5 py-1 text-[10.5px] uppercase tracking-[0.1em] rounded transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-coral]/40 " +
+                                    "px-2.5 py-1 text-[10.5px] uppercase tracking-[0.1em] rounded " +
                                     (active
-                                      ? "bg-[--color-ink] text-[--color-paper]"
-                                      : "text-[--color-ink-faint] hover:text-[--color-ink] hover:bg-white")
+                                      ? "bg-[--color-ink] text-[--color-paper] hover:bg-[--color-ink] hover:text-[--color-paper]"
+                                      : "hover:text-[--color-ink] hover:bg-white")
                                   }
                                 >
                                   {opt}
-                                </button>
+                                </Button>
                               );
                             })}
                           </div>

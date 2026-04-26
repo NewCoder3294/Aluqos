@@ -165,18 +165,21 @@ export function ActivityRail() {
                   key={t.id}
                   className="px-4 py-2.5 flex items-center gap-3 hover:bg-[--color-paper-hi]/40 transition-colors"
                 >
-                  <button
+                  <Button
                     type="button"
+                    variant="outline"
+                    size="icon"
                     onClick={() =>
                       setTasks(prev =>
                         prev.map(p => (p.id === t.id ? { ...p, done: !p.done } : p)),
                       )
                     }
-                    className="size-4 rounded border border-[--color-paper-edge] grid place-items-center bg-white hover:border-[--color-coral] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-coral]/40"
                     aria-label={t.done ? "Mark incomplete" : "Mark complete"}
+                    aria-pressed={t.done}
+                    className="size-4 rounded p-0 [&_svg]:size-3 hover:border-[--color-coral]"
                   >
-                    {t.done && <Check className="size-3 text-[--color-coral-deep]" />}
-                  </button>
+                    {t.done ? <Check className="text-[--color-coral-deep]" /> : null}
+                  </Button>
                   <span
                     className={
                       "flex-1 min-w-0 text-[12.5px] " +

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "@/src/components/toast";
+import { Button } from "@/src/components/ui/button";
 
 const CHANNELS = ["#product-feedback", "#design-review", "#general", "#eng-standup"];
 
@@ -17,12 +18,14 @@ export function SlackConnectButton({
 
   return (
     <>
-      <button
+      <Button
+        variant="outline"
+        size="md"
         onClick={() => { setOpen(true); setStep("auth"); }}
-        className="px-4 py-2 rounded-md border border-[--color-paper-edge] bg-white text-sm hover:border-[--color-coral]"
+        className="gap-2 text-sm normal-case tracking-normal"
       >
-        <span className="inline-flex items-center gap-2"><SlackGlyph /> Connect Slack</span>
-      </button>
+        <SlackGlyph /> Connect Slack
+      </Button>
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[440px] rounded-lg bg-white shadow-2xl border border-stone-200 overflow-hidden">
@@ -57,11 +60,18 @@ export function SlackConnectButton({
               </div>
             )}
             <div className="px-5 py-3 bg-stone-50 flex justify-end gap-2 border-t border-stone-200">
-              <button onClick={() => setOpen(false)} className="px-3 py-1.5 text-sm text-stone-600">
+              <Button
+                variant="quiet"
+                size="sm"
+                onClick={() => setOpen(false)}
+                className="text-sm normal-case tracking-normal text-stone-600"
+              >
                 Cancel
-              </button>
+              </Button>
               {step === "auth" ? (
-                <button
+                <Button
+                  variant="ink"
+                  size="sm"
                   onClick={async () => {
                     setBusy(true);
                     await new Promise(r => setTimeout(r, 1500));
@@ -69,21 +79,23 @@ export function SlackConnectButton({
                     setStep("channels");
                   }}
                   disabled={busy}
-                  className="px-3 py-1.5 text-sm rounded bg-[#4a154b] text-white disabled:opacity-60"
+                  className="!bg-[#4a154b] hover:!bg-[#3a1138] text-sm normal-case tracking-normal"
                 >
                   {busy ? "Authorizing…" : "Allow"}
-                </button>
+                </Button>
               ) : (
-                <button
+                <Button
+                  variant="ink"
+                  size="sm"
                   onClick={() => {
                     setOpen(false);
                     toast.success(`Connected to ${picked}`, { icon: <SlackGlyph /> });
                     onConnected?.(picked);
                   }}
-                  className="px-3 py-1.5 text-sm rounded bg-[#4a154b] text-white"
+                  className="!bg-[#4a154b] hover:!bg-[#3a1138] text-sm normal-case tracking-normal"
                 >
                   Use this channel
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -95,12 +107,14 @@ export function SlackConnectButton({
 
 export function SlackSendButton({ channel = "#product-feedback" }: { channel?: string }) {
   return (
-    <button
+    <Button
+      variant="outline"
+      size="sm"
       onClick={() => toast.success(`Sent to ${channel}`, { icon: <SlackGlyph /> })}
-      className="px-3 py-1.5 text-xs rounded border border-[--color-paper-edge] bg-white hover:border-[#4a154b]"
+      className="gap-1.5 text-xs normal-case tracking-normal hover:border-[#4a154b]"
     >
-      <span className="inline-flex items-center gap-1.5"><SlackGlyph /> Send to Slack</span>
-    </button>
+      <SlackGlyph /> Send to Slack
+    </Button>
   );
 }
 

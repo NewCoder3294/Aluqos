@@ -110,14 +110,16 @@ export function PrdHeader({
             </span>
           </PropRow>
           <PropRow label="Reviewer">
-            <button
+            <Button
               type="button"
+              variant="quiet"
+              size="sm"
               onClick={() => toast.info("Coming soon")}
-              className="inline-flex items-center gap-1 text-[12.5px] text-[--color-ink-faint] hover:text-[--color-coral-deep] transition-colors cursor-pointer"
+              className="gap-1 text-[12.5px] normal-case tracking-normal px-0 py-0"
             >
               <Plus className="size-3" />
               Add reviewer
-            </button>
+            </Button>
           </PropRow>
         </div>
       </CardContent>

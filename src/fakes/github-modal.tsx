@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "@/src/components/toast";
+import { Button } from "@/src/components/ui/button";
 
 export function GithubConnectButton({
   onConnected,
@@ -15,14 +16,14 @@ export function GithubConnectButton({
 
   return (
     <>
-      <button
+      <Button
+        variant="outline"
+        size="md"
         onClick={() => setOpen(true)}
-        className="px-4 py-2 rounded-md border border-[--color-paper-edge] bg-white text-sm text-[--color-ink] hover:border-[--color-coral]"
+        className="gap-2 text-sm normal-case tracking-normal"
       >
-        <span className="inline-flex items-center gap-2">
-          <GithubGlyph /> Connect GitHub
-        </span>
-      </button>
+        <GithubGlyph /> Connect GitHub
+      </Button>
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[420px] rounded-lg bg-white shadow-2xl border border-stone-200 overflow-hidden">
@@ -39,14 +40,18 @@ export function GithubConnectButton({
               </ul>
             </div>
             <div className="px-5 py-3 bg-stone-50 flex justify-end gap-2 border-t border-stone-200">
-              <button
+              <Button
+                variant="quiet"
+                size="sm"
                 onClick={() => setOpen(false)}
-                className="px-3 py-1.5 text-sm text-stone-600"
+                className="text-sm normal-case tracking-normal text-stone-600"
                 disabled={busy}
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="ink"
+                size="sm"
                 onClick={async () => {
                   setBusy(true);
                   await new Promise(r => setTimeout(r, 1800));
@@ -55,11 +60,11 @@ export function GithubConnectButton({
                   toast.success(`Connected to ${preset}`, { icon: <GithubGlyph /> });
                   onConnected?.(preset);
                 }}
-                className="px-3 py-1.5 text-sm rounded bg-[#1f883d] text-white disabled:opacity-60"
+                className="!bg-[#1f883d] hover:!bg-[#1a7234] text-sm normal-case tracking-normal"
                 disabled={busy}
               >
                 {busy ? "Authorizing…" : "Authorize Saathi"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
