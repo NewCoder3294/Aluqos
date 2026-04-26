@@ -16,6 +16,9 @@ function formatToday(): string {
 }
 
 const HEADER_TITLE: Record<ActiveNavKey, string> = {
+  "all-dashboard": "Dashboard",
+  "all-files": "Files",
+  "all-activity": "Activity",
   "alex-dashboard": "Dashboard",
   "alex-prds": "PRDs",
   "alex-backlog": "Backlog",

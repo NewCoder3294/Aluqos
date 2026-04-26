@@ -15,11 +15,16 @@ import {
   Megaphone,
   Mic,
   BarChart,
+  FolderOpen,
+  Activity,
 } from "lucide-react";
 import { cn } from "@/src/lib/cn";
 import { toast } from "@/src/components/toast";
 
 export type ActiveNavKey =
+  | "all-dashboard"
+  | "all-files"
+  | "all-activity"
   | "alex-dashboard"
   | "alex-prds"
   | "alex-backlog"
@@ -39,16 +44,15 @@ type NavItem = {
   label: string;
   icon: React.ReactNode;
   href: string;
-  /** Soft-coming-soon: still navigates, but shows the "soon" tag in the nav. */
-  comingSoonLabel?: boolean;
 };
 
+type SectionId = "all" | "alex" | "jordan" | "sam";
+
 type NavSection = {
-  id: "alex" | "jordan" | "sam";
+  id: SectionId;
   label: string;
-  /** Tailwind background class for the section dot indicator. */
-  dotClass: string;
-  defaultOpen?: boolean;
+  /** Tailwind background class for the section dot indicator. Optional for global sections. */
+  dotClass?: string;
   items: NavItem[];
 };
 
@@ -57,10 +61,18 @@ const ICON_PROPS = { size: 14, strokeWidth: 1.75 };
 function buildSections(employeeId: string): NavSection[] {
   return [
     {
+      id: "all",
+      label: "All · Overview",
+      items: [
+        { key: "all-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}/overview` },
+        { key: "all-files", label: "Files", icon: <FolderOpen {...ICON_PROPS} />, href: `/work/${employeeId}/files` },
+        { key: "all-activity", label: "Activity", icon: <Activity {...ICON_PROPS} />, href: `/work/${employeeId}/activity` },
+      ],
+    },
+    {
       id: "alex",
       label: "Alex (PM)",
       dotClass: "bg-coral",
-      defaultOpen: true,
       items: [
         { key: "alex-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}` },
         { key: "alex-prds", label: "PRDs", icon: <FileText {...ICON_PROPS} />, href: `/work/${employeeId}/prds` },
@@ -75,9 +87,9 @@ function buildSections(employeeId: string): NavSection[] {
       dotClass: "bg-[#5a4f3d]",
       items: [
         { key: "jordan-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}/jordan` },
-        { key: "jordan-standups", label: "Standups", icon: <MessageSquare {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/standups`, comingSoonLabel: true },
-        { key: "jordan-status", label: "Status updates", icon: <BellRing {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/status`, comingSoonLabel: true },
-        { key: "jordan-risks", label: "Risks", icon: <AlertTriangle {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/risks`, comingSoonLabel: true },
+        { key: "jordan-standups", label: "Standups", icon: <MessageSquare {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/standups` },
+        { key: "jordan-status", label: "Status updates", icon: <BellRing {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/status` },
+        { key: "jordan-risks", label: "Risks", icon: <AlertTriangle {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/risks` },
       ],
     },
     {
@@ -86,19 +98,12 @@ function buildSections(employeeId: string): NavSection[] {
       dotClass: "bg-[#7a8b5c]",
       items: [
         { key: "sam-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}/sam` },
-        { key: "sam-campaigns", label: "Campaigns", icon: <Megaphone {...ICON_PROPS} />, href: `/work/${employeeId}/sam/campaigns`, comingSoonLabel: true },
-        { key: "sam-brand-voice", label: "Brand voice", icon: <Mic {...ICON_PROPS} />, href: `/work/${employeeId}/sam/brand-voice`, comingSoonLabel: true },
-        { key: "sam-performance", label: "Performance", icon: <BarChart {...ICON_PROPS} />, href: `/work/${employeeId}/sam/performance`, comingSoonLabel: true },
+        { key: "sam-campaigns", label: "Campaigns", icon: <Megaphone {...ICON_PROPS} />, href: `/work/${employeeId}/sam/campaigns` },
+        { key: "sam-brand-voice", label: "Brand voice", icon: <Mic {...ICON_PROPS} />, href: `/work/${employeeId}/sam/brand-voice` },
+        { key: "sam-performance", label: "Performance", icon: <BarChart {...ICON_PROPS} />, href: `/work/${employeeId}/sam/performance` },
       ],
     },
   ];
-}
-
-/** Map an active nav key to its owning section so we can auto-expand it. */
-function sectionForActive(activeNav: ActiveNavKey): NavSection["id"] {
-  if (activeNav.startsWith("jordan-")) return "jordan";
-  if (activeNav.startsWith("sam-")) return "sam";
-  return "alex";
 }
 
 export function TreeNav({
@@ -109,12 +114,14 @@ export function TreeNav({
   activeNav?: ActiveNavKey;
 }) {
   const sections = buildSections(employeeId);
-  const activeSection = sectionForActive(activeNav);
-  const [open, setOpen] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(
-      sections.map((s) => [s.id, s.defaultOpen || s.id === activeSection]),
-    ),
-  );
+  // Persistent expanded state — all sections start expanded and stay expanded
+  // independent of which nav item is active. Chevron toggles only that section.
+  const [open, setOpen] = useState<Record<SectionId, boolean>>(() => ({
+    all: true,
+    alex: true,
+    jordan: true,
+    sam: true,
+  }));
 
   return (
     <aside className="w-[220px] shrink-0 bg-paper border-r border-paper-edge flex flex-col h-screen sticky top-0">
@@ -142,7 +149,11 @@ export function TreeNav({
                     isOpen && "rotate-90",
                   )}
                 />
-                <span className={cn("size-1.5 rounded-full shrink-0", section.dotClass)} />
+                {section.dotClass ? (
+                  <span className={cn("size-1.5 rounded-full shrink-0", section.dotClass)} />
+                ) : (
+                  <span className="size-1.5 shrink-0" aria-hidden />
+                )}
                 <span className="text-[10px] uppercase tracking-[0.14em] text-ink-faint font-medium">
                   {section.label}
                 </span>
@@ -167,11 +178,6 @@ export function TreeNav({
                               {item.icon}
                             </span>
                             <span className="truncate">{item.label}</span>
-                            {item.comingSoonLabel && !isActive && (
-                              <span className="ml-auto text-[9px] uppercase tracking-[0.1em] text-ink-faint/60">
-                                soon
-                              </span>
-                            )}
                           </span>
                         </Link>
                       </li>
