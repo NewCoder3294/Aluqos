@@ -4,7 +4,12 @@ import { useMemo } from "react";
 import { Serif } from "@/src/components/serif";
 import { StatusPill } from "@/src/components/status-pill";
 import { Button } from "@/src/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/src/components/ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/src/components/ui/tabs";
 import { useWorkspace } from "@/src/store/workspace";
 import { toast } from "@/src/components/toast";
 import { ChevronRight, ExternalLink, Plus } from "lucide-react";
@@ -52,9 +57,9 @@ export function LeftRail({
   const recentPrds = (prds ?? []).slice(0, 3);
 
   return (
-    <aside className="bg-paper-hi border-r border-paper-edge h-full overflow-y-auto flex flex-col">
-      {/* Header band — identity anchor */}
-      <div className="px-4 pt-4 pb-3 border-b border-paper-edge">
+    <aside className="bg-paper-hi border-r border-paper-edge h-full flex flex-col min-w-0 overflow-hidden">
+      {/* Header band — identity anchor (persistent) */}
+      <div className="px-4 pt-4 pb-3 border-b border-paper-edge shrink-0">
         <div className="flex items-center gap-3">
           <div
             className="w-10 h-10 rounded-full text-white grid place-items-center shrink-0"
@@ -77,131 +82,155 @@ export function LeftRail({
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 p-3 flex-1">
-        {/* Today */}
-        <Card tone="muted">
-          <CardHeader className="!py-2.5 !px-4">
-            <CardTitle className="text-[13px]">Today</CardTitle>
-            <span className="text-[10.5px] tabular-nums text-ink-faint">
-              {events.length} events
-            </span>
-          </CardHeader>
-          <CardContent compact className="!p-4">
-            <ol className="relative pl-4">
-              <span
-                aria-hidden
-                className="absolute left-[5px] top-1 bottom-1 w-px bg-paper-edge"
-              />
-              {events.map(e => (
-                <li key={e.id} className="relative pb-2.5 last:pb-0">
-                  <span
-                    aria-hidden
-                    className="absolute -left-[11px] top-[5px] w-[7px] h-[7px] rounded-full bg-coral"
-                  />
-                  <div className="text-[12.5px] text-ink leading-snug">{e.verb}</div>
-                  <div className="text-[10.5px] text-ink-faint mt-0.5">{e.when}</div>
-                </li>
-              ))}
-            </ol>
-          </CardContent>
-        </Card>
+      <Tabs defaultValue="sources" className="flex flex-col flex-1 min-h-0">
+        {/* Tab list (persistent) */}
+        <div className="px-3 pt-2 bg-paper-hi border-b border-paper-edge shrink-0">
+          <TabsList className="border-b-0 -mb-px">
+            <TabsTrigger value="sources">Sources</TabsTrigger>
+            <TabsTrigger value="plan">Plan</TabsTrigger>
+            <TabsTrigger value="history">History</TabsTrigger>
+          </TabsList>
+        </div>
 
-        {/* Source materials */}
-        <Card tone="muted">
-          <CardHeader className="!py-2.5 !px-4">
-            <CardTitle className="text-[13px]">Source materials</CardTitle>
+        {/* Sources */}
+        <TabsContent
+          value="sources"
+          className="flex-1 min-h-0 overflow-y-auto px-3 py-3"
+        >
+          <div className="flex items-center justify-between mb-2 px-1">
+            <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
+              Source materials
+            </span>
             <Button variant="quiet" size="sm" onClick={() => toast.info("Coming soon")}>
-              + Add
+              + Add more
             </Button>
-          </CardHeader>
-          <CardContent compact className="!p-4">
-            <ul className="space-y-2 text-[12.5px]">
-              {uploads.map((u, idx) => {
-                const meta = FILE_META[idx] ?? { size: "—", progress: 100 };
-                const reading = meta.progress < 100;
-                return (
-                  <li key={u.id} className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <FileGlyph />
-                      <span className="flex-1 truncate text-ink">{u.filename}</span>
-                      <span className="text-[10.5px] tabular-nums text-ink-faint shrink-0">
-                        {meta.size}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 pl-[16px]">
-                      <span className="flex-1 h-1 bg-paper-edge/70 rounded-full overflow-hidden">
-                        <span
-                          className={
-                            "block h-full rounded-full transition-all " +
-                            (reading ? "bg-coral pulse-coral" : "bg-coral/70")
-                          }
-                          style={{ width: `${meta.progress}%` }}
-                        />
-                      </span>
+          </div>
+          <ul className="space-y-2 text-[12.5px]">
+            {uploads.map((u, idx) => {
+              const meta = FILE_META[idx] ?? { size: "—", progress: 100 };
+              const reading = meta.progress < 100;
+              return (
+                <li key={u.id} className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <FileGlyph />
+                    <span className="flex-1 truncate text-ink">{u.filename}</span>
+                    <span className="text-[10.5px] tabular-nums text-ink-faint shrink-0">
+                      {meta.size}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 pl-[16px]">
+                    <span className="flex-1 h-1 bg-paper-edge/70 rounded-full overflow-hidden">
                       <span
                         className={
-                          "text-[9.5px] uppercase tracking-[0.1em] shrink-0 " +
-                          (reading ? "text-coral-deep" : "text-ink-faint")
+                          "block h-full rounded-full transition-all " +
+                          (reading ? "bg-coral pulse-coral" : "bg-coral/70")
                         }
-                      >
-                        {reading ? "reading…" : "✓ read"}
-                      </span>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </CardContent>
-        </Card>
+                        style={{ width: `${meta.progress}%` }}
+                      />
+                    </span>
+                    <span
+                      className={
+                        "text-[9.5px] uppercase tracking-[0.1em] shrink-0 " +
+                        (reading ? "text-coral-deep" : "text-ink-faint")
+                      }
+                    >
+                      {reading ? "reading…" : "✓ read"}
+                    </span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </TabsContent>
 
-        {/* Action plan */}
-        {actionPlan && (
-          <Card tone="muted">
-            <CardHeader className="!py-2.5 !px-4">
-              <CardTitle className="text-[13px]">Action plan</CardTitle>
-            </CardHeader>
-            <CardContent compact className="!p-4">
+        {/* Plan */}
+        <TabsContent
+          value="plan"
+          className="flex-1 min-h-0 overflow-y-auto px-3 py-3"
+        >
+          {actionPlan ? (
+            <div className="space-y-1">
               <Tier label="I will own" tone="own" items={actionPlan.own} onPickTask={onPickTask} />
               <Tier label="I will assist" tone="assist" items={actionPlan.assist} onPickTask={onPickTask} />
               <Tier label="I will flag" tone="flag" items={actionPlan.flag} onPickTask={onPickTask} />
-            </CardContent>
-          </Card>
-        )}
+            </div>
+          ) : (
+            <div className="text-[11.5px] text-ink-faint italic leading-relaxed px-1">
+              No action plan yet.
+            </div>
+          )}
+        </TabsContent>
 
-        {/* Recent work */}
-        <Card tone="muted">
-          <CardHeader className="!py-2.5 !px-4">
-            <CardTitle className="text-[13px]">Recent work</CardTitle>
-          </CardHeader>
-          <CardContent compact className="!p-4">
-            {recentPrds.length === 0 ? (
-              <div className="text-[11.5px] text-ink-faint italic leading-relaxed">
-                No PRDs yet — your work will collect here.
+        {/* History */}
+        <TabsContent
+          value="history"
+          className="flex-1 min-h-0 overflow-y-auto px-3 py-3"
+        >
+          <div className="space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2 px-1">
+                <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
+                  Today
+                </span>
+                <span className="text-[10.5px] tabular-nums text-ink-faint">
+                  {events.length} events
+                </span>
               </div>
-            ) : (
-              <ul className="space-y-1.5">
-                {recentPrds.map(p => (
-                  <li
-                    key={p.id}
-                    className="group bg-white border border-paper-edge rounded px-2.5 py-1.5 hover:border-coral transition-colors cursor-pointer flex items-center gap-2"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[12.5px] text-ink truncate">
-                        {p.title || "Untitled PRD"}
-                      </div>
-                      <div className="text-[10.5px] text-ink-faint mt-0.5">
-                        shipped 3m ago
-                      </div>
-                    </div>
-                    <ChevronRight className="size-3 text-ink-faint opacity-0 group-hover:opacity-100 transition-opacity" />
+              <ol className="relative pl-4">
+                <span
+                  aria-hidden
+                  className="absolute left-[5px] top-1 bottom-1 w-px bg-paper-edge"
+                />
+                {events.map(e => (
+                  <li key={e.id} className="relative pb-2.5 last:pb-0">
+                    <span
+                      aria-hidden
+                      className="absolute -left-[11px] top-[5px] w-[7px] h-[7px] rounded-full bg-coral"
+                    />
+                    <div className="text-[12.5px] text-ink leading-snug">{e.verb}</div>
+                    <div className="text-[10.5px] text-ink-faint mt-0.5">{e.when}</div>
                   </li>
                 ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+              </ol>
+            </div>
 
-        {/* + Add task */}
+            <div className="border-t border-paper-edge pt-3">
+              <div className="flex items-center justify-between mb-2 px-1">
+                <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
+                  Recent work
+                </span>
+              </div>
+              {recentPrds.length === 0 ? (
+                <div className="text-[11.5px] text-ink-faint italic leading-relaxed px-1">
+                  No PRDs yet — your work will collect here.
+                </div>
+              ) : (
+                <ul className="space-y-1.5">
+                  {recentPrds.map(p => (
+                    <li
+                      key={p.id}
+                      className="group bg-white border border-paper-edge rounded px-2.5 py-1.5 hover:border-coral transition-colors cursor-pointer flex items-center gap-2"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[12.5px] text-ink truncate">
+                          {p.title || "Untitled PRD"}
+                        </div>
+                        <div className="text-[10.5px] text-ink-faint mt-0.5">
+                          shipped 3m ago
+                        </div>
+                      </div>
+                      <ChevronRight className="size-3 text-ink-faint opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      {/* Persistent footer */}
+      <div className="shrink-0 px-3 pt-2 pb-3 border-t border-paper-edge bg-paper-hi space-y-2">
         <Button
           variant="outline"
           size="sm"
@@ -211,20 +240,16 @@ export function LeftRail({
           <Plus className="size-3.5" />
           Add task
         </Button>
-
-        {/* Footer */}
-        <div className="mt-auto pt-2 pb-1">
-          <Button
-            type="button"
-            variant="quiet"
-            size="sm"
-            onClick={() => toast.info("Coming soon")}
-            className="gap-1 text-[11px] normal-case tracking-normal px-0 py-0"
-          >
-            Need a hand? Docs
-            <ExternalLink className="size-3" />
-          </Button>
-        </div>
+        <Button
+          type="button"
+          variant="quiet"
+          size="sm"
+          onClick={() => toast.info("Coming soon")}
+          className="gap-1 text-[11px] normal-case tracking-normal px-1 py-0"
+        >
+          Need a hand? Docs
+          <ExternalLink className="size-3" />
+        </Button>
       </div>
     </aside>
   );
@@ -283,7 +308,7 @@ function Tier({
         ? "var(--color-coral)"
         : "var(--color-ink-muted)";
   return (
-    <div className="space-y-1.5 mb-2.5 last:mb-0">
+    <div className="space-y-1.5 mb-3 last:mb-0">
       <div className="flex items-center gap-2">
         <span
           aria-hidden

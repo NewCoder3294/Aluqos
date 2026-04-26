@@ -83,14 +83,16 @@ export function ActivityRail() {
       <Tabs defaultValue="activity" className="flex flex-col flex-1 min-h-0">
         <div className="px-3 pt-2 bg-paper-hi border-b border-paper-edge">
           <TabsList className="border-b-0 -mb-px">
-            <TabsTrigger value="activity">Activity</TabsTrigger>
-            <TabsTrigger value="comments" count={1}>
+            <TabsTrigger value="activity" className="px-2">
+              Activity
+            </TabsTrigger>
+            <TabsTrigger value="comments" count={1} className="px-2">
               Comments
             </TabsTrigger>
-            <TabsTrigger value="versions" count={3}>
+            <TabsTrigger value="versions" count={3} className="px-2">
               Versions
             </TabsTrigger>
-            <TabsTrigger value="tasks" count={tasks.filter(t => !t.done).length}>
+            <TabsTrigger value="tasks" count={tasks.filter(t => !t.done).length} className="px-2">
               Tasks
             </TabsTrigger>
           </TabsList>

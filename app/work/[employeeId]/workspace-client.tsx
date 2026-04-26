@@ -26,7 +26,7 @@ export function WorkspaceClient({
   return (
     <main className="h-screen overflow-hidden flex flex-col bg-paper">
       <TopToolbar employeeName={employee.name} centerLabel={centerLabel} />
-      <div className="grid grid-cols-[280px_1fr_360px] flex-1 min-h-0 overflow-hidden">
+      <div className="grid grid-cols-[300px_1fr_320px] flex-1 min-h-0 overflow-hidden">
         <LeftRail
           employeeId={employee.id}
           employeeName={employee.name}

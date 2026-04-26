@@ -70,7 +70,7 @@ export function PrdSection({
           <Badge variant="outline">Pending</Badge>
         )}
       </CardHeader>
-      <CardContent compact>
+      <CardContent compact className="!p-7">
         {showSkeleton ? (
           <div className="space-y-2 py-1" aria-label="Loading section content">
             <div className="h-3 rounded w-full bg-gradient-to-r from-paper-hi via-paper-edge/40 to-paper-hi animate-pulse" />

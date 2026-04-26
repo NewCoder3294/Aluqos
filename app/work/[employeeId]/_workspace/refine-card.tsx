@@ -57,7 +57,7 @@ export function RefineCard() {
           Powered by Alex
         </span>
       </CardHeader>
-      <CardContent compact className="space-y-3">
+      <CardContent compact className="space-y-3 !p-7">
         <div className="flex gap-1.5 flex-wrap">
           {PRESETS.map(p => (
             <Button

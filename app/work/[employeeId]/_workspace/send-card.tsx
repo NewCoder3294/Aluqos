@@ -77,7 +77,7 @@ export function SendCard() {
           Mock destinations
         </span>
       </CardHeader>
-      <CardContent compact className="space-y-2 !p-3">
+      <CardContent compact className="space-y-2 !p-7">
         {DESTINATIONS.map(d => (
           <Button
             key={d.id}

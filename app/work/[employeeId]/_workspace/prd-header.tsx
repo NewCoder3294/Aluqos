@@ -27,7 +27,7 @@ export function PrdHeader({
 
   return (
     <Card tone="primary">
-      <CardContent className="space-y-4 !p-5">
+      <CardContent className="space-y-4 !p-8">
         <div className="flex items-start justify-between gap-3">
           <Serif as="h2" className="text-[24px] leading-tight text-ink truncate">
             {title || "Drafting…"}
