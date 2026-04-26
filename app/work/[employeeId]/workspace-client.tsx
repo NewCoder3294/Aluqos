@@ -27,8 +27,14 @@ export function WorkspaceClient({
         <AvatarCard name={employee.name} role="AI Product Manager" size="sm" />
         <StatusPill active={status !== "idle"}>{statusLabel(status)}</StatusPill>
       </header>
-      <div className="grid grid-cols-[300px_1fr] min-h-[calc(100vh-65px)]">
-        <LeftRail employeeId={employee.id} uploads={uploads} actionPlan={actionPlan} />
+      <div className="grid grid-cols-[320px_1fr] min-h-[calc(100vh-65px)]">
+        <LeftRail
+          employeeId={employee.id}
+          employeeName={employee.name}
+          uploads={uploads}
+          actionPlan={actionPlan}
+          prds={prds.map(p => ({ id: p.id, title: p.title }))}
+        />
         <PrdSurface employeeId={employee.id} initialPrds={prds} bootstrap={bootstrap} />
       </div>
     </main>
