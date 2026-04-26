@@ -1,6 +1,7 @@
+import { redirect } from "next/navigation";
 import { fetchWorkspaceState } from "@/src/server/run-prd";
 import { fakeEmployee } from "@/src/db/client";
-import { WorkspaceClient } from "./workspace-client";
+import { DashboardShell } from "./_dashboard/dashboard-shell";
 
 export default async function WorkPage({
   params,
@@ -12,6 +13,11 @@ export default async function WorkPage({
   const { employeeId } = await params;
   const sp = await searchParams;
 
+  // Bootstrap from onboarding lands directly into the streaming PRD detail.
+  if (sp.bootstrap === "1") {
+    redirect(`/work/${employeeId}/prd/new-bootstrap?bootstrap=1`);
+  }
+
   let state;
   try {
     state = await fetchWorkspaceState(employeeId);
@@ -20,13 +26,5 @@ export default async function WorkPage({
   }
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
 
-  return (
-    <WorkspaceClient
-      employee={emp}
-      uploads={state.uploads}
-      prds={state.prds}
-      actionPlan={state.session?.action_plan ?? null}
-      bootstrap={sp.bootstrap === "1"}
-    />
-  );
+  return <DashboardShell employeeId={emp.id} employeeName={emp.name} />;
 }
