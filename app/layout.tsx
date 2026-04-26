@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
+import { Inter, Newsreader } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const serif = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: ["400", "500", "600"],
+});
 
 export const metadata: Metadata = {
   title: "Saathi",
-  description: "Saathi placeholder",
+  description: "AI employees that learn how you work.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${inter.variable} ${serif.variable}`}>
+      <body className="bg-[--color-paper] text-[--color-ink] font-sans antialiased">
+        {children}
+      </body>
     </html>
   );
 }
