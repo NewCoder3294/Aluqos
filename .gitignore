@@ -35,3 +35,10 @@ coverage/
 .playwright/
 test-results/
 playwright-report/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel
