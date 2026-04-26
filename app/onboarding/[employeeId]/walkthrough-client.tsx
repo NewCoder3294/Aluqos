@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { useWalkthrough, type Phase } from "@/src/store/walkthrough";
-import { TopToolbar } from "@/src/components/top-toolbar";
-import { OnboardingRail } from "./_chrome/onboarding-rail";
-import { OnboardingContext } from "./_chrome/onboarding-context";
+import { OnboardingProgress } from "./_chrome/onboarding-progress";
 import {
   Phase1Brief, Phase2Reading, Phase3Observe, Phase4Plan, Phase5Approve,
 } from "./_phases";
 
-type UploadLite = { id: string; filename: string };
-
+// Linear-style editorial onboarding shell.
+// No top toolbar, no sidebars, no KPI strip — only a thin coral progress
+// rail at the very top and a centered content area. Each phase renders its
+// own steps; phases publish their progress (current step / total in phase)
+// into the walkthrough store so the rail at the top can fill proportionally.
 export function WalkthroughClient({
   employee,
   session,
@@ -19,56 +21,37 @@ export function WalkthroughClient({
   session: { phase?: number; employee_id: string };
 }) {
   const phase = useWalkthrough(s => s.phase);
+  const subStep = useWalkthrough(s => s.subStep);
+  const subStepTotal = useWalkthrough(s => s.subStepTotal);
   const setPhase = useWalkthrough(s => s.setPhase);
-
-  // Local mock list of uploads for the right rail. Phase 1 + Phase 3 add to it
-  // through the file pickers; for the demo path we seed it once entering Phase 2.
-  const [uploads, setUploads] = useState<UploadLite[]>([]);
 
   useEffect(() => {
     if (session.phase) setPhase(session.phase as Phase);
   }, [session.phase, setPhase]);
 
-  // When we enter Phase 2+ and we have no uploads tracked locally, drop in a
-  // mock list so the right-rail "Gathered" tab feels populated. Real uploads
-  // would replace this once the upload server actions surface filenames here.
-  useEffect(() => {
-    if (phase >= 2 && uploads.length === 0) {
-      setUploads([
-        { id: "u-1", filename: "q2-roadmap.pdf" },
-        { id: "u-2", filename: "issue-47-brief.md" },
-        { id: "u-3", filename: "design-review-notes.docx" },
-        { id: "u-4", filename: "voice-and-tone.md" },
-      ]);
-    }
-  }, [phase, uploads.length]);
-
   return (
-    <main className="h-screen overflow-hidden flex flex-col bg-paper">
-      <TopToolbar
-        employeeName={employee.name}
-        centerLabel="Onboarding"
-        trail={[`Phase ${phase}`]}
+    <main className="bg-paper min-h-screen relative">
+      <OnboardingProgress
+        phase={phase}
+        stepWithinPhase={subStep}
+        totalStepsInPhase={subStepTotal}
       />
-      <div className="grid grid-cols-[280px_1fr_340px] flex-1 min-h-0 overflow-hidden">
-        <OnboardingRail
-          employeeName={employee.name}
-          uploadCount={uploads.length}
-        />
 
-        {/* Center column — phase content */}
-        <section className="h-full overflow-y-auto">
-          <div className="max-w-[680px] mx-auto px-6 py-8 space-y-5">
-            {phase === 1 && <Phase1Brief employeeId={employee.id} />}
-            {phase === 2 && <Phase2Reading employeeId={employee.id} />}
-            {phase === 3 && <Phase3Observe employeeId={employee.id} />}
-            {phase === 4 && <Phase4Plan employeeId={employee.id} />}
-            {phase === 5 && <Phase5Approve employeeId={employee.id} />}
-          </div>
-        </section>
-
-        <OnboardingContext uploads={uploads} />
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={phase}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {phase === 1 && <Phase1Brief employeeId={employee.id} />}
+          {phase === 2 && <Phase2Reading employeeId={employee.id} />}
+          {phase === 3 && <Phase3Observe employeeId={employee.id} />}
+          {phase === 4 && <Phase4Plan employeeId={employee.id} />}
+          {phase === 5 && <Phase5Approve employeeId={employee.id} />}
+        </motion.div>
+      </AnimatePresence>
     </main>
   );
 }

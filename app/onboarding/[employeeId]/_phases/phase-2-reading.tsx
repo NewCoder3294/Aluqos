@@ -1,22 +1,37 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { Serif } from "@/src/components/serif";
 import { TypewriterLine } from "@/src/components/typewriter-line";
 import { Button } from "@/src/components/ui/button";
 import { useWalkthrough } from "@/src/store/walkthrough";
 import { fetchOnboardingForUnderstand, persistUnderstood } from "@/src/server/run-understand";
-import { PhaseHeader, PhaseFooter } from "../_chrome/phase-header";
 
-type Understood = { project_context: string; role_and_priorities: string; how_you_communicate: string };
+type Understood = {
+  project_context: string;
+  role_and_priorities: string;
+  how_you_communicate: string;
+};
+
+const SECTIONS: ReadonlyArray<{ key: keyof Understood; label: string }> = [
+  { key: "project_context", label: "Project context" },
+  { key: "role_and_priorities", label: "Your role and priorities" },
+  { key: "how_you_communicate", label: "How you communicate" },
+] as const;
 
 export function Phase2Reading({ employeeId }: { employeeId: string }) {
   const setPhase = useWalkthrough(s => s.setPhase);
   const setUnderstoodStore = useWalkthrough(s => s.setUnderstood);
+  const setSubStep = useWalkthrough(s => s.setSubStep);
   const [lines, setLines] = useState<string[]>([]);
   const [understood, setUnderstood] = useState<Understood | null>(null);
   const [editMode, setEditMode] = useState(false);
   const ran = useRef(false);
+
+  useEffect(() => {
+    setSubStep(1, 1);
+  }, [setSubStep]);
 
   useEffect(() => {
     if (ran.current) return;
@@ -36,13 +51,18 @@ export function Phase2Reading({ employeeId }: { employeeId: string }) {
       }
 
       const res = await fetch("/api/ai/understand", {
-        method: "POST", body: JSON.stringify(ctx),
+        method: "POST",
+        body: JSON.stringify(ctx),
       });
       const text = await res.text();
       const start = text.indexOf("{");
       const end = text.lastIndexOf("}");
       if (start < 0 || end < 0) {
-        setUnderstood({ project_context: "I read what I could. Let's keep going.", role_and_priorities: "Let's confirm your priorities below.", how_you_communicate: "I'll calibrate as we go." });
+        setUnderstood({
+          project_context: "I read what I could. Let's keep going.",
+          role_and_priorities: "Let's confirm your priorities below.",
+          how_you_communicate: "I'll calibrate as we go.",
+        });
         return;
       }
       try {
@@ -50,136 +70,128 @@ export function Phase2Reading({ employeeId }: { employeeId: string }) {
         setUnderstood(parsed);
         setUnderstoodStore(parsed);
       } catch {
-        setUnderstood({ project_context: text.slice(start, end + 1), role_and_priorities: "", how_you_communicate: "" });
+        setUnderstood({
+          project_context: text.slice(start, end + 1),
+          role_and_priorities: "",
+          how_you_communicate: "",
+        });
       }
     })();
   }, [employeeId, setUnderstoodStore]);
 
+  // Show only the last 5 lines while streaming.
+  const visibleLines = lines.slice(-5);
+
   return (
-    <>
-      <PhaseHeader
-        phase={2}
-        title={understood ? "Here's what I understood." : "I'm reading everything."}
-        subtitle={
-          understood
-            ? "Confirm what landed. You can edit anything before we keep going."
-            : "Skimming your docs and picking up your style. This takes a moment."
-        }
-        estimate="~1 min"
-      />
+    <section className="min-h-screen flex items-center justify-center px-6 py-24">
+      {!understood && (
+        <div className="w-full max-w-[640px] flex flex-col items-center text-center gap-7">
+          <span className="text-[11px] uppercase tracking-[0.18em] text-ink-faint font-medium">
+            Phase 2 · Reading
+          </span>
 
-      <div className="bg-white border border-paper-edge rounded-lg shadow-[0_1px_2px_rgba(31,29,26,0.04)] flex flex-col min-h-[560px]">
-        {!understood && (
-          <>
-            <div className="px-5 py-3 border-b border-paper-edge flex items-center justify-between bg-paper-hi shrink-0">
-              <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
-                Reading
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-[11px] text-coral-deep">
-                <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-coral pulse-coral" />
-                live
-              </span>
-            </div>
-            <div className="flex-1 flex items-center">
-              <ol className="px-6 py-5 space-y-2 w-full">
-                {lines.map((l, i) => (
-                  <li
-                    key={i}
-                    className={
-                      "text-[14px] leading-relaxed " +
-                      (i === lines.length - 1 ? "text-ink" : "text-ink-muted")
-                    }
-                  >
-                    {i === lines.length - 1 ? (
-                      <TypewriterLine text={l} />
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        <span aria-hidden className="text-coral">✓</span>
-                        {l}
-                      </span>
-                    )}
-                  </li>
-                ))}
-                {lines.length === 0 && (
-                  <li className="text-[13px] text-ink-faint italic">Opening your docs…</li>
-                )}
-              </ol>
-            </div>
-          </>
-        )}
+          <Serif as="h1" className="font-medium leading-[1.05]">
+            <span style={{ fontSize: "clamp(32px, 6vw, 56px)" }}>
+              I&apos;m reading everything.
+            </span>
+          </Serif>
 
-        {understood && (
-          <>
-            <div className="flex-1 flex flex-col divide-y divide-paper-edge">
-              <SummaryCard
-                label="Project context"
-                value={understood.project_context}
-                editable={editMode}
-                onChange={v => setUnderstood({ ...understood, project_context: v })}
-              />
-              <SummaryCard
-                label="Your role & priorities"
-                value={understood.role_and_priorities}
-                editable={editMode}
-                onChange={v => setUnderstood({ ...understood, role_and_priorities: v })}
-              />
-              <SummaryCard
-                label="How you communicate"
-                value={understood.how_you_communicate}
-                editable={editMode}
-                onChange={v => setUnderstood({ ...understood, how_you_communicate: v })}
-              />
-            </div>
+          <Serif italic className="text-[16px] text-ink-muted">
+            Skimming your docs and picking up your style. This takes a moment.
+          </Serif>
 
-            <div className="px-6 py-4 flex flex-wrap gap-2 justify-end bg-paper-hi/40 border-t border-paper-edge shrink-0">
-              <Button variant="outline" size="md" onClick={() => setEditMode(true)}>
-                Let me correct this
-              </Button>
-              <Button
-                variant="ink"
-                size="md"
-                onClick={async () => { await persistUnderstood(employeeId, understood); setPhase(3); }}
-              >
-                That&apos;s right, keep going
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
-
-      <PhaseFooter phase={2} />
-    </>
-  );
-}
-
-function SummaryCard({
-  label,
-  value,
-  editable,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  editable: boolean;
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div className="px-6 py-5 space-y-2">
-      <div className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
-        {label}
-      </div>
-      {editable ? (
-        <textarea
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          className="w-full bg-white border border-paper-edge rounded p-3 text-[15px] leading-relaxed serif focus:outline-none focus:border-coral transition-colors"
-          rows={3}
-        />
-      ) : (
-        <Serif className="text-[15.5px] leading-relaxed text-ink block">
-          {value}
-        </Serif>
+          <ol className="w-full space-y-3 pt-4">
+            {visibleLines.length === 0 && (
+              <li className="text-[14px] text-ink-faint italic serif">
+                Opening your docs…
+              </li>
+            )}
+            {visibleLines.map((l, i) => {
+              const isLast = i === visibleLines.length - 1;
+              return (
+                <li
+                  key={`${l}-${lines.length - visibleLines.length + i}`}
+                  className={
+                    "serif italic text-[15px] leading-relaxed transition-colors " +
+                    (isLast ? "text-coral-deep" : "text-ink-muted")
+                  }
+                >
+                  {isLast ? <TypewriterLine text={l} /> : l}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
       )}
-    </div>
+
+      {understood && (
+        <div className="w-full max-w-[720px] flex flex-col items-center text-center gap-8">
+          <span className="text-[11px] uppercase tracking-[0.18em] text-ink-faint font-medium">
+            Phase 2 · What I understood
+          </span>
+
+          <Serif as="h1" className="font-medium leading-[1.05]">
+            <span style={{ fontSize: "clamp(32px, 6vw, 56px)" }}>
+              Here&apos;s what I understood.
+            </span>
+          </Serif>
+
+          <Serif italic className="text-[16px] text-ink-muted">
+            Confirm what landed. You can edit anything before we keep going.
+          </Serif>
+
+          <div className="w-full flex flex-col gap-7 text-left pt-2">
+            {SECTIONS.map(section => (
+              <div key={section.key} className="space-y-2">
+                <Serif italic className="text-[13px] text-coral block">
+                  {section.label}
+                </Serif>
+                {editMode ? (
+                  <textarea
+                    value={understood[section.key]}
+                    onChange={e =>
+                      setUnderstood({ ...understood, [section.key]: e.target.value })
+                    }
+                    rows={3}
+                    className="w-full bg-transparent border-b border-paper-edge focus:border-coral focus:outline-none text-[17px] leading-relaxed serif py-2 transition-colors text-ink resize-none"
+                  />
+                ) : (
+                  <Serif className="text-[17px] leading-relaxed text-ink block">
+                    {understood[section.key]}
+                  </Serif>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center justify-center gap-3 pt-4">
+            <Button
+              variant="outline"
+              size="md"
+              onClick={() => setEditMode(true)}
+              disabled={editMode}
+            >
+              Let me correct this
+            </Button>
+            <Button
+              variant="ink"
+              size="md"
+              onClick={async () => {
+                await persistUnderstood(employeeId, understood);
+                setPhase(3);
+              }}
+            >
+              That&apos;s right, keep going
+              <ArrowRight className="size-3.5" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Bottom-right phase indicator (no Back/Next during streaming/review) */}
+      <div className="fixed bottom-6 right-6 flex items-center gap-3 font-sans text-[11px] text-ink-faint z-30">
+        <span className="tabular-nums uppercase tracking-[0.14em]">2 / 6</span>
+      </div>
+    </section>
   );
 }
