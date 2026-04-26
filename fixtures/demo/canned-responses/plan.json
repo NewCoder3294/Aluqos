@@ -1,0 +1,16 @@
+{
+  "own": [
+    { "title": "Draft PRDs for new feature requests in #product-feedback", "rationale": "Marie flagged bulk export three times this month — exactly the recurring pain point you said takes too long." },
+    { "title": "Track the open backlog and surface gaps before standup", "rationale": "Issue #47 sat without a PRD for two weeks; you can't catch all of those manually." },
+    { "title": "Maintain a one-line status on every shipped feature in Notion", "rationale": "Your sample PRD shows you care about clean trails — I'll keep that hygiene without you asking." }
+  ],
+  "assist": [
+    { "title": "Draft stakeholder update emails — you review before sending", "rationale": "External comms stay your call. I'll handle the first 80%." },
+    { "title": "Write engineering tickets from approved PRDs", "rationale": "You said you want bullet-tight tickets. I'll match your style and let you sign-off." }
+  ],
+  "flag": [
+    { "title": "When a PRD's scope grows past the original brief", "rationale": "You said you handle scope creep with strict pushback — I'll surface it before it lands." },
+    { "title": "When a feature request comes in for the third time across channels", "rationale": "Three-strikes is the signal you trust most." },
+    { "title": "When a release date slips by more than a sprint", "rationale": "Demo-Day cadence is tight; one slipped week can compound." }
+  ]
+}

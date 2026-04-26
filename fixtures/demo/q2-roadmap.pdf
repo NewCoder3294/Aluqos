@@ -1,0 +1,64 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 629 >>
+stream
+BT
+/F1 14 Tf
+1 0 0 1 50 760 Tm
+(Q2 Roadmap - Saathi) Tj
+0 -22 Td
+(Target: YC Demo Day, ship 3 AI employees.) Tj
+0 -22 Td
+() Tj
+0 -22 Td
+(April) Tj
+0 -22 Td
+(- AI Product Manager \(Alex\) - onboarding + PRD generation. Demo-ready.) Tj
+0 -22 Td
+(- Internal demo rehearsal: 30 reps minimum.) Tj
+0 -22 Td
+() Tj
+0 -22 Td
+(May) Tj
+0 -22 Td
+(- AI Program Manager \(Jordan\).) Tj
+0 -22 Td
+(- AI Marketing Employee \(Sam\).) Tj
+0 -22 Td
+(- Sign 10 design partners.) Tj
+0 -22 Td
+() Tj
+0 -22 Td
+(Voice) Tj
+0 -22 Td
+(Short sentences. Numbers in hooks. No hedge words.) Tj
+0 -22 Td
+(The product earns trust by doing, not by promising.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000920 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+990
+%%EOF

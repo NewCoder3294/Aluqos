@@ -1,4 +1,6 @@
 {
-  "title": "Improve onboarding completion rate for new mobile users",
-  "body": "Our mobile signup funnel drops 38% between account creation and first action. Users complete the form, land in the empty home screen, and bounce. Three customers said in interviews this week that they didn't understand what to do next. We need a clear first-run experience that gets people to a meaningful action within 90 seconds."
+  "id": 47,
+  "title": "Add bulk export for analytics dashboard",
+  "labels": ["feature", "analytics", "needs-prd"],
+  "body": "Power users export dashboard data row by row today. They want a single click to download CSV/xlsx with current filters and column order preserved. Three customer interviews flagged this in the last month."
 }

@@ -1,0 +1,8 @@
+{
+  "channel": "#product-feedback",
+  "messages": [
+    { "user": "marie", "ts": "2026-04-22T10:14:00Z", "text": "Customer asked for bulk export from the analytics dashboard again. That's the third time this month." },
+    { "user": "alex_eng", "ts": "2026-04-23T09:03:00Z", "text": "Issue #47 — would be quick. Need a PRD first." },
+    { "user": "marie", "ts": "2026-04-24T14:22:00Z", "text": "Filed it. PM bandwidth tight this week." }
+  ]
+}

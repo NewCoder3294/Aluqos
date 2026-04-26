@@ -1,1 +1,5 @@
-{"project_context":"stub","role_and_priorities":"stub","how_you_communicate":"stub"}
+{
+  "project_context": "Saathi is a YC-stage product letting non-technical buyers hire AI 'employees' (PM, PgM, Marketer). The company is in active Demo-Day rehearsals — Day 3 of a 5-day push to ship Alex, the AI PM. Architecture is intentionally simple: one Next.js app, Supabase, Claude. Demo > scale.",
+  "role_and_priorities": "Founder and head of product, owning the demo and the product surface. Top three priorities: (1) make the YC demo jaw-dropping, (2) close 10 design partners pre-launch, (3) hit $10K MRR within 90 days. The single biggest time sink is drafting PRDs from scratch each week.",
+  "how_you_communicate": "Short sentences. Numbers in hooks. No 'leverage'/'seamless'/'best-in-class'. You frame outcomes as deltas (from X to Y) and lead with the user pain in concrete terms. Bullets are tight, two lines max."
+}

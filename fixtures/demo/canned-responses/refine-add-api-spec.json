@@ -1,0 +1,4 @@
+{
+  "section_key": "scope",
+  "new_content": "One-click CSV and .xlsx export from any dashboard view. Server-side pagination for sets above 50K rows. Filter and sort state preserved exactly.\n\nAPI: POST /v1/dashboards/:id/exports → { format: 'csv'|'xlsx', filters?: {...}, columns?: [...] } returns 202 + { export_id }. GET /v1/exports/:id polls status (pending|done|failed) with a signed_url on done. Signed URLs valid 24h."
+}

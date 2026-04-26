@@ -1,0 +1,68 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 774 >>
+stream
+BT
+/F1 14 Tf
+1 0 0 1 50 760 Tm
+(Quick filters on the analytics dashboard) Tj
+0 -22 Td
+() Tj
+0 -22 Td
+(Problem statement) Tj
+0 -22 Td
+(Analysts open the dashboard and immediately filter to last 30 days,) Tj
+0 -22 Td
+(top customers, and a single product line. Six clicks today.) Tj
+0 -22 Td
+() Tj
+0 -22 Td
+(Goals) Tj
+0 -22 Td
+(- Cut filter setup from 6 clicks to 1.) Tj
+0 -22 Td
+(- Preserve last-used filter set across sessions.) Tj
+0 -22 Td
+() Tj
+0 -22 Td
+(Scope) Tj
+0 -22 Td
+(- One-click filter chips at the top of the dashboard.) Tj
+0 -22 Td
+(- Persisted last-used set per user.) Tj
+0 -22 Td
+() Tj
+0 -22 Td
+(Success metrics) Tj
+0 -22 Td
+(- 80% of analysts apply a saved filter within 2 weeks.) Tj
+0 -22 Td
+(- Median time to first filtered view drops from 18s to 4s.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001065 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1135
+%%EOF

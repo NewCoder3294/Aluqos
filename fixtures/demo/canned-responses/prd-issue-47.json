@@ -1,0 +1,11 @@
+{
+  "title": "Bulk export for the analytics dashboard",
+  "sections": {
+    "problem": "Power users export dashboard rows by hand today. The fastest analyst still takes about three minutes to assemble a 5,000-row CSV and the formatting breaks every time it lands in a deck. Three customer calls in the last month surfaced this. Issue #47 was filed two weeks ago and no PRD existed until now.",
+    "goals": "Cut time-to-export for a 5,000-row view from 3 minutes of manual copy-paste to under 10 seconds. Preserve current filters, column order, and visible computed columns. Hit 25% weekly-active analyst adoption inside 30 days.",
+    "user_stories": "As an analyst, I click 'Export' on any dashboard view and get a file matching what I see — filters, sort, computed columns. As a manager, I schedule a saved view to email me weekly without waiting on data eng. As a customer, I drop the export straight into a board deck without reformatting.",
+    "scope": "One-click CSV and .xlsx export from any dashboard view. Server-side pagination for sets above 50K rows. Filter and sort state preserved exactly.",
+    "out_of_scope": "Scheduled email delivery (parking for v2 — adds infra without changing core value). PDF export (different design problem). API access to exports (separate ticket).",
+    "success_metrics": "Adoption: 25% of weekly active analysts use Export within 30 days. Median time-to-export under 10s. Zero formatting-related support tickets in the first month."
+  }
+}
