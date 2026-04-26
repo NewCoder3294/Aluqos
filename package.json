@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "db:migrate": "node scripts/db-migrate.mjs",
     "db:seed": "node --experimental-strip-types scripts/db-seed.mjs",
     "db:reset": "node --experimental-strip-types scripts/db-reset.mjs",
@@ -34,6 +35,7 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/pdf-parse": "^1.1.5",
