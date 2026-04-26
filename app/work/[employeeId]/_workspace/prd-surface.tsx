@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { PrdSection } from "./prd-section";
 import { PrdHeader } from "./prd-header";
-import { ActionCard } from "./action-card";
-import { ActivityFeed } from "./activity-feed";
-import { SourceSnapshot } from "./source-snapshot";
+import { RefineCard } from "./refine-card";
+import { SendCard } from "./send-card";
+import { ActivityRail } from "./activity-rail";
+import { KpiStrip } from "./kpi-strip";
+import { SectionProgressStrip } from "./section-progress-strip";
 import { EmptyState } from "./empty-state";
 import { useWorkspace, type PrdSectionKey } from "@/src/store/workspace";
 import {
@@ -18,7 +20,6 @@ export function PrdSurface({
   employeeId,
   initialPrds,
   bootstrap,
-  uploads = [],
 }: {
   employeeId: string;
   initialPrds: Array<{ id: string; title: string; sections: Record<string, string>; source_issue: string | null }>;
@@ -71,25 +72,37 @@ export function PrdSurface({
   }
 
   if (!ws.prdId) {
-    return <EmptyState />;
+    return (
+      <div className="flex-1 overflow-y-auto">
+        <EmptyState />
+      </div>
+    );
   }
 
   const isStreaming = ws.streamingSection !== null;
   const sectionsComplete = SECTION_ORDER.filter(k => (ws.sections[k] ?? "").trim().length > 0).length;
 
   return (
-    <section className="p-8 overflow-y-auto">
-      <div className="max-w-[1280px] mx-auto space-y-5">
-        <PrdHeader
-          title={ws.title}
-          sourceIssue={latest?.source_issue ?? null}
-          isStreaming={isStreaming}
-          sectionsComplete={sectionsComplete}
-        />
+    <>
+      {/* Center column — work surface */}
+      <section className="h-full overflow-y-auto bg-[--color-paper]">
+        <div className="px-6 py-5 space-y-4 max-w-[920px] mx-auto">
+          <KpiStrip />
 
-        <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_320px] gap-5">
-          {/* Main column: sections + action card */}
-          <div className="flex flex-col gap-5 min-w-0">
+          <PrdHeader
+            title={ws.title}
+            sourceIssue={latest?.source_issue ?? null}
+            isStreaming={isStreaming}
+            sectionsComplete={sectionsComplete}
+            totalSections={SECTION_ORDER.length}
+          />
+
+          <SectionProgressStrip
+            sections={ws.sections}
+            streamingSection={ws.streamingSection}
+          />
+
+          <div className="space-y-3">
             {SECTION_ORDER.map(k => (
               <PrdSection
                 key={k}
@@ -102,16 +115,19 @@ export function PrdSurface({
                 }}
               />
             ))}
-            <ActionCard employeeId={employeeId} />
           </div>
 
-          {/* Sidebar column: activity + source materials */}
-          <div className="flex flex-col gap-5">
-            <ActivityFeed />
-            <SourceSnapshot uploads={uploads} />
+          <div className="space-y-3 pt-1">
+            <RefineCard />
+            <SendCard />
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Right column — activity rail */}
+      <aside className="h-full overflow-y-auto bg-[--color-paper-hi] border-l border-[--color-paper-edge] p-3">
+        <ActivityRail />
+      </aside>
+    </>
   );
 }

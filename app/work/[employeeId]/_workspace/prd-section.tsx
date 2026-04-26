@@ -42,6 +42,11 @@ export function PrdSection({
     }
   }, [text, editor, editing]);
 
+  const isEmpty = text.trim().length === 0;
+  const showSkeleton = streaming && isEmpty;
+  const showPreStream = !streaming && isEmpty;
+  const showEdit = !streaming && !isEmpty;
+
   return (
     <Card tone="default">
       <CardHeader>
@@ -57,14 +62,27 @@ export function PrdSection({
           <Button variant="quiet" size="sm" onClick={() => setEditing(false)}>
             Done
           </Button>
-        ) : (
+        ) : showEdit ? (
           <Button variant="quiet" size="sm" onClick={() => setEditing(true)}>
             Edit
           </Button>
+        ) : (
+          <Badge variant="outline">Pending</Badge>
         )}
       </CardHeader>
       <CardContent compact>
-        {editing ? (
+        {showSkeleton ? (
+          <div className="space-y-2 py-1" aria-label="Loading section content">
+            <div className="h-3 rounded w-full bg-gradient-to-r from-[--color-paper-hi] via-[--color-paper-edge]/40 to-[--color-paper-hi] animate-pulse" />
+            <div className="h-3 rounded w-[92%] bg-gradient-to-r from-[--color-paper-hi] via-[--color-paper-edge]/40 to-[--color-paper-hi] animate-pulse" />
+            <div className="h-3 rounded w-[78%] bg-gradient-to-r from-[--color-paper-hi] via-[--color-paper-edge]/40 to-[--color-paper-hi] animate-pulse" />
+            <div className="h-3 rounded w-[64%] bg-gradient-to-r from-[--color-paper-hi] via-[--color-paper-edge]/40 to-[--color-paper-hi] animate-pulse" />
+          </div>
+        ) : showPreStream ? (
+          <div className="text-[12px] text-[--color-ink-faint] italic py-1">
+            Alex will draft this once the previous section settles…
+          </div>
+        ) : editing ? (
           <EditorContent
             editor={editor}
             className="serif text-[15px] leading-[1.65] prose prose-stone max-w-none"
