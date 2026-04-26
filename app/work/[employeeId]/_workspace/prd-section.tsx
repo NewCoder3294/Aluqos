@@ -3,6 +3,9 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState } from "react";
+import { Card, CardHeader, CardContent } from "@/src/components/ui/card";
+import { Badge } from "@/src/components/ui/badge";
+import { Button } from "@/src/components/ui/button";
 
 const LABELS: Record<string, string> = {
   problem: "Problem statement",
@@ -40,26 +43,39 @@ export function PrdSection({
   }, [text, editor, editing]);
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-3">
-        <h3 className="serif text-[14px] uppercase tracking-[0.14em] text-[--color-coral-deep]">
+    <Card tone="default">
+      <CardHeader>
+        <h3 className="serif text-[12px] uppercase tracking-[0.14em] text-[--color-coral-deep]">
           {LABELS[sectionKey] ?? sectionKey}
         </h3>
-        {!streaming && !editing && (
-          <button onClick={() => setEditing(true)} className="label cursor-pointer">edit</button>
+        {streaming ? (
+          <Badge variant="coral">
+            <span className="w-[6px] h-[6px] rounded-full bg-[--color-coral] pulse-coral" />
+            Streaming
+          </Badge>
+        ) : editing ? (
+          <Button variant="quiet" size="sm" onClick={() => setEditing(false)}>
+            Done
+          </Button>
+        ) : (
+          <Button variant="quiet" size="sm" onClick={() => setEditing(true)}>
+            Edit
+          </Button>
         )}
-        {editing && (
-          <button onClick={() => setEditing(false)} className="label cursor-pointer">done</button>
+      </CardHeader>
+      <CardContent compact>
+        {editing ? (
+          <EditorContent
+            editor={editor}
+            className="serif text-[15px] leading-[1.65] prose prose-stone max-w-none"
+          />
+        ) : (
+          <p className="serif text-[15px] leading-[1.65] whitespace-pre-wrap text-[--color-ink]">
+            {text}
+            {streaming && <span className="text-[--color-coral]">▍</span>}
+          </p>
         )}
-      </div>
-      {editing ? (
-        <EditorContent editor={editor} className="serif text-[15px] leading-[1.65] prose prose-stone max-w-none" />
-      ) : (
-        <p className="serif text-[15px] leading-[1.65] whitespace-pre-wrap">
-          {text}
-          {streaming && <span className="text-[--color-coral]">▍</span>}
-        </p>
-      )}
-    </div>
+      </CardContent>
+    </Card>
   );
 }

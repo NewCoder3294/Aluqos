@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Serif } from "@/src/components/serif";
-import { Button } from "@/src/components/ui/button";
-import { toast } from "@/src/components/toast";
 import { PrdSection } from "./prd-section";
-import { ExportRow } from "./export-row";
-import { FollowUps } from "./follow-ups";
+import { PrdHeader } from "./prd-header";
+import { ActionCard } from "./action-card";
+import { ActivityFeed } from "./activity-feed";
+import { SourceSnapshot } from "./source-snapshot";
+import { EmptyState } from "./empty-state";
 import { useWorkspace, type PrdSectionKey } from "@/src/store/workspace";
 import {
   createPrd, fetchPrdInputs, persistPrdSections, persistPrdEdit, loadIssueFixture,
@@ -18,10 +18,12 @@ export function PrdSurface({
   employeeId,
   initialPrds,
   bootstrap,
+  uploads = [],
 }: {
   employeeId: string;
   initialPrds: Array<{ id: string; title: string; sections: Record<string, string>; source_issue: string | null }>;
   bootstrap: boolean;
+  uploads?: Array<{ id: string; filename: string }>;
 }) {
   const ws = useWorkspace();
   const ran = useRef(false);
@@ -72,108 +74,44 @@ export function PrdSurface({
     return <EmptyState />;
   }
 
+  const isStreaming = ws.streamingSection !== null;
+  const sectionsComplete = SECTION_ORDER.filter(k => (ws.sections[k] ?? "").trim().length > 0).length;
+
   return (
-    <section className="p-10 space-y-6 overflow-y-auto">
-      <div>
-        <Serif as="h2" className="text-[24px]">{ws.title || "Drafting…"}</Serif>
-        <p className="text-[12px] text-[--color-ink-faint] mt-1">Drafted by Alex · sourced from {latest?.source_issue ?? "—"}</p>
-      </div>
+    <section className="p-8 overflow-y-auto">
+      <div className="max-w-[1280px] mx-auto space-y-5">
+        <PrdHeader
+          title={ws.title}
+          sourceIssue={latest?.source_issue ?? null}
+          isStreaming={isStreaming}
+          sectionsComplete={sectionsComplete}
+        />
 
-      <div className="space-y-6">
-        {SECTION_ORDER.map(k => (
-          <PrdSection
-            key={k}
-            sectionKey={k}
-            text={ws.sections[k] ?? ""}
-            streaming={ws.streamingSection === k}
-            onCommit={(newText) => {
-              ws.appendSection(k, "");
-              if (ws.prdId) persistPrdEdit(ws.prdId, k, newText);
-            }}
-          />
-        ))}
-      </div>
+        <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_320px] gap-5">
+          {/* Main column: sections + action card */}
+          <div className="flex flex-col gap-5 min-w-0">
+            {SECTION_ORDER.map(k => (
+              <PrdSection
+                key={k}
+                sectionKey={k}
+                text={ws.sections[k] ?? ""}
+                streaming={ws.streamingSection === k}
+                onCommit={(newText) => {
+                  ws.appendSection(k, "");
+                  if (ws.prdId) persistPrdEdit(ws.prdId, k, newText);
+                }}
+              />
+            ))}
+            <ActionCard employeeId={employeeId} />
+          </div>
 
-      <FollowUps employeeId={employeeId} />
-      <ExportRow />
-      <ActivityFeed />
-    </section>
-  );
-}
-
-function EmptyState() {
-  const [draft, setDraft] = useState("");
-  return (
-    <section className="p-10 grid place-items-center min-h-[60vh]">
-      <div className="max-w-[440px] w-full text-center space-y-6 bg-[--color-paper-hi] border border-[--color-paper-edge] rounded-md p-10">
-        <div className="flex justify-center">
-          <div
-            className="w-12 h-12 rounded-full text-white grid place-items-center"
-            style={{ background: "linear-gradient(135deg,#e07a5f,#c46449)" }}
-          >
-            <Serif className="text-[18px]">A</Serif>
+          {/* Sidebar column: activity + source materials */}
+          <div className="flex flex-col gap-5">
+            <ActivityFeed />
+            <SourceSnapshot uploads={uploads} />
           </div>
         </div>
-        <div className="space-y-2">
-          <Serif as="h2" className="text-[22px] leading-tight">
-            I&apos;m here when you&apos;re ready.
-          </Serif>
-          <p className="text-[13.5px] text-[--color-ink-faint] leading-relaxed">
-            Pick a task from the left, or tell me what&apos;s next.
-          </p>
-        </div>
-        <div className="flex gap-2 pt-1">
-          <input
-            value={draft}
-            onChange={e => setDraft(e.target.value)}
-            placeholder="What should I work on?"
-            className="flex-1 bg-white border border-[--color-paper-edge] rounded px-3 py-2 text-[13px] focus:outline-none focus:border-[--color-coral]"
-            onKeyDown={e => {
-              if (e.key === "Enter" && draft.trim()) {
-                toast.info("Coming soon", { description: draft });
-                setDraft("");
-              }
-            }}
-          />
-          <Button
-            variant="ink"
-            size="md"
-            disabled={!draft.trim()}
-            onClick={() => {
-              toast.info("Coming soon", { description: draft });
-              setDraft("");
-            }}
-          >
-            Go
-          </Button>
-        </div>
       </div>
     </section>
-  );
-}
-
-function ActivityFeed() {
-  const events = [
-    { id: "a-1", verb: "Drafted Issue #47 PRD", when: "just now" },
-    { id: "a-2", verb: "Read q2-roadmap.pdf", when: "2m ago" },
-    { id: "a-3", verb: "Read saathi-mvp/README.md", when: "3m ago" },
-    { id: "a-4", verb: "Onboarding completed", when: "5m ago" },
-  ];
-  return (
-    <div className="pt-6 mt-6 border-t border-[--color-paper-edge]">
-      <div className="label mb-3">Activity</div>
-      <ul className="space-y-2">
-        {events.map(e => (
-          <li key={e.id} className="flex items-center gap-3 text-[13px]">
-            <span
-              aria-hidden
-              className="w-[7px] h-[7px] rounded-full bg-[--color-coral] shrink-0"
-            />
-            <span className="text-[--color-ink]">{e.verb}</span>
-            <span className="text-[--color-ink-faint] text-[11.5px] ml-auto">{e.when}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
