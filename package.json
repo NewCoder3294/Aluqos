@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:migrate": "node scripts/db-migrate.mjs"
+    "db:migrate": "node scripts/db-migrate.mjs",
+    "db:seed": "node --experimental-strip-types scripts/db-seed.mjs",
+    "db:reset": "node --experimental-strip-types scripts/db-reset.mjs",
+    "demo:reset": "pnpm db:reset"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",
