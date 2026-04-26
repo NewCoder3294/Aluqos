@@ -11,7 +11,7 @@ export async function startWorking(
   modifications: Record<string, string>,
 ) {
   if (MOCK_MODE) {
-    redirect(`/work/${employeeId}?bootstrap=1`);
+    redirect(`/work/${employeeId}/prd/new-bootstrap?bootstrap=1`);
   }
   try {
     const sb = serverClient();
