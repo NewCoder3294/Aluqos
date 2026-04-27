@@ -4,9 +4,9 @@ import { withFallback, loadCanned } from "@/src/ai/fallback";
 import { rateLimitResponse, getClientIp } from "@/src/server/ratelimit";
 import {
   buildProposePlanPrompt,
-  ActionPlanInput,
   ActionPlan,
 } from "@/src/ai/prompts/propose-action-plan";
+import { ActionPlanInputSchema, parseJsonRequest } from "@/src/ai/prompts/input-schemas";
 
 export const runtime = "nodejs";
 
@@ -15,8 +15,9 @@ export async function POST(req: NextRequest) {
   const limited = await rateLimitResponse(`ai:${ip}`, 10, 60_000);
   if (limited) return limited;
 
-  const input = (await req.json()) as ActionPlanInput;
-  const { system, user } = buildProposePlanPrompt(input);
+  const parsed = await parseJsonRequest(req, ActionPlanInputSchema);
+  if (!parsed.ok) return parsed.res;
+  const { system, user } = buildProposePlanPrompt(parsed.data);
 
   const live = async () => {
     const result = await streamClaude({ system, prompt: user });

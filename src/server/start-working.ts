@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { serverClient, MOCK_MODE } from "@/src/db/client";
 import { updateOnboarding, setEmployeeStatus, logEvent } from "@/src/db/queries";
 import { seedDemoFirstPrd } from "@/src/server/run-prd";
+import { authorizeEmployee } from "./auth-guard";
 import {
   PRD_DEMO_SECTIONS,
   PRD_DEMO_SOURCE_ISSUE,
@@ -16,6 +17,7 @@ export async function startWorking(
   autonomyLevel: "ask_always" | "ask_external" | "just_do_it",
   modifications: Record<string, string>,
 ) {
+  await authorizeEmployee(employeeId);
   if (MOCK_MODE) {
     redirect(`/work/${employeeId}`);
   }

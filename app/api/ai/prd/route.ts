@@ -4,9 +4,9 @@ import { withFallback, loadCanned } from "@/src/ai/fallback";
 import { rateLimitResponse, getClientIp } from "@/src/server/ratelimit";
 import {
   buildGeneratePrdPrompt,
-  PrdInput,
   GeneratedPrd,
 } from "@/src/ai/prompts/generate-prd";
+import { PrdInputSchema, parseJsonRequest } from "@/src/ai/prompts/input-schemas";
 
 export const runtime = "nodejs";
 
@@ -15,8 +15,9 @@ export async function POST(req: NextRequest) {
   const limited = await rateLimitResponse(`ai:${ip}`, 10, 60_000);
   if (limited) return limited;
 
-  const input = (await req.json()) as PrdInput;
-  const { system, user } = buildGeneratePrdPrompt(input);
+  const parsed = await parseJsonRequest(req, PrdInputSchema);
+  if (!parsed.ok) return parsed.res;
+  const { system, user } = buildGeneratePrdPrompt(parsed.data);
 
   const live = async () => {
     const result = await streamClaude({ system, prompt: user });

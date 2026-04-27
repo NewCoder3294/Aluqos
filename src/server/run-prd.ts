@@ -5,8 +5,10 @@ import { listEmployeePrds, listUploads, logEvent } from "@/src/db/queries";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { authorizeEmployee } from "./auth-guard";
 
 export async function fetchWorkspaceState(employeeId: string) {
+  await authorizeEmployee(employeeId);
   if (MOCK_MODE) {
     const uploads = await listUploads(employeeId);
     const prds = await listEmployeePrds(employeeId);
@@ -27,6 +29,7 @@ export async function fetchWorkspaceState(employeeId: string) {
 }
 
 export async function fetchPrdInputs(employeeId: string, source: string) {
+  await authorizeEmployee(employeeId);
   if (MOCK_MODE) {
     const uploads = await listUploads(employeeId);
     return {
@@ -58,6 +61,7 @@ export async function fetchPrdInputs(employeeId: string, source: string) {
 }
 
 export async function createPrd(employeeId: string, title: string, sourceIssue: string) {
+  await authorizeEmployee(employeeId);
   if (MOCK_MODE) {
     return {
       id: randomUUID(),
@@ -91,6 +95,7 @@ export async function createPrd(employeeId: string, title: string, sourceIssue: 
 }
 
 export async function persistPrdSections(prdId: string, employeeId: string, sections: Record<string, string>, title: string) {
+  await authorizeEmployee(employeeId);
   if (MOCK_MODE) return;
   try {
     const sb = serverClient();
@@ -123,6 +128,7 @@ export async function draftPrdFromBacklog(
   employeeId: string,
   source: string,
 ): Promise<void> {
+  await authorizeEmployee(employeeId);
   const { redirect } = await import("next/navigation");
   // randomUUID fallback path keeps the demo working even when MOCK_MODE / DB
   // is unavailable; prd-surface will still kick off generation against the
@@ -143,6 +149,7 @@ export async function seedDemoFirstPrd(
   sourceIssue: string,
   sections: Record<string, string>,
 ): Promise<{ id: string } | null> {
+  await authorizeEmployee(employeeId);
   if (MOCK_MODE) return null;
   try {
     const sb = serverClient();

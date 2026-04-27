@@ -4,9 +4,9 @@ import { withFallback, loadCanned } from "@/src/ai/fallback";
 import { rateLimitResponse, getClientIp } from "@/src/server/ratelimit";
 import {
   buildUnderstandPrompt,
-  UnderstandInput,
   UnderstoodContext,
 } from "@/src/ai/prompts/understand-context";
+import { UnderstandInputSchema, parseJsonRequest } from "@/src/ai/prompts/input-schemas";
 
 export const runtime = "nodejs";
 
@@ -15,8 +15,9 @@ export async function POST(req: NextRequest) {
   const limited = await rateLimitResponse(`ai:${ip}`, 10, 60_000);
   if (limited) return limited;
 
-  const input = (await req.json()) as UnderstandInput;
-  const { system, user } = buildUnderstandPrompt(input);
+  const parsed = await parseJsonRequest(req, UnderstandInputSchema);
+  if (!parsed.ok) return parsed.res;
+  const { system, user } = buildUnderstandPrompt(parsed.data);
 
   const live = async () => {
     const result = await streamClaude({ system, prompt: user });

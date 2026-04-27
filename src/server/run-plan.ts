@@ -2,8 +2,10 @@
 
 import { listUploads, updateOnboarding, logEvent } from "@/src/db/queries";
 import { serverClient, MOCK_MODE } from "@/src/db/client";
+import { authorizeEmployee } from "./auth-guard";
 
 export async function fetchPlanInputs(employeeId: string) {
+  await authorizeEmployee(employeeId);
   if (MOCK_MODE) {
     const uploads = await listUploads(employeeId);
     return {
@@ -35,6 +37,7 @@ export async function fetchPlanInputs(employeeId: string) {
 }
 
 export async function persistPlan(employeeId: string, plan: unknown) {
+  await authorizeEmployee(employeeId);
   if (MOCK_MODE) return;
   try {
     await updateOnboarding(employeeId, { action_plan: plan, phase: 5 });

@@ -14,6 +14,9 @@ export function Dropzone({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: onFiles,
     multiple,
+    // 5MB ceiling: PDFs/DOCX bigger than this rarely contain useful PRD
+    // context, but they explode parse time and serverless function memory.
+    maxSize: 5 * 1024 * 1024,
     accept: {
       "application/pdf": [".pdf"],
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],

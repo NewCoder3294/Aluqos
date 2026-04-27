@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { updateOnboarding, logEvent } from "@/src/db/queries";
 import { storeAndParseUpload } from "./uploads";
+import { authorizeEmployee } from "./auth-guard";
 
 export type BriefData = {
   project: string;
@@ -14,6 +15,7 @@ export type BriefData = {
 };
 
 export async function submitBrief(employeeId: string, brief: BriefData, files: Array<{ name: string; type: string; data: ArrayBuffer }>) {
+  await authorizeEmployee(employeeId);
   for (const file of files) {
     await storeAndParseUpload(employeeId, file);
   }
@@ -23,6 +25,7 @@ export async function submitBrief(employeeId: string, brief: BriefData, files: A
 }
 
 export async function updateOnboardingObservations(employeeId: string, observations: Record<string, unknown>) {
+  await authorizeEmployee(employeeId);
   await updateOnboarding(employeeId, { observations, phase: 4 });
   await logEvent(employeeId, "phase_completed", { phase: 3 });
 }
