@@ -8,7 +8,6 @@ const NAV_LINKS: Array<{ href: string; label: string }> = [
   { href: "#features", label: "Product" },
   { href: "#how", label: "How it works" },
   { href: "#roles", label: "Roles" },
-  { href: "#why", label: "Why now" },
   { href: "#pricing", label: "Pricing" },
 ];
 

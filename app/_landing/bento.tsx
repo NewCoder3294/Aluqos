@@ -62,36 +62,46 @@ function VoiceMock() {
   );
 }
 
-function IntegrationsMock() {
-  const brands: Array<{ name: string; src: string; scale?: number }> = [
-    { name: "Slack", src: "/logos/slack.svg" },
-    { name: "Notion", src: "/logos/notion.svg" },
-    { name: "Linear", src: "/logos/linear.svg" },
-    { name: "GitHub", src: "/logos/github.svg" },
-    { name: "Figma", src: "/logos/figma.svg", scale: 0.62 },
-    { name: "Google Drive", src: "/logos/drive.svg" },
-    { name: "Loom", src: "/logos/loom.svg" },
-    { name: "Discord", src: "/logos/discord.svg" },
+function AutonomyMock() {
+  const modes = [
+    { id: "ask",      label: "Ask always",        sub: "Confirm every action",        icon: "?" },
+    { id: "external", label: "Ask before external", sub: "Send to Slack/email needs OK", icon: "↗", active: true },
+    { id: "go",       label: "Just do it",         sub: "Run with full autonomy",        icon: "→" },
   ];
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {brands.map(({ name, src, scale = 1 }, i) => (
+    <div className="space-y-2">
+      {modes.map((m, i) => (
         <motion.div
-          key={name}
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          key={m.id}
+          initial={{ opacity: 0, x: -6 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: i * 0.04, duration: 0.4, ease: EASE }}
-          aria-label={name}
-          className="aspect-square rounded-md border border-paper-edge bg-white grid place-items-center p-2.5"
+          transition={{ delay: i * 0.07, duration: 0.4, ease: EASE }}
+          className={`flex items-center gap-3 rounded-md border p-2.5 ${
+            m.active
+              ? "border-coral/35 bg-coral/[0.06]"
+              : "border-paper-edge bg-white"
+          }`}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            alt={name}
-            className="w-full h-full object-contain"
-            style={{ transform: `scale(${scale})` }}
-          />
+          <div
+            className={`w-7 h-7 rounded-full grid place-items-center text-[12px] shrink-0 ${
+              m.active ? "bg-coral text-paper" : "bg-paper-hi text-ink-faint border border-paper-edge"
+            }`}
+            aria-hidden
+          >
+            {m.icon}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className={`text-[12.5px] ${m.active ? "text-ink font-medium" : "text-ink"}`}>
+              {m.label}
+            </div>
+            <div className="text-[10.5px] text-ink-faint truncate">{m.sub}</div>
+          </div>
+          {m.active && (
+            <span className="text-[9.5px] uppercase tracking-[0.12em] text-coral-deep shrink-0">
+              Current
+            </span>
+          )}
         </motion.div>
       ))}
     </div>
@@ -293,10 +303,10 @@ export function LandingBento() {
           <BentoCell
             index={2}
             className="md:col-span-1"
-            eyebrow="Integrations"
-            title="Lives in your tools"
-            subtitle="Slack &middot; Notion &middot; Linear &middot; GitHub &middot; Figma &middot; Drive &middot; Loom &middot; Discord"
-            visual={<IntegrationsMock />}
+            eyebrow="Autonomy"
+            title="Asks before it ships"
+            subtitle="Pick the leash. Confirm everything, only outbound, or full autonomy &mdash; switch any time."
+            visual={<AutonomyMock />}
           />
           <BentoCell
             index={3}

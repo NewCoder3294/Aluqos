@@ -21,6 +21,29 @@ html, body {
 
 html { scroll-padding-top: 100px; }
 
+/* Custom landing cursor — slim brand arrow, coral-deep fill with paper outline.
+   32x32 SVG, hotspot at (5,4) — the arrow tip. */
+.landing-root,
+.landing-root * {
+  cursor: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M5 4 L5 24 L10.5 19.5 L13.5 27 L16.5 26 L13.5 18.5 L20 18.5 Z' fill='%239c4a2a' stroke='%23f9f3e6' stroke-width='1.25' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") 5 4, auto;
+}
+
+/* Pointer for interactive elements — same arrow with a small coral dot at the tip
+   to signal "clickable" without changing the silhouette. Hotspot still at the tip. */
+.landing-root a,
+.landing-root button,
+.landing-root [role="button"],
+.landing-root summary,
+.landing-root label[for] {
+  cursor: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M5 4 L5 24 L10.5 19.5 L13.5 27 L16.5 26 L13.5 18.5 L20 18.5 Z' fill='%239c4a2a' stroke='%23f9f3e6' stroke-width='1.25' stroke-linejoin='round' stroke-linecap='round'/%3E%3Ccircle cx='5' cy='4' r='2.25' fill='%23c46449' stroke='%23f9f3e6' stroke-width='1'/%3E%3C/svg%3E") 5 4, pointer;
+}
+
+/* Text fields keep the native I-beam */
+.landing-root input,
+.landing-root textarea {
+  cursor: text;
+}
+
 .serif { font-family: var(--font-serif); letter-spacing: -0.03em; }
 .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-ink-faint); }
 .italic-serif { font-family: var(--font-serif); font-style: italic; }
@@ -37,6 +60,12 @@ html { scroll-padding-top: 100px; }
   50%      { background-color: rgba(196, 100, 73, 0.06); }
 }
 .cta-breathe { animation: cta-breathe 8s ease-in-out infinite; }
+
+/* Integrations orbit — soft breathing for orbit rings & center halo */
+@keyframes orbit-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.04); }
+}
 
 /* Blinking caret for streaming text (PRD reveal, typewriter). */
 @keyframes blink {

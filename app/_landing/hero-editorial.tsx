@@ -135,11 +135,11 @@ export function LandingHeroEditorial() {
           </div>
 
           {/* Side caption + meta */}
-          <div className="col-span-12 lg:col-span-3 lg:-mt-20 space-y-4 max-w-[280px]">
-            <Reveal delay={0.2}>
-              <div className="bg-paper-hi border border-paper-edge rounded-lg p-5 shadow-[0_1px_0_rgba(60,40,20,0.04)]">
-                <div className="label mb-3">Problem</div>
-                <p className="text-[15px] lg:text-[16px] leading-[1.55] text-ink">
+          <div className="col-span-12 lg:col-span-3 lg:-mt-20 lg:self-stretch flex flex-col gap-5 lg:gap-6">
+            <Reveal delay={0.2} className="flex-1 flex">
+              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-xl p-7 lg:p-8 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
+                <div className="label mb-4 text-coral-deep">Problem</div>
+                <p className="text-[17px] lg:text-[19px] leading-[1.5] text-ink">
                   Most AI needs prompts, training, and an engineer.{" "}
                   <span className="text-ink-muted">
                     Your team tries it once and quits.
@@ -148,10 +148,10 @@ export function LandingHeroEditorial() {
               </div>
             </Reveal>
 
-            <Reveal delay={0.26}>
-              <div className="bg-paper-hi border border-paper-edge rounded-lg p-5 shadow-[0_1px_0_rgba(60,40,20,0.04)]">
-                <div className="label mb-3">Solution</div>
-                <p className="text-[15px] lg:text-[16px] leading-[1.55] text-ink">
+            <Reveal delay={0.26} className="flex-1 flex">
+              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-xl p-7 lg:p-8 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
+                <div className="label mb-4 text-coral-deep">Solution</div>
+                <p className="text-[17px] lg:text-[19px] leading-[1.5] text-ink">
                   Aluqos watches how you actually work.{" "}
                   <span className="text-ink-muted">
                     Then does the job. No setup, no prompting.
@@ -160,10 +160,10 @@ export function LandingHeroEditorial() {
               </div>
             </Reveal>
 
-            <Reveal delay={0.32}>
-              <div className="bg-paper-hi border border-paper-edge rounded-lg p-5 shadow-[0_1px_0_rgba(60,40,20,0.04)]">
-                <div className="label mb-3">Future</div>
-                <p className="text-[15px] lg:text-[16px] leading-[1.55] text-ink">
+            <Reveal delay={0.32} className="flex-1 flex">
+              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-xl p-7 lg:p-8 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
+                <div className="label mb-4 text-coral-deep">Future</div>
+                <p className="text-[17px] lg:text-[19px] leading-[1.5] text-ink">
                   Start with one hire. Grow to a whole team.{" "}
                   <span className="text-ink-muted">
                     Same product. No migration, ever.
