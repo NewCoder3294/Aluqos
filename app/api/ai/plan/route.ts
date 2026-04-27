@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { streamClaude } from "@/src/ai/stream";
 import { withFallback, loadCanned } from "@/src/ai/fallback";
+import { rateLimitResponse, getClientIp } from "@/src/server/ratelimit";
 import {
   buildProposePlanPrompt,
   ActionPlanInput,
@@ -10,6 +11,10 @@ import {
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
+  const ip = await getClientIp();
+  const limited = await rateLimitResponse(`ai:${ip}`, 10, 60_000);
+  if (limited) return limited;
+
   const input = (await req.json()) as ActionPlanInput;
   const { system, user } = buildProposePlanPrompt(input);
 
@@ -26,10 +31,10 @@ export async function POST(req: NextRequest) {
     });
   };
 
-  if (!process.env.ANTHROPIC_API_KEY) return canned();
+  if (!process.env.OPENAI_API_KEY && !process.env.ANTHROPIC_API_KEY) return canned();
 
   try {
-    return await withFallback({ ttfbMs: 10000, live, canned });
+    return await withFallback({ ttfbMs: 30000, live, canned });
   } catch {
     return canned();
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ChevronRight,
@@ -9,17 +9,16 @@ import {
   ListTodo,
   Calendar,
   Target,
-  MessageSquare,
-  BellRing,
-  AlertTriangle,
-  Megaphone,
-  Mic,
-  BarChart,
   FolderOpen,
   Activity,
+  PanelLeftClose,
+  PanelLeftOpen,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/src/lib/cn";
 import { toast } from "@/src/components/toast";
+
+const STORAGE_KEY = "aluqos-sidebar-collapsed";
 
 export type ActiveNavKey =
   | "all-dashboard"
@@ -46,7 +45,7 @@ type NavItem = {
   href: string;
 };
 
-type SectionId = "all" | "alex" | "jordan" | "sam";
+type SectionId = "all" | "alex" | "jordan" | "sam"; // jordan/sam kept for type compat with existing routes; not rendered.
 
 type NavSection = {
   id: SectionId;
@@ -81,28 +80,6 @@ function buildSections(employeeId: string): NavSection[] {
         { key: "alex-goals", label: "Goals", icon: <Target {...ICON_PROPS} />, href: `/work/${employeeId}/goals` },
       ],
     },
-    {
-      id: "jordan",
-      label: "Jordan (PGM)",
-      dotClass: "bg-[#5a4f3d]",
-      items: [
-        { key: "jordan-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}/jordan` },
-        { key: "jordan-standups", label: "Standups", icon: <MessageSquare {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/standups` },
-        { key: "jordan-status", label: "Status updates", icon: <BellRing {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/status` },
-        { key: "jordan-risks", label: "Risks", icon: <AlertTriangle {...ICON_PROPS} />, href: `/work/${employeeId}/jordan/risks` },
-      ],
-    },
-    {
-      id: "sam",
-      label: "Sam (Marketing)",
-      dotClass: "bg-[#7a8b5c]",
-      items: [
-        { key: "sam-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}/sam` },
-        { key: "sam-campaigns", label: "Campaigns", icon: <Megaphone {...ICON_PROPS} />, href: `/work/${employeeId}/sam/campaigns` },
-        { key: "sam-brand-voice", label: "Brand voice", icon: <Mic {...ICON_PROPS} />, href: `/work/${employeeId}/sam/brand-voice` },
-        { key: "sam-performance", label: "Performance", icon: <BarChart {...ICON_PROPS} />, href: `/work/${employeeId}/sam/performance` },
-      ],
-    },
   ];
 }
 
@@ -114,70 +91,149 @@ export function TreeNav({
   activeNav?: ActiveNavKey;
 }) {
   const sections = buildSections(employeeId);
-  // Persistent expanded state — all sections start expanded and stay expanded
-  // independent of which nav item is active. Chevron toggles only that section.
   const [open, setOpen] = useState<Record<SectionId, boolean>>(() => ({
     all: true,
     alex: true,
-    jordan: true,
-    sam: true,
+    jordan: false,
+    sam: false,
   }));
 
+  // Collapsed state — persisted across navigations via localStorage.
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored === "1") setCollapsed(true);
+    } catch {}
+  }, []);
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, collapsed ? "1" : "0");
+    } catch {}
+  }, [collapsed]);
+
   return (
-    <aside className="w-[220px] shrink-0 bg-paper border-r border-paper-edge flex flex-col h-screen sticky top-0">
-      <div className="px-5 pt-5 pb-4 shrink-0">
-        <Link href={`/work/${employeeId}`} className="serif text-[18px] tracking-[-0.01em] text-ink hover:text-coral-deep">
-          Aluqos
-        </Link>
+    <aside
+      className={cn(
+        "shrink-0 bg-[#ebe2d0] border-r border-[#d9c9a8] flex flex-col h-screen sticky top-0",
+        "shadow-[inset_-1px_0_0_rgba(0,0,0,0.02)]",
+        "transition-[width] duration-200 ease-out",
+        collapsed ? "w-[60px]" : "w-[220px]",
+      )}
+    >
+      {/* Brand row + collapse toggle */}
+      <div
+        className={cn(
+          "shrink-0 flex items-center pt-4 pb-3",
+          collapsed ? "px-3 justify-center" : "px-5 justify-between",
+        )}
+      >
+        {!collapsed && (
+          <Link
+            href={`/work/${employeeId}`}
+            className="serif text-[18px] tracking-[-0.01em] text-ink hover:text-coral-deep"
+          >
+            Aluqos
+          </Link>
+        )}
+        <button
+          type="button"
+          onClick={() => setCollapsed((c) => !c)}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="p-1 rounded-sm text-ink-faint hover:text-ink hover:bg-paper-edge/50 transition-colors"
+        >
+          {collapsed ? (
+            <PanelLeftOpen size={15} strokeWidth={1.75} />
+          ) : (
+            <PanelLeftClose size={15} strokeWidth={1.75} />
+          )}
+        </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-2 pb-2 min-h-0">
+      <nav
+        className={cn(
+          "flex-1 overflow-y-auto pb-2 min-h-0",
+          collapsed ? "px-1.5" : "px-2",
+        )}
+      >
         {sections.map((section) => {
           const isOpen = open[section.id];
           return (
-            <div key={section.id} className="mb-1.5">
-              <button
-                type="button"
-                onClick={() => setOpen((s) => ({ ...s, [section.id]: !s[section.id] }))}
-                className="w-full flex items-center gap-1.5 px-2 py-1.5 rounded-sm hover:bg-paper-edge/40 transition-colors"
-              >
-                <ChevronRight
-                  size={11}
-                  strokeWidth={2}
-                  className={cn(
-                    "text-ink-faint transition-transform",
-                    isOpen && "rotate-90",
+            <div key={section.id} className={cn(collapsed ? "mb-3" : "mb-1.5")}>
+              {collapsed ? (
+                // Collapsed: thin divider above each section (skip for first)
+                section.id !== "all" && (
+                  <div className="my-2 mx-2 h-px bg-[#d9c9a8]/60" aria-hidden />
+                )
+              ) : (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setOpen((s) => ({ ...s, [section.id]: !s[section.id] }))
+                  }
+                  className="w-full flex items-center gap-1.5 px-2 py-1.5 rounded-sm hover:bg-paper-edge/40 transition-colors"
+                >
+                  <ChevronRight
+                    size={11}
+                    strokeWidth={2}
+                    className={cn(
+                      "text-ink-faint transition-transform",
+                      isOpen && "rotate-90",
+                    )}
+                  />
+                  {section.dotClass ? (
+                    <span
+                      className={cn(
+                        "size-1.5 rounded-full shrink-0",
+                        section.dotClass,
+                      )}
+                    />
+                  ) : (
+                    <span className="size-1.5 shrink-0" aria-hidden />
                   )}
-                />
-                {section.dotClass ? (
-                  <span className={cn("size-1.5 rounded-full shrink-0", section.dotClass)} />
-                ) : (
-                  <span className="size-1.5 shrink-0" aria-hidden />
-                )}
-                <span className="text-[10px] uppercase tracking-[0.14em] text-ink-faint font-medium">
-                  {section.label}
-                </span>
-              </button>
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-ink-faint font-medium">
+                    {section.label}
+                  </span>
+                </button>
+              )}
 
-              {isOpen && (
-                <ul className="mt-0.5 ml-1.5 border-l border-paper-edge">
+              {(collapsed || isOpen) && (
+                <ul
+                  className={cn(
+                    collapsed
+                      ? "flex flex-col items-stretch gap-0.5"
+                      : "mt-0.5 ml-1.5 border-l border-paper-edge",
+                  )}
+                >
                   {section.items.map((item) => {
                     const isActive = item.key === activeNav;
                     return (
                       <li key={item.key}>
                         <Link href={item.href}>
                           <span
+                            title={collapsed ? item.label : undefined}
                             className={cn(
-                              "flex items-center gap-2 px-2.5 py-1.5 ml-1 rounded-sm text-[13px] transition-colors",
+                              "flex items-center rounded-sm transition-colors",
+                              collapsed
+                                ? "justify-center py-2 mx-1"
+                                : "gap-2 px-2.5 py-1.5 ml-1 text-[13px]",
                               isActive
                                 ? "bg-coral/10 text-coral-deep"
                                 : "text-ink-muted hover:bg-paper-edge/40 hover:text-ink",
                             )}
                           >
-                            <span className={cn("shrink-0", isActive ? "text-coral-deep" : "text-ink-faint")}>
+                            <span
+                              className={cn(
+                                "shrink-0",
+                                isActive ? "text-coral-deep" : "text-ink-faint",
+                              )}
+                            >
                               {item.icon}
                             </span>
-                            <span className="truncate">{item.label}</span>
+                            {!collapsed && (
+                              <span className="truncate">{item.label}</span>
+                            )}
                           </span>
                         </Link>
                       </li>
@@ -190,14 +246,31 @@ export function TreeNav({
         })}
       </nav>
 
-      <div className="border-t border-paper-edge px-3 py-3 shrink-0 mt-auto">
+      <div
+        className={cn(
+          "border-t border-paper-edge shrink-0 mt-auto",
+          collapsed ? "px-1.5 py-2" : "px-3 py-3",
+        )}
+      >
         <button
           type="button"
           onClick={() => toast.info("Demo mode — sign out coming soon.")}
-          className="w-full flex items-center justify-between px-2 py-1.5 rounded-sm text-[13px] text-ink-faint hover:text-ink hover:bg-paper-edge/40 transition-colors"
+          title={collapsed ? "Sign out" : undefined}
+          className={cn(
+            "w-full flex items-center rounded-sm text-ink-faint hover:text-ink hover:bg-paper-edge/40 transition-colors",
+            collapsed
+              ? "justify-center py-2"
+              : "justify-between px-2 py-1.5 text-[13px]",
+          )}
         >
-          <span>Sign out</span>
-          <span className="text-ink-faint/70">↗</span>
+          {collapsed ? (
+            <LogOut size={15} strokeWidth={1.75} />
+          ) : (
+            <>
+              <span>Sign out</span>
+              <span className="text-ink-faint/70">↗</span>
+            </>
+          )}
         </button>
       </div>
     </aside>

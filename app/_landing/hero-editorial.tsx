@@ -2,9 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { hireProductManager } from "@/src/server/hire";
-import { Button } from "@/src/components/ui/button";
 import { WorkspaceMockup } from "./workspace-mockup";
+import { EarlyAccessDialog } from "./early-access-dialog";
 import { DemoDialog } from "./demo-dialog";
 import { EASE, Reveal } from "./motion-primitives";
 
@@ -178,11 +177,12 @@ export function LandingHeroEditorial() {
         {/* CTAs — left-aligned, editorial */}
         <Reveal delay={0.36}>
           <div className="mt-12 lg:mt-14 flex flex-wrap items-center gap-3">
-            <form action={hireProductManager}>
-              <Button variant="ink" size="lg" type="submit">
-                Get early access
-              </Button>
-            </form>
+            <EarlyAccessDialog
+              triggerLabel="Get early access"
+              triggerVariant="ink"
+              triggerSize="lg"
+              source="hero"
+            />
             <DemoDialog />
           </div>
         </Reveal>

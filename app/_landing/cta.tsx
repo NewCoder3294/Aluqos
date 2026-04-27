@@ -31,7 +31,7 @@ export function LandingCTA() {
               We&rsquo;re onboarding the first 12 design partners now.
             </p>
             <div className="mt-10 flex justify-center">
-              <EarlyAccessDialog />
+              <EarlyAccessDialog source="footer-cta" />
             </div>
             <div className="mt-6 text-[12.5px] text-ink-faint">
               Free for the first 12 design partners.
