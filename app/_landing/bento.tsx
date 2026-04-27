@@ -62,85 +62,36 @@ function VoiceMock() {
   );
 }
 
-/* Tiny logo glyphs — minimal, on-paper. */
-function SlackGlyph() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden>
-      <g fill="currentColor">
-        <rect x="2.5" y="9.5" width="5" height="2" rx="1" />
-        <rect x="9.5" y="2.5" width="2" height="5" rx="1" />
-        <rect x="16.5" y="12.5" width="5" height="2" rx="1" />
-        <rect x="12.5" y="16.5" width="2" height="5" rx="1" />
-      </g>
-    </svg>
-  );
-}
-function NotionGlyph() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
-      <rect x="4" y="3.5" width="16" height="17" rx="1.5" />
-      <path d="M8 7.5v9M8 7.5l8 9M16 7.5v9" strokeLinecap="round" />
-    </svg>
-  );
-}
-function JiraGlyph() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden fill="currentColor">
-      <path d="M12 2 L20 10 L16 10 A6 6 0 0 0 10 4 Z" opacity="0.85" />
-      <path d="M4 12 L8 12 A6 6 0 0 0 14 18 L14 22 Z" />
-    </svg>
-  );
-}
-function GithubGlyph() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden fill="currentColor">
-      <path d="M12 2.5a9.5 9.5 0 0 0-3 18.5c.5.1.7-.2.7-.5v-1.7c-2.6.6-3.2-1.2-3.2-1.2-.4-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.1-.2-4.3-1-4.3-4.6 0-1 .4-1.9 1-2.5-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1 .8-.2 1.6-.3 2.5-.3s1.7.1 2.5.3c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.5 1 2.5 0 3.6-2.2 4.4-4.3 4.6.4.3.7.9.7 1.8v2.6c0 .3.2.6.7.5A9.5 9.5 0 0 0 12 2.5z" />
-    </svg>
-  );
-}
-function DriveGlyph() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden fill="currentColor">
-      <path d="M9 3 L15 3 L21 14 L18 14 L12 3.5 Z" />
-      <path d="M3 14 L9 3 L12 8.5 L6 19 Z" opacity="0.75" />
-      <path d="M6 19 L18 14 L21 14 L18 19 Z" opacity="0.55" />
-    </svg>
-  );
-}
-function LinearGlyph() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
-      <path d="M3 14 L10 21" />
-      <path d="M3 9 L15 21" />
-      <path d="M4 5 L19 20" />
-      <path d="M9 3 L21 15" />
-      <path d="M14 3 L21 10" />
-    </svg>
-  );
-}
-
 function IntegrationsMock() {
-  const glyphs = [
-    { name: "Slack", G: SlackGlyph },
-    { name: "Notion", G: NotionGlyph },
-    { name: "Jira", G: JiraGlyph },
-    { name: "GitHub", G: GithubGlyph },
-    { name: "Drive", G: DriveGlyph },
-    { name: "Linear", G: LinearGlyph },
+  const brands: Array<{ name: string; src: string; scale?: number }> = [
+    { name: "Slack", src: "/logos/slack.svg" },
+    { name: "Notion", src: "/logos/notion.svg" },
+    { name: "Linear", src: "/logos/linear.svg" },
+    { name: "GitHub", src: "/logos/github.svg" },
+    { name: "Figma", src: "/logos/figma.svg", scale: 0.62 },
+    { name: "Google Drive", src: "/logos/drive.svg" },
+    { name: "Loom", src: "/logos/loom.svg" },
+    { name: "Discord", src: "/logos/discord.svg" },
   ];
   return (
-    <div className="grid grid-cols-6 gap-2">
-      {glyphs.map(({ name, G }, i) => (
+    <div className="grid grid-cols-4 gap-2">
+      {brands.map(({ name, src, scale = 1 }, i) => (
         <motion.div
           key={name}
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: i * 0.05, duration: 0.4, ease: EASE }}
+          transition={{ delay: i * 0.04, duration: 0.4, ease: EASE }}
           aria-label={name}
-          className="aspect-square rounded-md border border-paper-edge bg-paper-hi/60 grid place-items-center text-ink-muted hover:text-coral-deep transition-colors"
+          className="aspect-square rounded-md border border-paper-edge bg-white grid place-items-center p-2.5"
         >
-          <G />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt={name}
+            className="w-full h-full object-contain"
+            style={{ transform: `scale(${scale})` }}
+          />
         </motion.div>
       ))}
     </div>
@@ -334,7 +285,7 @@ export function LandingBento() {
             className="md:col-span-1"
             eyebrow="Integrations"
             title="Lives in your tools"
-            subtitle="Slack &middot; Notion &middot; Jira &middot; GitHub &middot; Drive &middot; Linear"
+            subtitle="Slack &middot; Notion &middot; Linear &middot; GitHub &middot; Figma &middot; Drive &middot; Loom &middot; Discord"
             visual={<IntegrationsMock />}
           />
           <BentoCell
