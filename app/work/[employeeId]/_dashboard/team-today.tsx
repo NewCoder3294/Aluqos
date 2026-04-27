@@ -33,7 +33,6 @@ export function TeamToday({
         <ul>
           {team.map((row, idx) => {
             const meta = AGENTS[row.agent];
-            const initials = meta.name.charAt(0);
             const href = `/work/${employeeId}${row.href ? "/" + row.href : ""}`;
             return (
               <li key={row.agent}>
@@ -46,12 +45,12 @@ export function TeamToday({
                 >
                   <span
                     className={cn(
-                      "size-8 rounded-full shrink-0 flex items-center justify-center text-white text-[12px] font-medium",
+                      "size-8 rounded-full shrink-0 flex items-center justify-center",
                       meta.avatarGradient,
                     )}
                     aria-hidden
                   >
-                    {initials}
+                    <span className="size-3 rounded-full bg-white/45" />
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2">

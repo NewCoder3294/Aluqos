@@ -56,8 +56,10 @@ export function PrdHeader({
                 <span className="w-[6px] h-[6px] rounded-full bg-coral pulse-coral" />
                 Drafting
               </Badge>
+            ) : sectionsComplete >= totalSections ? (
+              <Badge variant="default">Ready for review</Badge>
             ) : (
-              <Badge variant="coral">Drafting</Badge>
+              <Badge variant="coral">Draft</Badge>
             )}
           </PropRow>
           <PropRow label="Priority">

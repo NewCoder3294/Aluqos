@@ -11,8 +11,7 @@ type KeyResult = {
   title: string;
   current: number;
   target: number;
-  unit?: string;
-  display?: string;
+  display: string;
 };
 
 type Goal = {
@@ -20,43 +19,59 @@ type Goal = {
   title: string;
   timeframe: string;
   status: GoalStatus;
+  setBy: string;
+  lastReview: string;
+  alexNote: string;
   keyResults: KeyResult[];
 };
 
 const GOALS: Goal[] = [
   {
     id: "g1",
-    title: "Ship the YC demo",
-    timeframe: "Q2 2026 · due Apr 28",
+    title: "Ship analytics bulk export",
+    timeframe: "Q2 2026 · due May 16",
     status: "on-track",
+    setBy: "Set with Nicolas · Apr 14",
+    lastReview: "Reviewed 3 days ago",
+    alexNote:
+      "PRD #47 finished drafting this morning. Engineering picked up the spec — first slice lands Friday.",
     keyResults: [
-      { title: "AI employees built and demo-ready", current: 3, target: 3, display: "3 / 3" },
-      { title: "Demo rehearsals completed", current: 22, target: 30, display: "22 / 30" },
-      { title: "Design partners on the demo invite", current: 12, target: 12, display: "12 / 12" },
-      { title: "Day-Day pitch script locked", current: 90, target: 100, display: "90% locked", unit: "%" },
+      { title: "PRD drafted, refined, and approved", current: 6, target: 6, display: "6 / 6 sections" },
+      { title: "Engineering effort scoped", current: 100, target: 100, display: "Scoped · 9 pts" },
+      { title: "First user-visible slice in staging", current: 60, target: 100, display: "60% built" },
+      { title: "Top-10 accounts notified before GA", current: 4, target: 10, display: "4 / 10 accounts" },
     ],
   },
   {
     id: "g2",
-    title: "Close 10 design partners",
-    timeframe: "Q2 2026 · due Jun 30",
-    status: "at-risk",
+    title: "Tighten PRD cycle time",
+    timeframe: "Q2 2026 · rolling target",
+    status: "ahead",
+    setBy: "Self-set · Apr 1",
+    lastReview: "Reviewed yesterday",
+    alexNote:
+      "Three drafts shipped this week from issue → reviewable in under a day. Holding pace through demo prep.",
     keyResults: [
-      { title: "Design-partner logos signed", current: 6, target: 10, display: "6 / 10" },
-      { title: "Contracts sent", current: 9, target: 12, display: "9 / 12" },
-      { title: "Discovery calls completed", current: 31, target: 40, display: "31 / 40" },
-      { title: "Median NPS across partners", current: 58, target: 60, display: "58 / 60" },
+      { title: "Median issue → reviewable PRD", current: 75, target: 100, display: "0.6d (target ≤ 1d)" },
+      { title: "PRDs shipped this quarter", current: 11, target: 15, display: "11 / 15" },
+      { title: "PRDs reviewed by ≥ 1 partner before merge", current: 9, target: 11, display: "9 / 11" },
+      { title: "Refinement rounds per PRD (lower better)", current: 50, target: 100, display: "1.4 avg (cap 2.0)" },
     ],
   },
   {
     id: "g3",
-    title: "Hit $10K MRR by July",
-    timeframe: "Q2 2026 · due Jul 31",
-    status: "ahead",
+    title: "Convert design-partner feedback into roadmap",
+    timeframe: "Q2 2026 · monthly check-in",
+    status: "at-risk",
+    setBy: "Set with Marie · Mar 22",
+    lastReview: "Reviewed 5 days ago",
+    alexNote:
+      "Acme Health and Beacon Labs both raised filter parity on this week's calls. Pulling forward to next sprint — flagging to Nicolas.",
     keyResults: [
-      { title: "Current MRR", current: 6800, target: 10000, display: "$6.8K / $10K" },
-      { title: "Paying customers", current: 14, target: 20, display: "14 / 20" },
-      { title: "Logo churn (lower is better)", current: 100 - 2, target: 100 - 5, display: "2% churn (cap 5%)" },
+      { title: "Partner-flagged requests triaged within 48h", current: 18, target: 22, display: "18 / 22" },
+      { title: "Partner asks promoted to PRDs", current: 5, target: 8, display: "5 / 8" },
+      { title: "Net Promoter Score from partners", current: 53, target: 60, display: "53 / 60" },
+      { title: "Discovery calls attended this quarter", current: 19, target: 24, display: "19 / 24" },
     ],
   },
 ];
@@ -91,7 +106,9 @@ export default async function GoalsPage({
       <div className="space-y-6">
         <div>
           <h1 className="serif text-[28px] tracking-[-0.02em] text-ink leading-tight">Q2 OKRs</h1>
-          <p className="mt-1 text-[13px] text-ink-faint">Three objectives Alex is driving for the quarter.</p>
+          <p className="mt-1 text-[13px] text-ink-faint">
+            What Alex is driving as Product. Reviewed weekly with Nicolas.
+          </p>
         </div>
 
         <div className="space-y-5">
@@ -120,6 +137,10 @@ export default async function GoalsPage({
                         <div className="text-[13px] text-ink">Alex · Product</div>
                       </div>
                     </div>
+                    <div className="hidden md:block text-[12px] text-ink-faint">
+                      <div>{goal.setBy}</div>
+                      <div>{goal.lastReview}</div>
+                    </div>
                     <div className="ml-auto text-right">
                       <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint">Composite</div>
                       <div className="serif text-[20px] tabular-nums text-ink">{overall}%</div>
@@ -134,7 +155,7 @@ export default async function GoalsPage({
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-[13px] text-ink">{kr.title}</span>
                             <span className="text-[12px] tabular-nums text-ink-faint shrink-0">
-                              {kr.display ?? `${kr.current} / ${kr.target}${kr.unit ?? ""}`}
+                              {kr.display}
                             </span>
                           </div>
                           <div className="h-1.5 bg-paper-hi rounded-full overflow-hidden">
@@ -149,6 +170,15 @@ export default async function GoalsPage({
                         </div>
                       );
                     })}
+                  </div>
+
+                  <div className="border-t border-paper-edge pt-4 flex items-start gap-3">
+                    <span className="text-[10px] uppercase tracking-[0.14em] text-coral-deep font-medium shrink-0 mt-0.5">
+                      Note from Alex
+                    </span>
+                    <p className="text-[13px] text-ink-muted leading-relaxed flex-1">
+                      {goal.alexNote}
+                    </p>
                   </div>
                 </CardContent>
               </Card>

@@ -26,6 +26,16 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
   const setSubStep = useWalkthrough(s => s.setSubStep);
   const [approvals, setApprovals] = useState<Record<string, ApprovalState>>({});
   const [mods, setMods] = useState<Record<string, string>>({});
+  const [customs, setCustoms] = useState<Record<"own" | "assist" | "flag", ActionItem[]>>({
+    own: [],
+    assist: [],
+    flag: [],
+  });
+  const [drafts, setDrafts] = useState<Record<"own" | "assist" | "flag", string | null>>({
+    own: null,
+    assist: null,
+    flag: null,
+  });
   const [autonomy, setAutonomy] = useState<typeof AUTONOMY[number]["val"]>("ask_external");
   const [submitting, setSubmitting] = useState(false);
 
@@ -34,13 +44,23 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
   }, [setSubStep]);
 
   const tiers: Array<{ tier: "own" | "assist" | "flag"; items: ActionItem[] }> = [
-    { tier: "own", items: (plan?.own as ActionItem[]) ?? [] },
-    { tier: "assist", items: (plan?.assist as ActionItem[]) ?? [] },
-    { tier: "flag", items: (plan?.flag as ActionItem[]) ?? [] },
+    { tier: "own", items: [...((plan?.own as ActionItem[]) ?? []), ...customs.own] },
+    { tier: "assist", items: [...((plan?.assist as ActionItem[]) ?? []), ...customs.assist] },
+    { tier: "flag", items: [...((plan?.flag as ActionItem[]) ?? []), ...customs.flag] },
   ];
 
   const setApproval = (key: string, val: ApprovalState) =>
     setApprovals(a => ({ ...a, [key]: val }));
+
+  const addCustom = (tier: "own" | "assist" | "flag", title: string) => {
+    const trimmed = title.trim();
+    if (!trimmed) {
+      setDrafts(d => ({ ...d, [tier]: null }));
+      return;
+    }
+    setCustoms(c => ({ ...c, [tier]: [...c[tier], { title: trimmed, rationale: "" }] }));
+    setDrafts(d => ({ ...d, [tier]: null }));
+  };
 
   const counts = {
     own: tiers[0].items.filter((_, i) => (approvals[`own-${i}`] ?? "approved") !== "removed").length,
@@ -66,8 +86,8 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
 
           <div className="w-full flex flex-col gap-10 text-left pt-4">
             {tiers.map(t => {
-              if (t.items.length === 0) return null;
               const meta = TIER_META[t.tier];
+              const draft = drafts[t.tier];
               return (
                 <div key={t.tier} className="space-y-3">
                   <Serif italic className="text-[14px] text-coral block">
@@ -142,6 +162,37 @@ export function Phase5Approve({ employeeId }: { employeeId: string }) {
                       );
                     })}
                   </ul>
+                  {draft !== null ? (
+                    <div className="flex items-center gap-2 pl-[14px]">
+                      <input
+                        autoFocus
+                        value={draft}
+                        onChange={e => setDrafts(d => ({ ...d, [t.tier]: e.target.value }))}
+                        onKeyDown={e => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            addCustom(t.tier, draft);
+                          } else if (e.key === "Escape") {
+                            setDrafts(d => ({ ...d, [t.tier]: null }));
+                          }
+                        }}
+                        onBlur={() => addCustom(t.tier, draft)}
+                        placeholder="Describe the task…"
+                        className="flex-1 bg-transparent border-b border-paper-edge text-[15px] text-ink focus:outline-none focus:border-coral transition-colors py-1 placeholder:text-ink-faint/60"
+                      />
+                      <span className="text-[10.5px] uppercase tracking-[0.1em] text-ink-faint">
+                        ↵ to add · esc to cancel
+                      </span>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setDrafts(d => ({ ...d, [t.tier]: "" }))}
+                      className="ml-[14px] text-[12px] uppercase tracking-[0.1em] text-ink-faint hover:text-coral-deep transition-colors"
+                    >
+                      + Add task
+                    </button>
+                  )}
                 </div>
               );
             })}

@@ -16,6 +16,10 @@ import {
 
 const SECTION_ORDER: PrdSectionKey[] = ["problem","goals","user_stories","scope","out_of_scope","success_metrics"];
 
+function sectionsAreEmpty(sections: Record<string, string>): boolean {
+  return SECTION_ORDER.every(k => !(sections[k] ?? "").trim());
+}
+
 export function PrdSurface({
   employeeId,
   initialPrds,
@@ -33,8 +37,9 @@ export function PrdSurface({
   useEffect(() => {
     if (ran.current) return;
     ran.current = true;
-    if (bootstrap && !initialPrds.length) {
-      void runFreshPrd();
+    const empty = !latest || sectionsAreEmpty(latest.sections);
+    if (bootstrap && empty) {
+      void runFreshPrd(latest?.id, latest?.source_issue ?? null);
     } else if (latest) {
       ws.setPrd({ id: latest.id, title: latest.title });
       Object.entries(latest.sections).forEach(([k, v]) => ws.appendSection(k as PrdSectionKey, v));
@@ -43,13 +48,18 @@ export function PrdSurface({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function runFreshPrd() {
-    const issue = await loadIssueFixture();
-    const sourceLabel = `Issue #47 — ${issue.title}`;
+  async function runFreshPrd(existingPrdId: string | undefined, presetSource: string | null) {
+    let sourceLabel: string;
+    if (presetSource) {
+      sourceLabel = presetSource;
+    } else {
+      const issue = await loadIssueFixture();
+      sourceLabel = `Issue #47 — ${issue.title}`;
+    }
     const inputs = await fetchPrdInputs(employeeId, sourceLabel);
-    const created = await createPrd(employeeId, "", sourceLabel);
-    setLatest({ id: created.id, title: "", sections: {}, source_issue: sourceLabel });
-    ws.setPrd({ id: created.id, title: "" });
+    const prdId = existingPrdId ?? (await createPrd(employeeId, "", sourceLabel)).id;
+    setLatest({ id: prdId, title: "", sections: {}, source_issue: sourceLabel });
+    ws.setPrd({ id: prdId, title: "" });
     ws.setStatus("drafting");
 
     const res = await fetch("/api/ai/prd", { method: "POST", body: JSON.stringify(inputs) });
@@ -67,8 +77,8 @@ export function PrdSurface({
       }
     }
     ws.finishStreaming();
-    await persistPrdSections(created.id, employeeId, sections, parsed.title ?? "");
-    setLatest({ id: created.id, title: parsed.title, sections, source_issue: sourceLabel });
+    await persistPrdSections(prdId, employeeId, sections, parsed.title ?? "");
+    setLatest({ id: prdId, title: parsed.title, sections, source_issue: sourceLabel });
   }
 
   if (!ws.prdId) {

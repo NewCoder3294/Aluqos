@@ -1,7 +1,7 @@
 import { fetchWorkspaceState } from "@/src/server/run-prd";
 import { fakeEmployee } from "@/src/db/client";
-import { DashboardShell } from "../_dashboard/dashboard-shell";
-import { SAM_DATA } from "../_dashboard/data/sam";
+import { ComingSoonWall } from "../_dashboard/coming-soon-wall";
+import { AGENTS } from "../_dashboard/data/overview";
 
 export default async function SamDashboardPage({
   params,
@@ -18,11 +18,14 @@ export default async function SamDashboardPage({
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
 
   return (
-    <DashboardShell
+    <ComingSoonWall
       employeeId={emp.id}
-      employeeName="Sam"
+      employeeName={emp.name}
       activeNav="sam-dashboard"
-      data={SAM_DATA}
+      name="Sam"
+      role="Marketing"
+      avatarGradient={AGENTS.sam.avatarGradient}
+      pitch="Sam writes in your voice, runs campaigns end-to-end, and tracks performance across every channel."
     />
   );
 }

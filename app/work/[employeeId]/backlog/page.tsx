@@ -1,4 +1,4 @@
-import { fetchWorkspaceState } from "@/src/server/run-prd";
+import { fetchWorkspaceState, draftPrdFromBacklog } from "@/src/server/run-prd";
 import { fakeEmployee } from "@/src/db/client";
 import { MessageCircle, Code2, Mail, Phone } from "lucide-react";
 import { DashboardShell } from "../_dashboard/dashboard-shell";
@@ -42,11 +42,11 @@ const SOURCE_LABEL: Record<Source, string> = {
   call: "Customer call",
 };
 
-const HEATMAP = [
-  { source: "Slack", count: 12 },
-  { source: "GitHub", count: 4 },
-  { source: "Customer calls", count: 2 },
-  { source: "Email", count: 1 },
+const HEATMAP: { source: string; count: number; color: string }[] = [
+  { source: "Slack", count: 12, color: "var(--color-coral)" },
+  { source: "GitHub", count: 4, color: "#1f1d1a" },
+  { source: "Customer calls", count: 2, color: "#7a8b5c" },
+  { source: "Email", count: 1, color: "#9a9388" },
 ];
 
 export default async function BacklogPage({
@@ -63,7 +63,19 @@ export default async function BacklogPage({
   }
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
 
-  const max = Math.max(...HEATMAP.map((h) => h.count));
+  const total = HEATMAP.reduce((s, h) => s + h.count, 0);
+  const RADIUS = 56;
+  const STROKE = 22;
+  const CIRC = 2 * Math.PI * RADIUS;
+  let cumulative = 0;
+  const slices = HEATMAP.map((h) => {
+    const fraction = h.count / total;
+    const length = fraction * CIRC;
+    const dasharray = `${length} ${CIRC - length}`;
+    const dashoffset = -cumulative;
+    cumulative += length;
+    return { ...h, dasharray, dashoffset, pct: Math.round(fraction * 100) };
+  });
 
   return (
     <DashboardShell employeeId={emp.id} employeeName={emp.name} activeNav="alex-backlog">
@@ -98,7 +110,26 @@ export default async function BacklogPage({
                         {SOURCE_LABEL[req.source]} · from {req.author} · {req.age} · {req.mentions} {req.mentions === 1 ? "mention" : "mentions"}
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" className="shrink-0">Draft PRD</Button>
+                    <form
+                      action={async () => {
+                        "use server";
+                        const sourceTag =
+                          SOURCE_LABEL[req.source] + " · " + req.author;
+                        await draftPrdFromBacklog(
+                          employeeId,
+                          `${sourceTag} — ${req.title}`,
+                        );
+                      }}
+                    >
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        type="submit"
+                        className="shrink-0"
+                      >
+                        Draft PRD
+                      </Button>
+                    </form>
                   </li>
                 ))}
               </ul>
@@ -109,21 +140,66 @@ export default async function BacklogPage({
             <CardHeader>
               <CardTitle>Top sources this week</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {HEATMAP.map((h) => (
-                <div key={h.source} className="space-y-1.5">
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-[13px] text-ink">{h.source}</span>
-                    <span className="serif text-[16px] tabular-nums text-ink">{h.count}</span>
-                  </div>
-                  <div className="h-1.5 bg-paper-hi rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-coral/70 rounded-full"
-                      style={{ width: `${Math.round((h.count / max) * 100)}%` }}
+            <CardContent className="space-y-5">
+              <div className="flex items-center justify-center pt-1">
+                <div className="relative">
+                  <svg
+                    width={160}
+                    height={160}
+                    viewBox="0 0 160 160"
+                    className="-rotate-90"
+                    aria-hidden
+                  >
+                    <circle
+                      cx={80}
+                      cy={80}
+                      r={RADIUS}
+                      fill="none"
+                      stroke="var(--color-paper-hi)"
+                      strokeWidth={STROKE}
                     />
+                    {slices.map((s) => (
+                      <circle
+                        key={s.source}
+                        cx={80}
+                        cy={80}
+                        r={RADIUS}
+                        fill="none"
+                        stroke={s.color}
+                        strokeWidth={STROKE}
+                        strokeDasharray={s.dasharray}
+                        strokeDashoffset={s.dashoffset}
+                      />
+                    ))}
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="serif text-[28px] tabular-nums text-ink leading-none">
+                      {total}
+                    </span>
+                    <span className="text-[10px] uppercase tracking-[0.14em] text-ink-faint mt-1">
+                      requests
+                    </span>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              <ul className="space-y-2">
+                {slices.map((s) => (
+                  <li key={s.source} className="flex items-center gap-2.5">
+                    <span
+                      aria-hidden
+                      className="size-2.5 rounded-sm shrink-0"
+                      style={{ backgroundColor: s.color }}
+                    />
+                    <span className="text-[13px] text-ink flex-1">{s.source}</span>
+                    <span className="text-[11.5px] tabular-nums text-ink-faint">{s.pct}%</span>
+                    <span className="serif text-[15px] tabular-nums text-ink w-7 text-right">
+                      {s.count}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
               <div className="pt-3 border-t border-paper-edge">
                 <div className="text-[11px] uppercase tracking-[0.12em] text-ink-faint mb-1">Signal</div>
                 <p className="text-[13px] text-ink-muted leading-relaxed">

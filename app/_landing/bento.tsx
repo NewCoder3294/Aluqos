@@ -135,7 +135,9 @@ function ApprovalMock() {
 function StreamMock() {
   const reduced = useReducedMotion() ?? false;
   const ref = React.useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-10%" });
+  // Loop forever once visible so a fast-scrolling visitor still catches the
+  // animation on the way back. Pause between cycles so it doesn't feel busy.
+  const inView = useInView(ref, { margin: "-10%" });
 
   const lines = [
     "Reading q2-roadmap.pdf",
@@ -149,23 +151,31 @@ function StreamMock() {
   React.useEffect(() => {
     if (reduced || !inView) return;
     let cancelled = false;
-    let acc: string[] = [];
 
     const run = async () => {
-      for (let i = 0; i < lines.length; i++) {
-        if (cancelled) return;
-        setCursorIdx(i);
-        const target = lines[i];
-        for (let n = 1; n <= target.length; n++) {
+      while (!cancelled) {
+        let acc: string[] = [];
+        setShown([]);
+        setCursorIdx(-1);
+        await new Promise(r => setTimeout(r, 200));
+        for (let i = 0; i < lines.length; i++) {
           if (cancelled) return;
-          const partial = [...acc];
-          partial[i] = target.slice(0, n);
-          setShown(partial);
-          await new Promise(r => setTimeout(r, 18));
+          setCursorIdx(i);
+          const target = lines[i];
+          for (let n = 1; n <= target.length; n++) {
+            if (cancelled) return;
+            const partial = [...acc];
+            partial[i] = target.slice(0, n);
+            setShown(partial);
+            await new Promise(r => setTimeout(r, 18));
+          }
+          acc = [...acc];
+          acc[i] = target;
+          await new Promise(r => setTimeout(r, 220));
         }
-        acc = [...acc];
-        acc[i] = target;
-        await new Promise(r => setTimeout(r, 220));
+        // Hold the completed state for a beat before resetting.
+        setCursorIdx(-1);
+        await new Promise(r => setTimeout(r, 2400));
       }
     };
 

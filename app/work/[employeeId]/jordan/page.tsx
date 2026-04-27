@@ -1,7 +1,7 @@
 import { fetchWorkspaceState } from "@/src/server/run-prd";
 import { fakeEmployee } from "@/src/db/client";
-import { DashboardShell } from "../_dashboard/dashboard-shell";
-import { JORDAN_DATA } from "../_dashboard/data/jordan";
+import { ComingSoonWall } from "../_dashboard/coming-soon-wall";
+import { AGENTS } from "../_dashboard/data/overview";
 
 export default async function JordanDashboardPage({
   params,
@@ -18,11 +18,14 @@ export default async function JordanDashboardPage({
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
 
   return (
-    <DashboardShell
+    <ComingSoonWall
       employeeId={emp.id}
-      employeeName="Jordan"
+      employeeName={emp.name}
       activeNav="jordan-dashboard"
-      data={JORDAN_DATA}
+      name="Jordan"
+      role="Program Manager"
+      avatarGradient={AGENTS.jordan.avatarGradient}
+      pitch="Jordan runs standups, drives status reports, and surfaces risks before they slow your sprint."
     />
   );
 }

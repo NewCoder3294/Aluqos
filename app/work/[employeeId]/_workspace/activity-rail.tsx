@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Tabs,
   TabsContent,
@@ -10,6 +11,7 @@ import {
 import { Card, CardContent } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { toast } from "@/src/components/toast";
+import { useWorkspace } from "@/src/store/workspace";
 import {
   Check,
   Circle,
@@ -72,10 +74,47 @@ function iconFor(type: EventType) {
   }
 }
 
+// Queued live entries that drip in after PRD streaming completes — sells the
+// "Alex keeps working" feel while the user reads the draft.
+const LIVE_QUEUE: Array<Omit<FeedItem, "id" | "bucket"> & { delayMs: number }> = [
+  { type: "read", verb: "Skimmed product-feedback.slack", detail: "12 new threads", when: "just now", delayMs: 4500 },
+  { type: "refine", verb: "Flagged scope risk on Issue #44", detail: "open question for Marie", when: "just now", delayMs: 4200 },
+  { type: "draft", verb: "Drafted release note for #38", detail: "queued for review", when: "just now", delayMs: 4800 },
+];
+
 export function ActivityRail() {
   const [tasks, setTasks] = useState(INITIAL_TASKS);
+  const [liveItems, setLiveItems] = useState<FeedItem[]>([]);
+  const status = useWorkspace(s => s.status);
+  const prevStatusRef = useRef(status);
+  const queueStartedRef = useRef(false);
 
-  const today = FEED.filter(e => e.bucket === "today");
+  // When PRD streaming flips drafting → idle, stagger LIVE_QUEUE entries in.
+  useEffect(() => {
+    const prev = prevStatusRef.current;
+    prevStatusRef.current = status;
+    if (queueStartedRef.current) return;
+    if (prev === "drafting" && status === "idle") {
+      queueStartedRef.current = true;
+      let cumulative = 0;
+      const timers: ReturnType<typeof setTimeout>[] = [];
+      LIVE_QUEUE.forEach((entry, i) => {
+        cumulative += entry.delayMs;
+        timers.push(
+          setTimeout(() => {
+            const { delayMs: _ignored, ...rest } = entry;
+            setLiveItems(curr => [
+              { ...rest, id: `live-${i}`, bucket: "today" },
+              ...curr,
+            ]);
+          }, cumulative),
+        );
+      });
+      return () => timers.forEach(clearTimeout);
+    }
+  }, [status]);
+
+  const today = [...liveItems, ...FEED.filter(e => e.bucket === "today")];
   const earlier = FEED.filter(e => e.bucket === "earlier");
 
   return (
@@ -211,27 +250,37 @@ function FeedGroup({ label, items }: { label: string; items: FeedItem[] }) {
         {label}
       </div>
       <ul className="divide-y divide-paper-edge/40">
-        {items.map(e => (
-          <li
-            key={e.id}
-            className="flex items-start gap-2.5 px-4 py-2 hover:bg-paper-hi/40 transition-colors"
-          >
-            <span className="mt-0.5">{iconFor(e.type)}</span>
-            <div className="flex-1 min-w-0">
-              <div className="text-[12.5px] text-ink leading-snug truncate">
-                {e.verb}
-              </div>
-              {e.detail && (
-                <div className="text-[11px] text-ink-faint leading-snug truncate">
-                  {e.detail}
+        <AnimatePresence initial={false}>
+          {items.map(e => (
+            <motion.li
+              key={e.id}
+              layout
+              initial={
+                e.id.startsWith("live-")
+                  ? { opacity: 0, y: -8, backgroundColor: "rgba(224,122,95,0.08)" }
+                  : false
+              }
+              animate={{ opacity: 1, y: 0, backgroundColor: "rgba(0,0,0,0)" }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-start gap-2.5 px-4 py-2 hover:bg-paper-hi/40"
+            >
+              <span className="mt-0.5">{iconFor(e.type)}</span>
+              <div className="flex-1 min-w-0">
+                <div className="text-[12.5px] text-ink leading-snug truncate">
+                  {e.verb}
                 </div>
-              )}
-            </div>
-            <span className="text-[10.5px] text-ink-faint shrink-0 mt-0.5">
-              {e.when}
-            </span>
-          </li>
-        ))}
+                {e.detail && (
+                  <div className="text-[11px] text-ink-faint leading-snug truncate">
+                    {e.detail}
+                  </div>
+                )}
+              </div>
+              <span className="text-[10.5px] text-ink-faint shrink-0 mt-0.5">
+                {e.when}
+              </span>
+            </motion.li>
+          ))}
+        </AnimatePresence>
       </ul>
     </div>
   );

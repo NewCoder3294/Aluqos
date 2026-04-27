@@ -19,7 +19,9 @@ export function Pipeline({
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <Button variant="outline" size="sm">View all →</Button>
+        <Button variant="outline" size="sm" asChild>
+          <Link href={`/work/${employeeId}/prds`}>View all →</Link>
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-5 gap-4">
@@ -70,12 +72,12 @@ export function Pipeline({
               })}
 
               {col.truncatedExtra && (
-                <button
-                  type="button"
-                  className="w-full text-[11.5px] text-ink-faint hover:text-coral-deep transition-colors px-3 py-2 text-left"
+                <Link
+                  href={`/work/${employeeId}/prds`}
+                  className="block w-full text-[11.5px] text-ink-faint hover:text-coral-deep transition-colors px-3 py-2 text-left"
                 >
                   +{col.truncatedExtra} more →
-                </button>
+                </Link>
               )}
             </div>
           </div>

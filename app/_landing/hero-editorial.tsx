@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { WorkspaceMockup } from "./workspace-mockup";
 import { EarlyAccessDialog } from "./early-access-dialog";
-import { DemoDialog } from "./demo-dialog";
+import { TryDemoButton } from "./try-demo-button";
 import { EASE, Reveal } from "./motion-primitives";
 
 export function LandingHeroEditorial() {
@@ -178,12 +178,12 @@ export function LandingHeroEditorial() {
         <Reveal delay={0.36}>
           <div className="mt-12 lg:mt-14 flex flex-wrap items-center gap-3">
             <EarlyAccessDialog
-              triggerLabel="Get early access"
+              triggerLabel="Sign up for waitlist"
               triggerVariant="ink"
               triggerSize="lg"
               source="hero"
             />
-            <DemoDialog />
+            <TryDemoButton />
           </div>
         </Reveal>
       </div>

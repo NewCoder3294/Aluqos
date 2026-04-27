@@ -103,7 +103,7 @@ export function LandingWhyNow() {
   return (
     <section
       id="why"
-      className="bg-paper-hi/40 border-y border-paper-edge"
+      className="bg-paper-hi border-y border-paper-edge"
     >
       <div className="max-w-6xl mx-auto px-6 py-24 lg:py-32">
         <Reveal>

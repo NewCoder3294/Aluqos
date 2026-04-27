@@ -28,13 +28,13 @@ export function LandingCTA() {
               Let AI learn humans.
             </p>
             <p className="mt-6 text-[16px] text-ink-muted max-w-[44ch] mx-auto">
-              We&rsquo;re onboarding the first 12 design partners now.
+              Private beta · we&rsquo;re reviewing applications now.
             </p>
             <div className="mt-10 flex justify-center">
               <EarlyAccessDialog source="footer-cta" />
             </div>
             <div className="mt-6 text-[12.5px] text-ink-faint">
-              Free for the first 12 design partners.
+              Free during the beta.
             </div>
           </div>
         </Card>

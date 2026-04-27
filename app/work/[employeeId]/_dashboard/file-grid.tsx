@@ -23,6 +23,7 @@ import {
   type FileNode,
   type FileType,
 } from "./data/files";
+import { FilePreviewSheet } from "./file-preview-sheet";
 
 type ViewMode = "grid" | "list";
 
@@ -40,11 +41,6 @@ function iconFor(type: FileType) {
     default:
       return <FileText {...props} className="text-ink-muted" />;
   }
-}
-
-function ownerInitial(owner: AgentId | "mixed"): string {
-  if (owner === "mixed") return "•";
-  return AGENTS[owner].name.charAt(0);
 }
 
 function ownerGradient(owner: AgentId | "mixed"): string {
@@ -65,6 +61,7 @@ export function FileGrid({
   const [view, setView] = useState<ViewMode>("grid");
   const [query, setQuery] = useState("");
   const [path, setPath] = useState<string | null>(initialPath ?? null);
+  const [preview, setPreview] = useState<FileNode | null>(null);
 
   const entries = useMemo<FileNode[]>(() => {
     const base = path ? FOLDER_CONTENTS[path] ?? [] : ROOT_ENTRIES;
@@ -78,7 +75,7 @@ export function FileGrid({
       setPath(item.slug);
       return;
     }
-    toast.info(`Preview for "${item.name}" coming soon.`);
+    setPreview(item);
   };
 
   return (
@@ -182,12 +179,12 @@ export function FileGrid({
               <div className="flex items-center gap-1.5 mt-2">
                 <span
                   className={cn(
-                    "size-4 rounded-full flex items-center justify-center text-white text-[9px] font-medium shrink-0",
+                    "size-4 rounded-full flex items-center justify-center shrink-0",
                     ownerGradient(item.owner),
                   )}
                   aria-hidden
                 >
-                  {ownerInitial(item.owner)}
+                  <span className="size-1.5 rounded-full bg-white/55" />
                 </span>
                 <span className="text-[11.5px] text-ink-faint truncate">
                   {ownerLabel(item.owner)} · {item.modified}
@@ -201,7 +198,7 @@ export function FileGrid({
             </button>
           ))}
         </div>
-      ) : (
+      ) : view === "list" ? (
         <Card>
           <CardContent compact className="p-0">
             <div className="grid grid-cols-[1fr_120px_120px_100px] px-5 py-2.5 text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium border-b border-paper-edge bg-paper-hi/40">
@@ -238,12 +235,12 @@ export function FileGrid({
                     <div className="flex items-center gap-1.5 min-w-0">
                       <span
                         className={cn(
-                          "size-4 rounded-full flex items-center justify-center text-white text-[9px] font-medium shrink-0",
+                          "size-4 rounded-full flex items-center justify-center shrink-0",
                           ownerGradient(item.owner),
                         )}
                         aria-hidden
                       >
-                        {ownerInitial(item.owner)}
+                        <span className="size-1.5 rounded-full bg-white/55" />
                       </span>
                       <span className="text-[12px] text-ink-faint truncate">
                         {ownerLabel(item.owner)}
@@ -259,7 +256,9 @@ export function FileGrid({
             </ul>
           </CardContent>
         </Card>
-      )}
+      ) : null}
+
+      <FilePreviewSheet file={preview} onClose={() => setPreview(null)} />
     </div>
   );
 }

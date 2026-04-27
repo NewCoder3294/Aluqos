@@ -3,6 +3,12 @@
 import { redirect } from "next/navigation";
 import { serverClient, MOCK_MODE } from "@/src/db/client";
 import { updateOnboarding, setEmployeeStatus, logEvent } from "@/src/db/queries";
+import { seedDemoFirstPrd } from "@/src/server/run-prd";
+import {
+  PRD_DEMO_SECTIONS,
+  PRD_DEMO_SOURCE_ISSUE,
+  PRD_TITLE,
+} from "@/src/data/onboarding-script";
 
 export async function startWorking(
   employeeId: string,
@@ -11,7 +17,7 @@ export async function startWorking(
   modifications: Record<string, string>,
 ) {
   if (MOCK_MODE) {
-    redirect(`/work/${employeeId}/prd/new-bootstrap?bootstrap=1`);
+    redirect(`/work/${employeeId}`);
   }
   try {
     const sb = serverClient();
@@ -24,6 +30,14 @@ export async function startWorking(
     await setEmployeeStatus(employeeId, "working");
     await logEvent(employeeId, "phase_completed", { phase: 5, modifications });
     await logEvent(employeeId, "onboarding_completed");
+    // Plant the magical-onboarding PRD as the user's first PRD so /work shows
+    // exactly what they just watched stream — no drift, no second generation.
+    await seedDemoFirstPrd(
+      employeeId,
+      PRD_TITLE,
+      PRD_DEMO_SOURCE_ISSUE,
+      PRD_DEMO_SECTIONS,
+    );
   } catch (err) {
     if ((err as { digest?: string } | null)?.digest?.startsWith("NEXT_REDIRECT")) throw err;
   }

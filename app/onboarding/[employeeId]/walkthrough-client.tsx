@@ -5,14 +5,23 @@ import { motion, AnimatePresence } from "motion/react";
 import { useWalkthrough, type Phase } from "@/src/store/walkthrough";
 import { OnboardingProgress } from "./_chrome/onboarding-progress";
 import {
-  Phase1Brief, Phase2Reading, Phase3Observe, Phase4Plan, Phase5Approve,
-} from "./_phases";
+  Beat1Intro,
+  Beat2Drop,
+  Beat3Reading,
+  Beat4Understanding,
+  Beat5PrdReveal,
+} from "./_beats";
 
-// Linear-style editorial onboarding shell.
-// No top toolbar, no sidebars, no KPI strip — only a thin coral progress
-// rail at the very top and a centered content area. Each phase renders its
-// own steps; phases publish their progress (current step / total in phase)
-// into the walkthrough store so the rail at the top can fill proportionally.
+// Magic-moment onboarding shell. Five beats per Saathi_MVP_Spec.docx:
+//   1 Intro    — "Hi, I'm Alex." avatar reveal
+//   2 Drop     — "GitHub repo" + "Notion product spec" drop targets
+//   3 Reading  — streaming "Reading codebase…" theater
+//   4 Understanding — "Here's what I picked up." cards + That's right
+//   5 PRD reveal — unprompted Issue #47 PRD streams in → /work
+//
+// The walkthrough store's `phase` field is repurposed (1-5 = beats; 6 = done,
+// handled by start-working.ts). The old form-driven phases live under
+// /work/{id}/settings as advanced setup (kept, not deleted).
 export function WalkthroughClient({
   employee,
   session,
@@ -26,7 +35,11 @@ export function WalkthroughClient({
   const setPhase = useWalkthrough(s => s.setPhase);
 
   useEffect(() => {
-    if (session.phase) setPhase(session.phase as Phase);
+    if (session.phase && session.phase >= 1 && session.phase <= 5) {
+      setPhase(session.phase as Phase);
+    } else {
+      setPhase(1);
+    }
   }, [session.phase, setPhase]);
 
   return (
@@ -51,12 +64,20 @@ export function WalkthroughClient({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className={
+              // Beats 1-4 sit inside their own BeatCard container, centered
+              // in the viewport on top of the dot grid. Beat 5 owns its own
+              // wide layout (sticky avatar rail + scrolling PRD card).
+              phase === 5
+                ? undefined
+                : "min-h-[calc(100vh-80px)] flex items-center justify-center px-6 py-10"
+            }
           >
-            {phase === 1 && <Phase1Brief employeeId={employee.id} />}
-            {phase === 2 && <Phase2Reading employeeId={employee.id} />}
-            {phase === 3 && <Phase3Observe employeeId={employee.id} />}
-            {phase === 4 && <Phase4Plan employeeId={employee.id} />}
-            {phase === 5 && <Phase5Approve employeeId={employee.id} />}
+            {phase === 1 && <Beat1Intro />}
+            {phase === 2 && <Beat2Drop />}
+            {phase === 3 && <Beat3Reading />}
+            {phase === 4 && <Beat4Understanding />}
+            {phase === 5 && <Beat5PrdReveal employeeId={employee.id} />}
           </motion.div>
         </AnimatePresence>
       </div>

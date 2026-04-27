@@ -113,3 +113,61 @@ export async function loadIssueFixture(): Promise<{ title: string; body: string 
   const file = path.resolve(process.cwd(), "fixtures/demo/issue-47.json");
   return JSON.parse(await readFile(file, "utf8"));
 }
+
+/**
+ * Spawn a blank PRD tied to a backlog request, then redirect into the PRD
+ * surface where it streams a draft. The bootstrap=1 flag tells prd-surface
+ * to generate against the new PRD's source_issue.
+ */
+export async function draftPrdFromBacklog(
+  employeeId: string,
+  source: string,
+): Promise<void> {
+  const { redirect } = await import("next/navigation");
+  // randomUUID fallback path keeps the demo working even when MOCK_MODE / DB
+  // is unavailable; prd-surface will still kick off generation against the
+  // source label passed via the URL.
+  const created = await createPrd(employeeId, "", source);
+  redirect(`/work/${employeeId}/prd/${created.id}?bootstrap=1`);
+}
+
+/**
+ * Plant the magical-onboarding PRD into the DB so the user lands on /work
+ * with the exact PRD they just watched stream — no drift, no second
+ * generation. Idempotent: if a PRD already exists for this employee with the
+ * demo source issue, do nothing.
+ */
+export async function seedDemoFirstPrd(
+  employeeId: string,
+  title: string,
+  sourceIssue: string,
+  sections: Record<string, string>,
+): Promise<{ id: string } | null> {
+  if (MOCK_MODE) return null;
+  try {
+    const sb = serverClient();
+    const { data: existing } = await sb
+      .from("prds")
+      .select("id")
+      .eq("employee_id", employeeId)
+      .eq("source_issue", sourceIssue)
+      .maybeSingle();
+    if (existing) return { id: existing.id };
+    const { data, error } = await sb
+      .from("prds")
+      .insert({
+        employee_id: employeeId,
+        title,
+        source_issue: sourceIssue,
+        sections,
+        status: "draft",
+      })
+      .select("id")
+      .single();
+    if (error) throw error;
+    await logEvent(employeeId, "prd_generated", { id: data.id, source: "demo-onboarding" });
+    return { id: data.id };
+  } catch {
+    return null;
+  }
+}

@@ -45,10 +45,10 @@ export type OverviewKpi = {
 };
 
 export const OVERVIEW_KPIS: OverviewKpi[] = [
-  { label: "Active employees", value: "3", caption: "Alex, Jordan, Sam" },
-  { label: "Items needing review", value: "8", caption: "across all agents", tone: "warning" },
-  { label: "Work shipped this week", value: "19", caption: "+5 vs last week" },
-  { label: "Time saved (est.)", value: "42h", caption: "this week" },
+  { label: "Active employees", value: "1", caption: "Alex" },
+  { label: "Items needing review", value: "4", caption: "from Alex", tone: "warning" },
+  { label: "Work shipped this week", value: "7", caption: "+2 vs last week" },
+  { label: "Time saved (est.)", value: "14h", caption: "this week" },
 ];
 
 export type OverviewAttention = {
@@ -83,44 +83,6 @@ export const OVERVIEW_ATTENTION: OverviewAttention[] = [
     blocker: true,
   },
   {
-    id: "a3",
-    agent: "jordan",
-    type: "Risk",
-    title: "Q2 milestone slipping — 3 stories at risk",
-    context: "flagged 25m ago",
-    cta: "Triage",
-    blocker: true,
-    href: "jordan/risks",
-  },
-  {
-    id: "a4",
-    agent: "jordan",
-    type: "Standup",
-    title: "Tomorrow's standup notes need a sign-off",
-    context: "drafted 1h ago",
-    cta: "Approve",
-    href: "jordan/standups",
-  },
-  {
-    id: "a5",
-    agent: "sam",
-    type: "Campaign",
-    title: "Q2 launch campaign — copy waiting on you",
-    context: "ready 2h ago",
-    cta: "Approve",
-    blocker: true,
-    href: "sam/campaigns",
-  },
-  {
-    id: "a6",
-    agent: "sam",
-    type: "Brand",
-    title: "Voice drift detected on 3 LinkedIn drafts",
-    context: "flagged 45m ago",
-    cta: "Review",
-    href: "sam/brand-voice",
-  },
-  {
     id: "a7",
     agent: "alex",
     type: "PRD",
@@ -130,13 +92,13 @@ export const OVERVIEW_ATTENTION: OverviewAttention[] = [
     href: "prd/issue-44",
   },
   {
-    id: "a8",
-    agent: "sam",
-    type: "Performance",
-    title: "Demo Day deck — final approval needed",
+    id: "a9",
+    agent: "alex",
+    type: "Backlog",
+    title: "Q2 milestone triage — 6 issues unsorted",
     context: "yesterday",
-    cta: "Approve",
-    href: "sam/performance",
+    cta: "Triage",
+    href: "backlog",
   },
 ];
 
@@ -156,19 +118,6 @@ export const TEAM_TODAY: TeamStatus[] = [
     detail: "Drafting Issue #47 PRD",
     progress: 60,
     href: "",
-  },
-  {
-    agent: "jordan",
-    state: "Reviewing",
-    detail: "Pulling sprint review notes",
-    progress: 30,
-    href: "jordan",
-  },
-  {
-    agent: "sam",
-    state: "Idle",
-    detail: "Brand voice review · idle",
-    href: "sam",
   },
 ];
 
@@ -191,22 +140,6 @@ export const WORK_IN_FLIGHT: WorkInFlight[] = [
     href: "prd/issue-47",
   },
   {
-    id: "w2",
-    agent: "jordan",
-    title: "Sprint 23 retrospective notes",
-    stage: "Reviewing",
-    progress: 75,
-    href: "jordan/standups",
-  },
-  {
-    id: "w3",
-    agent: "sam",
-    title: "Q2 launch campaign — Twitter thread",
-    stage: "Drafting",
-    progress: 45,
-    href: "sam/campaigns",
-  },
-  {
     id: "w4",
     agent: "alex",
     title: "Issue #44 — Quick filters on dashboard",
@@ -215,12 +148,12 @@ export const WORK_IN_FLIGHT: WorkInFlight[] = [
     href: "prd/issue-44",
   },
   {
-    id: "w5",
-    agent: "sam",
-    title: "Demo Day deck final pass",
-    stage: "Final review",
-    progress: 85,
-    href: "sam/performance",
+    id: "w6",
+    agent: "alex",
+    title: "Issue #38 — Saved searches API",
+    stage: "Refining",
+    progress: 35,
+    href: "prd/issue-38",
   },
 ];
 
@@ -243,28 +176,6 @@ export const RECENT_ACTIVITY: RecentActivity[] = [
     href: "prd/issue-47",
   },
   {
-    id: "r2",
-    agent: "jordan",
-    verb: "Posted standup digest in",
-    subject: "#eng-team",
-    timestamp: "12m ago",
-  },
-  {
-    id: "r3",
-    agent: "sam",
-    verb: "Published LinkedIn post",
-    subject: "Beacon Labs case study",
-    timestamp: "38m ago",
-  },
-  {
-    id: "r4",
-    agent: "jordan",
-    verb: "Flagged risk on",
-    subject: "Q2 milestone",
-    timestamp: "1h ago",
-    href: "jordan/risks",
-  },
-  {
     id: "r5",
     agent: "alex",
     verb: "Updated PRD",
@@ -273,18 +184,11 @@ export const RECENT_ACTIVITY: RecentActivity[] = [
     href: "prd/issue-44",
   },
   {
-    id: "r6",
-    agent: "sam",
-    verb: "Approved campaign brief",
-    subject: "Q2 launch — email sequence",
+    id: "r9",
+    agent: "alex",
+    verb: "Replied to Marie in",
+    subject: "#product-feedback",
     timestamp: "3h ago",
-  },
-  {
-    id: "r7",
-    agent: "jordan",
-    verb: "Sent status update to",
-    subject: "#leadership",
-    timestamp: "yesterday",
   },
   {
     id: "r8",

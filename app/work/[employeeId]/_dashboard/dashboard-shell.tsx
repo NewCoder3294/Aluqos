@@ -24,14 +24,15 @@ const HEADER_TITLE: Record<ActiveNavKey, string> = {
   "alex-backlog": "Backlog",
   "alex-calendar": "Calendar",
   "alex-goals": "Goals",
-  "jordan-dashboard": "Dashboard",
-  "jordan-standups": "Standups",
-  "jordan-status": "Status updates",
-  "jordan-risks": "Risks",
-  "sam-dashboard": "Dashboard",
-  "sam-campaigns": "Campaigns",
-  "sam-brand-voice": "Brand voice",
-  "sam-performance": "Performance",
+  "alex-settings": "Settings",
+  "jordan-dashboard": "Jordan",
+  "jordan-standups": "Jordan · Standups",
+  "jordan-status": "Jordan · Status updates",
+  "jordan-risks": "Jordan · Risks",
+  "sam-dashboard": "Sam",
+  "sam-campaigns": "Sam · Campaigns",
+  "sam-brand-voice": "Sam · Brand voice",
+  "sam-performance": "Sam · Performance",
 };
 
 export function DashboardShell({
@@ -59,7 +60,16 @@ export function DashboardShell({
       <div className="flex-1 min-w-0 flex flex-col min-h-screen">
         {/* Top header */}
         <header className="h-[56px] shrink-0 border-b border-paper-edge bg-paper px-8 flex items-center justify-between">
-          <div className="serif text-[16px] tracking-[-0.01em] text-ink">{headerTitle}</div>
+          <div className="flex items-center gap-3">
+            <div className="serif text-[16px] tracking-[-0.01em] text-ink">{headerTitle}</div>
+            <span
+              title="Sample data — pages are illustrative; nothing here is wired to real systems yet."
+              className="inline-flex items-center gap-1.5 rounded-full bg-coral/10 border border-coral/30 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.14em] text-coral-deep"
+            >
+              <span className="size-1.5 rounded-full bg-coral" />
+              Demo
+            </span>
+          </div>
           <div className="text-[12px] text-ink-faint">{dateLabel}</div>
         </header>
 
@@ -74,7 +84,7 @@ export function DashboardShell({
 
               <div className="grid grid-cols-[1.5fr_1fr] gap-5">
                 <NeedsAttention employeeId={employeeId} items={data.attention} />
-                <Today events={data.events} />
+                <Today employeeId={employeeId} events={data.events} />
               </div>
 
               <Pipeline

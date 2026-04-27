@@ -82,12 +82,12 @@ export default async function GlobalOverviewPage({
                     <>
                       <span
                         className={cn(
-                          "size-7 rounded-full shrink-0 flex items-center justify-center text-white text-[11px] font-medium",
+                          "size-7 rounded-full shrink-0 flex items-center justify-center",
                           meta.avatarGradient,
                         )}
                         aria-hidden
                       >
-                        {meta.name.charAt(0)}
+                        <span className="size-2.5 rounded-full bg-white/45" />
                       </span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline gap-2">
@@ -155,12 +155,12 @@ export default async function GlobalOverviewPage({
                     <div className="flex items-center gap-1.5">
                       <span
                         className={cn(
-                          "size-4 rounded-full flex items-center justify-center text-white text-[9px] font-medium shrink-0",
+                          "size-4 rounded-full flex items-center justify-center shrink-0",
                           meta.avatarGradient,
                         )}
                         aria-hidden
                       >
-                        {meta.name.charAt(0)}
+                        <span className="size-1.5 rounded-full bg-white/55" />
                       </span>
                       <span className="text-[10.5px] uppercase tracking-[0.12em] text-ink-faint font-medium">
                         {meta.name}
@@ -215,12 +215,12 @@ export default async function GlobalOverviewPage({
                   <div className="flex items-start gap-3 px-5 py-3.5 transition-colors hover:bg-paper-hi/40">
                     <span
                       className={cn(
-                        "size-7 rounded-full shrink-0 flex items-center justify-center text-white text-[11px] font-medium mt-0.5",
+                        "size-7 rounded-full shrink-0 flex items-center justify-center mt-0.5",
                         meta.avatarGradient,
                       )}
                       aria-hidden
                     >
-                      {meta.name.charAt(0)}
+                      <span className="size-2.5 rounded-full bg-white/45" />
                     </span>
                     <div className="flex-1 min-w-0">
                       <div className="text-[13.5px] text-ink leading-snug">

@@ -1,14 +1,23 @@
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/lib/cn";
 import type { CalendarEvent } from "./data/types";
 
-export function Today({ events }: { events: CalendarEvent[] }) {
+export function Today({
+  employeeId,
+  events,
+}: {
+  employeeId: string;
+  events: CalendarEvent[];
+}) {
   return (
     <Card className="h-full">
       <CardHeader>
         <CardTitle>Today</CardTitle>
-        <Button variant="outline" size="sm">Calendar →</Button>
+        <Button variant="outline" size="sm" asChild>
+          <Link href={`/work/${employeeId}/calendar`}>Calendar →</Link>
+        </Button>
       </CardHeader>
       <CardContent compact className="p-0">
         <ul>

@@ -5,7 +5,7 @@ import { cn } from "@/src/lib/cn";
 import { LogoMark } from "./logo";
 
 const NAV_LINKS: Array<{ href: string; label: string }> = [
-  { href: "#product", label: "Product" },
+  { href: "#features", label: "Product" },
   { href: "#how", label: "How it works" },
   { href: "#roles", label: "Roles" },
   { href: "#why", label: "Why now" },
@@ -37,7 +37,7 @@ export function LandingNav() {
           scrolled
             ? // Pill — liquid glass: heavy blur, saturated bg, paper-edge ring,
               // soft outer drop shadow + thin inset highlight on the top edge.
-              "max-w-3xl h-11 px-5 rounded-full " +
+              "max-w-4xl h-13 px-7 rounded-full " +
               "bg-paper-hi/60 backdrop-blur-xl backdrop-saturate-150 " +
               "border border-paper-edge/70 " +
               "shadow-[0_10px_30px_-12px_rgba(31,29,26,0.20),inset_0_1px_0_0_rgba(255,255,255,0.55)]"
@@ -72,14 +72,18 @@ export function LandingNav() {
             aria-label="Primary"
             className={cn(
               "hidden lg:flex items-center justify-self-center text-ink-muted transition-all duration-300",
-              scrolled ? "gap-5 text-[12px]" : "gap-8 text-[13px]",
+              scrolled ? "gap-2 text-[12px]" : "gap-3 text-[13px]",
             )}
           >
             {NAV_LINKS.map(link => (
               <a
                 key={link.href}
                 href={link.href}
-                className="hover:text-coral-deep transition-colors duration-200"
+                className={cn(
+                  "rounded-full transition-all duration-200",
+                  "hover:bg-paper-edge/50 hover:text-ink",
+                  scrolled ? "px-3 py-1.5" : "px-3.5 py-2",
+                )}
               >
                 {link.label}
               </a>

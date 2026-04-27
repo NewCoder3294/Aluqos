@@ -38,8 +38,6 @@ export function ActivityFeed({
     return {
       all: events.length,
       alex: events.filter((e) => e.agent === "alex").length,
-      jordan: events.filter((e) => e.agent === "jordan").length,
-      sam: events.filter((e) => e.agent === "sam").length,
     };
   }, [events]);
 
@@ -57,8 +55,6 @@ export function ActivityFeed({
             <TabsList>
               <TabsTrigger value="all" count={counts.all}>All</TabsTrigger>
               <TabsTrigger value="alex" count={counts.alex}>Alex</TabsTrigger>
-              <TabsTrigger value="jordan" count={counts.jordan}>Jordan</TabsTrigger>
-              <TabsTrigger value="sam" count={counts.sam}>Sam</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -75,17 +71,16 @@ export function ActivityFeed({
                 <ul>
                   {items.map((event, idx) => {
                     const meta = AGENTS[event.agent];
-                    const initials = meta.name.charAt(0);
                     const inner = (
                       <div className="flex items-start gap-3 px-5 py-3.5 transition-colors hover:bg-paper-hi/40">
                         <span
                           className={cn(
-                            "size-7 rounded-full shrink-0 flex items-center justify-center text-white text-[11px] font-medium mt-0.5",
+                            "size-7 rounded-full shrink-0 flex items-center justify-center mt-0.5",
                             meta.avatarGradient,
                           )}
                           aria-hidden
                         >
-                          {initials}
+                          <span className="size-2.5 rounded-full bg-white/45" />
                         </span>
                         <div className="flex-1 min-w-0">
                           <div className="text-[13.5px] text-ink leading-snug">
