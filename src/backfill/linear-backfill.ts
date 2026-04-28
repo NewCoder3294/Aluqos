@@ -27,10 +27,13 @@ export async function runLinearBackfill(opts: { tenantId: string }): Promise<num
     });
 
     for (const issue of result.nodes) {
+      // Match webhook normalizer's source_event_id shape so the (source, source_event_id)
+      // unique index dedupes when the same issue arrives via both backfill and webhook.
+      const updatedAtIso = new Date(issue.updatedAt as unknown as string).toISOString();
       const event: ActivityEvent = {
         tenant_id: opts.tenantId,
         source: "linear",
-        source_event_id: `linear:Issue:backfill:${issue.id}:${issue.updatedAt}`,
+        source_event_id: `linear:Issue:update:${issue.id}:${updatedAtIso}`,
         actor: ((issue as unknown as { creator?: { email?: string } }).creator?.email) ?? null,
         verb: "updated",
         object: sanitizeUserText(issue.title ?? ""),
@@ -39,7 +42,7 @@ export async function runLinearBackfill(opts: { tenantId: string }): Promise<num
           identifier: issue.identifier ?? null,
           state: ((issue as unknown as { state?: { name?: string } }).state?.name) ?? null,
         },
-        occurred_at: new Date(issue.updatedAt as unknown as string),
+        occurred_at: new Date(updatedAtIso),
       };
       await insertActivityEvent(event);
       ingested += 1;
