@@ -72,6 +72,33 @@ html { scroll-padding-top: 100px; }
   to { opacity: 0; }
 }
 
+/* ─── Agent UI motion ──────────────────────────────────────────────
+   Soft "breathing" for live indicators (Alex's status dot, attention
+   item dots) and a staggered fade-up for dashboard cards on first
+   paint. Both are CSS-only — no JS time interpolation — so SSR/CSR
+   stay aligned without hydration warnings. */
+
+@keyframes alex-breathe {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.85); }
+}
+.alex-breathe { animation: alex-breathe 2.8s ease-in-out infinite; }
+
+@keyframes alex-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.alex-fade-up {
+  animation: alex-fade-up 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+/* Stagger helpers — apply alongside .alex-fade-up on siblings. */
+.alex-stagger-1 { animation-delay: 60ms; }
+.alex-stagger-2 { animation-delay: 120ms; }
+.alex-stagger-3 { animation-delay: 180ms; }
+.alex-stagger-4 { animation-delay: 240ms; }
+.alex-stagger-5 { animation-delay: 300ms; }
+.alex-stagger-6 { animation-delay: 360ms; }
+
 /* Cursor-driven spotlight: JS writes --hero-mx / --hero-my via rAF; CSS owns shape. */
 @property --hero-mx { syntax: '<percentage>'; initial-value: 50%;    inherits: false; }
 @property --hero-my { syntax: '<percentage>'; initial-value: 40%;    inherits: false; }
@@ -97,6 +124,8 @@ html { scroll-padding-top: 100px; }
 @media (prefers-reduced-motion: reduce) {
   .pulse-coral,
   .cta-breathe,
+  .alex-breathe,
+  .alex-fade-up,
   .hero-glow-mask,
   .hero-glow-ambient {
     animation: none !important;
