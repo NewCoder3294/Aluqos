@@ -1,117 +1,31 @@
-import { TreeNav, type ActiveNavKey } from "./tree-nav";
-import { Greeting } from "./greeting";
-import { KpiRow } from "./kpi-row";
-import { NeedsAttention } from "./needs-attention";
-import { Today } from "./today";
-import { Pipeline } from "./pipeline";
-import { AlexProposals } from "./alex-proposals";
-import type { DashboardData } from "./data/types";
-import type { WorkflowProposal } from "@/src/workflows/queries";
+// Re-export of the canonical AppShell for legacy per-employee pages
+// (PRDs / Calendar / Goals / Backlog / Settings / Sam / Jordan / Files /
+// Activity / Overview) that imported from this path. The actual chrome
+// lives in app/_chrome/app-shell.tsx — keeping this thin re-export means
+// we don't have to touch ~20 page files in the same change.
 
-function formatToday(): string {
-  const d = new Date();
-  return d.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
-}
+import { AppShell, type ActiveNavKey } from "@/app/_chrome/app-shell";
 
-const HEADER_TITLE: Record<ActiveNavKey, string> = {
-  "all-dashboard": "Dashboard",
-  "all-files": "Files",
-  "all-activity": "Activity",
-  "alex-dashboard": "Dashboard",
-  "alex-prds": "PRDs",
-  "alex-backlog": "Backlog",
-  "alex-calendar": "Calendar",
-  "alex-goals": "Goals",
-  "alex-workflows": "Workflows",
-  "alex-inbox": "Inbox",
-  "alex-settings": "Settings",
-  "jordan-dashboard": "Jordan",
-  "jordan-standups": "Jordan · Standups",
-  "jordan-status": "Jordan · Status updates",
-  "jordan-risks": "Jordan · Risks",
-  "sam-dashboard": "Sam",
-  "sam-campaigns": "Sam · Campaigns",
-  "sam-brand-voice": "Sam · Brand voice",
-  "sam-performance": "Sam · Performance",
-};
+export type { ActiveNavKey };
 
 export function DashboardShell({
   employeeId,
-  employeeName,
   activeNav = "alex-dashboard",
-  data,
   children,
-  proposals,
 }: {
   employeeId: string;
-  employeeName: string;
+  /** No longer used — kept in the type for backwards compatibility. */
+  employeeName?: string;
   activeNav?: ActiveNavKey;
-  /** Role data for the dashboard composition. Required when no `children`. */
-  data?: DashboardData;
-  /** Pass custom content (e.g. <ComingSoon />) to override the dashboard composition. */
+  /** No longer used — children-only composition now. */
+  data?: unknown;
+  /** No longer used — proposals live on /dashboard. */
+  proposals?: unknown;
   children?: React.ReactNode;
-  /** Open workflow proposals to surface as the autonomous-Alex card. */
-  proposals?: WorkflowProposal[];
 }) {
-  const dateLabel = formatToday();
-  const headerTitle = HEADER_TITLE[activeNav];
-
   return (
-    <div className="min-h-screen flex bg-paper items-stretch">
-      <TreeNav employeeId={employeeId} activeNav={activeNav} />
-
-      <div className="flex-1 min-w-0 flex flex-col min-h-screen">
-        {/* Top header */}
-        <header className="h-[56px] shrink-0 border-b border-paper-edge bg-paper px-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="serif text-[16px] tracking-[-0.01em] text-ink">{headerTitle}</div>
-            <span
-              title="Sample data — pages are illustrative; nothing here is wired to real systems yet."
-              className="inline-flex items-center gap-1.5 rounded-full bg-coral/10 border border-coral/30 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.14em] text-coral-deep"
-            >
-              <span className="size-1.5 rounded-full bg-coral" />
-              Demo
-            </span>
-          </div>
-          <div className="text-[12px] text-ink-faint">{dateLabel}</div>
-        </header>
-
-        <main className="flex-1 overflow-y-auto">
-          {children ? (
-            <div className="max-w-7xl mx-auto px-8 py-8">{children}</div>
-          ) : data ? (
-            <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
-              <Greeting name={data.greetingName} subline={data.greetingSubline} />
-
-              {proposals && proposals.length > 0 && (
-                <AlexProposals employeeId={employeeId} proposals={proposals} />
-              )}
-
-              <KpiRow kpis={data.kpis} />
-
-              <div className="grid grid-cols-[1.5fr_1fr] gap-5">
-                <NeedsAttention employeeId={employeeId} items={data.attention} />
-                <Today employeeId={employeeId} events={data.events} />
-              </div>
-
-              <Pipeline
-                employeeId={employeeId}
-                title={data.pipelineTitle}
-                columns={data.pipelineColumns}
-              />
-            </div>
-          ) : (
-            // Defensive: should not happen — caller must pass data or children.
-            <div className="max-w-7xl mx-auto px-8 py-8 text-ink-faint">
-              No content for {employeeName}.
-            </div>
-          )}
-        </main>
-      </div>
-    </div>
+    <AppShell employeeId={employeeId} activeNav={activeNav}>
+      {children}
+    </AppShell>
   );
 }

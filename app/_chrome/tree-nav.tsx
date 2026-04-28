@@ -63,13 +63,16 @@ type NavSection = {
 
 const ICON_PROPS = { size: 14, strokeWidth: 1.75 };
 
+// Top-level routes are first-class verbs (Dashboard / Workflows / Inbox) and
+// don't carry employee IDs in the URL. Per-employee artifacts (PRDs, Calendar,
+// Goals, Backlog, Settings) stay under /work/<id>/* because they're scoped to
+// the AI employee that authored them.
 function buildSections(employeeId: string): NavSection[] {
   return [
     {
       id: "all",
       label: "All · Overview",
       items: [
-        { key: "all-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}/overview` },
         { key: "all-files", label: "Files", icon: <FolderOpen {...ICON_PROPS} />, href: `/work/${employeeId}/files` },
         { key: "all-activity", label: "Activity", icon: <Activity {...ICON_PROPS} />, href: `/work/${employeeId}/activity` },
       ],
@@ -79,13 +82,13 @@ function buildSections(employeeId: string): NavSection[] {
       label: "Alex (PM)",
       dotClass: "bg-coral",
       items: [
-        { key: "alex-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/work/${employeeId}` },
+        { key: "alex-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/dashboard` },
+        { key: "alex-inbox", label: "Inbox", icon: <Mailbox {...ICON_PROPS} />, href: `/inbox` },
+        { key: "alex-workflows", label: "Workflows", icon: <Workflow {...ICON_PROPS} />, href: `/workflows` },
         { key: "alex-prds", label: "PRDs", icon: <FileText {...ICON_PROPS} />, href: `/work/${employeeId}/prds` },
         { key: "alex-backlog", label: "Backlog", icon: <ListTodo {...ICON_PROPS} />, href: `/work/${employeeId}/backlog` },
         { key: "alex-calendar", label: "Calendar", icon: <Calendar {...ICON_PROPS} />, href: `/work/${employeeId}/calendar` },
         { key: "alex-goals", label: "Goals", icon: <Target {...ICON_PROPS} />, href: `/work/${employeeId}/goals` },
-        { key: "alex-workflows", label: "Workflows", icon: <Workflow {...ICON_PROPS} />, href: `/work/${employeeId}/workflows` },
-        { key: "alex-inbox", label: "Inbox", icon: <Mailbox {...ICON_PROPS} />, href: `/work/${employeeId}/inbox` },
         { key: "alex-settings", label: "Settings", icon: <Settings {...ICON_PROPS} />, href: `/work/${employeeId}/settings` },
       ],
     },

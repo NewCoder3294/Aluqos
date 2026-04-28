@@ -2,7 +2,7 @@ import Link from "next/link";
 import { DashboardShell } from "./dashboard-shell";
 import { Button } from "@/src/components/ui/button";
 import { Serif } from "@/src/components/serif";
-import type { ActiveNavKey } from "./tree-nav";
+import type { ActiveNavKey } from "@/app/_chrome/tree-nav";
 import { cn } from "@/src/lib/cn";
 
 type ComingSoonWallProps = {

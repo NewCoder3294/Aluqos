@@ -1,6 +1,6 @@
 "use client";
 
-import { TreeNav } from "../../_dashboard/tree-nav";
+import { TreeNav } from "@/app/_chrome/tree-nav";
 import { PrdSurface } from "../../_workspace/prd-surface";
 import { useWorkspace } from "@/src/store/workspace";
 
