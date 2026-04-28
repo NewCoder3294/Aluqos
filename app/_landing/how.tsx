@@ -8,153 +8,188 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 import { Card, CardContent } from "@/src/components/ui/card";
-import { FileText, Hash, CheckCircle2 } from "lucide-react";
+import { Eye, Sparkles, ShieldCheck, ArrowUpRight } from "lucide-react";
 import { EASE, Reveal } from "./motion-primitives";
 
 // ─── Step visuals ─────────────────────────────────────────────────────
-function StepDescribeVisual() {
-  return (
-    <div className="rounded-lg border border-paper-edge bg-paper-hi/50 p-6 lg:p-7">
-      <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint mb-5">
-        New AI employee
-      </div>
-      <div className="flex items-center gap-4">
-        <div
-          className="w-16 h-16 rounded-full text-white grid place-items-center serif text-[28px]"
-          style={{ background: "linear-gradient(135deg,#e07a5f,#c46449)" }}
-          aria-hidden
-        >
-          A
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="serif text-[20px] text-ink">Alex</div>
-          <div className="text-[11px] text-ink-faint uppercase tracking-[0.12em]">
-            Product Manager
-          </div>
-        </div>
-      </div>
-      <div className="mt-5 space-y-2">
-        {[
-          { k: "Tone", v: "Direct, warm" },
-          { k: "Priorities", v: "Customer truth > velocity" },
-          { k: "Style", v: "Short PRDs, sharp problems" },
-        ].map(row => (
-          <div
-            key={row.k}
-            className="flex items-center justify-between text-[12.5px] py-2.5 px-3.5 rounded bg-white border border-paper-edge"
-          >
-            <span className="text-ink-faint uppercase tracking-[0.1em] text-[10px]">
-              {row.k}
-            </span>
-            <span className="text-ink serif">{row.v}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
-function StepLearnVisual() {
+// Week 1 — read-only observation. Shows Aluqos passively watching the
+// surfaces a real team works in. No actions, no writes — just signal.
+function StepWatchVisual() {
   const reduced = useReducedMotion() ?? false;
-  const widths = [94, 82, 100, 68, 88, 55];
+  const observed: Array<{ source: string; signal: string; tone: "muted" | "warm" }> = [
+    { source: "#oncall-pages", signal: "12 pages this week · 4 false alarms", tone: "warm" },
+    { source: "Notion · Q2 roadmap", signal: "edited 9× · 3 stakeholders", tone: "muted" },
+    { source: "Linear · #ENG-471", signal: "blocked 3 days · waiting on design", tone: "warm" },
+    { source: "Slack · #product", signal: "47 threads · 6 unresolved asks", tone: "muted" },
+  ];
   return (
     <div className="rounded-lg border border-paper-edge bg-white p-6 lg:p-7">
       <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint mb-5 flex items-center justify-between">
         <span className="flex items-center gap-1.5">
-          <FileText className="w-3.5 h-3.5 text-coral" />
-          q2-roadmap.pdf
+          <Eye className="w-3.5 h-3.5 text-coral" />
+          Observing · read-only
         </span>
         <span className="flex items-center gap-1 text-coral">
           <span className="size-1.5 rounded-full bg-coral pulse-coral" />
-          reading
+          live
         </span>
       </div>
-      <div className="space-y-2.5">
-        {widths.map((w, i) => {
-          const isActive = i === widths.length - 1;
-          return (
-            <motion.div
-              key={i}
-              initial={reduced ? false : { scaleX: 0, opacity: 0.4 }}
-              animate={reduced ? undefined : { scaleX: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
-              style={{ width: `${w}%`, originX: 0 }}
-              className={
-                "h-2.5 rounded-full relative " +
-                (isActive ? "bg-coral/30" : "bg-paper-hi")
-              }
+      <div className="space-y-2">
+        {observed.map((row, i) => (
+          <motion.div
+            key={row.source}
+            initial={reduced ? false : { opacity: 0, x: -8 }}
+            animate={reduced ? undefined : { opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, delay: i * 0.08, ease: EASE }}
+            className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded bg-paper-hi/60 border border-paper-edge"
+          >
+            <span className="serif text-[13px] text-ink truncate">{row.source}</span>
+            <span
+              className={`text-[11px] truncate shrink-0 ${
+                row.tone === "warm" ? "text-coral-deep" : "text-ink-faint"
+              }`}
             >
-              {isActive && (
-                <span
-                  className="absolute -right-0.5 top-1/2 -translate-y-1/2 w-[2px] h-3.5 bg-coral animate-pulse"
-                  aria-hidden
-                />
-              )}
-            </motion.div>
-          );
-        })}
+              {row.signal}
+            </span>
+          </motion.div>
+        ))}
       </div>
-      <div className="mt-6 pt-4 border-t border-paper-edge">
-        <div className="text-[10px] uppercase tracking-[0.12em] text-coral mb-1.5">
-          Extracted
-        </div>
-        <div className="text-[14px] text-ink serif italic leading-snug">
-          &ldquo;Ops needs board-ready exports. Engineering owns the dashboard
-          renderer.&rdquo;
-        </div>
+      <div className="mt-5 pt-4 border-t border-paper-edge text-[12px] text-ink-faint">
+        Day 6 · no actions taken yet
       </div>
     </div>
   );
 }
 
-function StepDeployVisual() {
+// Week 2 — proposed workflows ranked by estimated hours saved per week.
+// The buyer's first "oh this is different" moment: Aluqos found work to
+// automate that they didn't have to spec.
+function StepProposeVisual() {
+  const reduced = useReducedMotion() ?? false;
+  const proposals: Array<{ title: string; why: string; hours: string; rank: number }> = [
+    {
+      rank: 1,
+      title: "Auto-triage incoming pages",
+      why: "60% of last week's pages were duplicates of incidents already resolved.",
+      hours: "6 hrs/wk",
+    },
+    {
+      rank: 2,
+      title: "Draft weekly stakeholder update",
+      why: "Pulled from Linear activity, customer calls, and PRD edits.",
+      hours: "3 hrs/wk",
+    },
+    {
+      rank: 3,
+      title: "Surface stale blocks in standup",
+      why: "Detected 4 issues that have been waiting on review > 3 days.",
+      hours: "1.5 hrs/wk",
+    },
+  ];
+  return (
+    <div className="rounded-lg border border-paper-edge bg-paper-hi/50 p-6 lg:p-7">
+      <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint mb-5 flex items-center justify-between">
+        <span className="flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-coral" />
+          Proposed workflows · ranked
+        </span>
+        <span className="text-ink-faint">10.5 hrs/wk total</span>
+      </div>
+      <div className="space-y-2.5">
+        {proposals.map((p, i) => (
+          <motion.div
+            key={p.title}
+            initial={reduced ? false : { opacity: 0, y: 8 }}
+            animate={reduced ? undefined : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: i * 0.1, ease: EASE }}
+            className="flex items-start gap-3 px-3.5 py-3 rounded-md bg-white border border-paper-edge"
+          >
+            <span className="serif text-[14px] text-coral-deep tabular-nums shrink-0 w-5">
+              {p.rank}.
+            </span>
+            <div className="min-w-0 flex-1">
+              <div className="text-[13.5px] text-ink leading-snug">{p.title}</div>
+              <div className="text-[11px] text-ink-faint leading-snug mt-0.5 truncate">
+                {p.why}
+              </div>
+            </div>
+            <span className="text-[11px] uppercase tracking-[0.1em] text-coral-deep border border-coral/30 rounded-full px-2 py-0.5 shrink-0 self-center tabular-nums">
+              {p.hours}
+            </span>
+          </motion.div>
+        ))}
+      </div>
+      <div className="mt-5 pt-4 border-t border-paper-edge flex items-center justify-between text-[11.5px]">
+        <span className="text-ink-faint">Approve all · Edit · Reject</span>
+        <span className="text-coral-deep flex items-center gap-1">
+          You decide what ships <ArrowUpRight className="w-3 h-3" />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// Week 3 — autonomy slider. The visual hero of the section. The buyer
+// picks how much trust to extend, per workflow, and changes their mind
+// at any time. Migrated from the old bento to live with the narrative.
+function StepShipVisual() {
+  const modes: Array<{ id: string; label: string; sub: string; icon: string; active?: boolean }> = [
+    { id: "ask",      label: "Ask always",         sub: "Confirm every action",            icon: "?" },
+    { id: "external", label: "Ask before external", sub: "Send to Slack/email needs OK",   icon: "↗", active: true },
+    { id: "go",       label: "Just do it",          sub: "Run with full autonomy",          icon: "→" },
+  ];
   return (
     <div className="rounded-lg border border-paper-edge bg-white p-6 lg:p-7">
       <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint mb-5 flex items-center justify-between">
         <span className="flex items-center gap-1.5">
-          <Hash className="w-3.5 h-3.5" />
-          product-team
+          <ShieldCheck className="w-3.5 h-3.5 text-coral" />
+          Auto-triage · autonomy
         </span>
-        <span className="text-ink-faint">9:41</span>
+        <span className="text-ink-faint">per workflow</span>
       </div>
-      <div className="flex gap-3">
-        <div
-          className="w-10 h-10 rounded text-white grid place-items-center serif text-[15px] shrink-0"
-          style={{ background: "linear-gradient(135deg,#e07a5f,#c46449)" }}
-          aria-hidden
-        >
-          A
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-2">
-            <span className="serif text-[15px] text-ink">Alex</span>
-            <span className="text-[10px] text-ink-faint uppercase tracking-[0.1em]">
-              AI Product Manager
-            </span>
-          </div>
-          <p className="mt-1 text-[14px] leading-snug text-ink-muted">
-            Drafted the PRD for bulk export &mdash; 6 sections, sourced from Q2
-            roadmap + issue 47. Ready for your read.
-          </p>
-          <div className="mt-3.5 flex items-center gap-2 px-3.5 py-2.5 rounded-md border border-paper-edge bg-paper-hi/60">
-            <FileText className="w-4 h-4 text-coral shrink-0" />
-            <div className="min-w-0 flex-1">
-              <div className="text-[13px] text-ink truncate">
-                PRD — Bulk export for ops
-              </div>
-              <div className="text-[10px] text-ink-faint">
-                6 sections · 1,240 words
-              </div>
+      <div className="space-y-2.5">
+        {modes.map((m, i) => (
+          <motion.div
+            key={m.id}
+            initial={{ opacity: 0, x: -6 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.07, duration: 0.4, ease: EASE }}
+            className={`flex items-center gap-3 rounded-md border p-3 ${
+              m.active
+                ? "border-coral/40 bg-coral/[0.06]"
+                : "border-paper-edge bg-paper-hi/40"
+            }`}
+          >
+            <div
+              className={`w-8 h-8 rounded-full grid place-items-center text-[13px] shrink-0 ${
+                m.active
+                  ? "bg-coral text-paper"
+                  : "bg-paper-hi text-ink-faint border border-paper-edge"
+              }`}
+              aria-hidden
+            >
+              {m.icon}
             </div>
-            <span className="text-[10px] uppercase tracking-[0.12em] text-coral-deep border border-coral/30 rounded-full px-2 py-0.5 shrink-0">
-              Pending
-            </span>
-          </div>
-        </div>
+            <div className="min-w-0 flex-1">
+              <div
+                className={`text-[13px] ${m.active ? "text-ink font-medium" : "text-ink"}`}
+              >
+                {m.label}
+              </div>
+              <div className="text-[11px] text-ink-faint truncate">{m.sub}</div>
+            </div>
+            {m.active && (
+              <span className="text-[10px] uppercase tracking-[0.12em] text-coral-deep shrink-0">
+                Current
+              </span>
+            )}
+          </motion.div>
+        ))}
       </div>
-      <div className="mt-5 pt-4 border-t border-paper-edge flex items-center gap-2 text-[12px] text-ink-faint">
-        <CheckCircle2 className="w-3.5 h-3.5 text-coral" />
-        <span>Linked to Linear issue #47, Notion roadmap, Drive folder</span>
+      <div className="mt-5 pt-4 border-t border-paper-edge text-[11.5px] text-ink-faint">
+        Change any time · per-workflow · audit log of every action
       </div>
     </div>
   );
@@ -164,27 +199,27 @@ function StepDeployVisual() {
 const STEPS = [
   {
     n: "01",
-    eyebrow: "Brief them",
-    title: "Describe how",
-    titleAccent: "you work.",
-    body: "Give them a name, a role, a personality. Tell them how you like to work — tone, priorities, style. Just like briefing a new hire on their first day.",
-    Visual: StepDescribeVisual,
+    eyebrow: "Week 1",
+    title: "It watches.",
+    titleAccent: "Read-only.",
+    body: "Aluqos joins your stack — Slack, Linear, Notion, GitHub, your inbox — read-only. It sees what you do, what you ignore, what you copy-paste, what wakes you up. No setup. No prompts. Nothing to configure.",
+    Visual: StepWatchVisual,
   },
   {
     n: "02",
-    eyebrow: "Watch & learn",
-    title: "They learn",
-    titleAccent: "from you.",
-    body: "Your AI employee shadows your work — reads your docs, observes your patterns, picks up your voice. No training. No prompts. It just learns, like a smart colleague would.",
-    Visual: StepLearnVisual,
+    eyebrow: "Week 2",
+    title: "It proposes",
+    titleAccent: "the workflows.",
+    body: "Aluqos surfaces what it would automate, ranked by hours saved per week, with the evidence for each. You approve, edit, or reject — you don't write specs, you don't prompt, you don't configure. You just say yes or no.",
+    Visual: StepProposeVisual,
   },
   {
     n: "03",
-    eyebrow: "Stay in sync",
-    title: "They ship",
-    titleAccent: "in your stack.",
-    body: "Your AI employee shows up in Slack, email, or wherever you work. Assign them tasks. They get smarter with every interaction.",
-    Visual: StepDeployVisual,
+    eyebrow: "Week 3",
+    title: "It ships.",
+    titleAccent: "Your leash.",
+    body: "Approved workflows go live with your chosen autonomy level — confirm everything, only outbound, or fully autonomous. Per workflow. Change at any time. Aluqos keeps watching and proposes new workflows as your work evolves.",
+    Visual: StepShipVisual,
   },
 ];
 
@@ -260,14 +295,12 @@ export function LandingHow() {
                 </Reveal>
                 <Reveal delay={0.05}>
                   <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[20ch]">
-                    Like onboarding{" "}
-                    <span className="italic text-ink-faint">
-                      a smart intern.
-                    </span>
+                    Three weeks.{" "}
+                    <span className="italic text-ink-faint">Zero configuration.</span>
                   </h2>
                 </Reveal>
 
-                <div className="relative mt-10 min-h-[260px]">
+                <div className="relative mt-10 min-h-[300px]">
                   {STEPS.map((step, i) => {
                     const isActive = i === active;
                     const isPast = i < active;
@@ -301,7 +334,7 @@ export function LandingHow() {
                                 {step.titleAccent}
                               </span>
                             </h3>
-                            <p className="mt-5 text-[16px] lg:text-[17px] leading-[1.6] text-ink-muted max-w-[40ch]">
+                            <p className="mt-5 text-[16px] lg:text-[17px] leading-[1.6] text-ink-muted max-w-[44ch]">
                               {step.body}
                             </p>
                           </div>
@@ -344,7 +377,7 @@ export function LandingHow() {
                       }}
                       aria-hidden={!isActive}
                     >
-                      <Card className="w-full max-w-[440px] p-2 lg:p-3 shadow-[0_24px_60px_-30px_rgba(31,29,26,0.25)] border border-paper-edge bg-white">
+                      <Card className="w-full max-w-[460px] p-2 lg:p-3 shadow-[0_24px_60px_-30px_rgba(31,29,26,0.25)] border border-paper-edge bg-white">
                         <CardContent className="p-0">
                           <Visual />
                         </CardContent>

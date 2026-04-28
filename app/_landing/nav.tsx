@@ -5,9 +5,9 @@ import { cn } from "@/src/lib/cn";
 import { LogoMark } from "./logo";
 
 const NAV_LINKS: Array<{ href: string; label: string }> = [
-  { href: "#features", label: "Product" },
   { href: "#how", label: "How it works" },
   { href: "#roles", label: "Roles" },
+  { href: "#team", label: "Team" },
   { href: "#pricing", label: "Pricing" },
 ];
 

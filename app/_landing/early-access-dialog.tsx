@@ -157,7 +157,7 @@ export function EarlyAccessDialog({
                   autoComplete="organization"
                 />
                 <Field
-                  label="What would you put an AI employee on first?"
+                  label="What's the most repetitive thing on your team's plate?"
                   name="notes"
                   textarea
                 />

@@ -112,61 +112,67 @@ export function LandingHeroEditorial() {
       <div className="relative z-10 max-w-[1280px] mx-auto px-6 mt-10 lg:mt-14">
         <div className="grid grid-cols-12 gap-6 lg:gap-10 items-start">
           {/* Headline column */}
+          {/* Headline variants considered (kept as a record for the team):
+              A. "The AI that watches how you work — and builds the workflow you didn't know you needed."
+              B. "Stop configuring AI. Aluqos watches, learns, and ships the workflow itself."   ← chosen
+              C. "Your team's busywork, automated by an AI that figured out how you work on its own."
+              We picked B because it leads with the verb the buyer cares about
+              ("stop configuring"), names the action ("watches, learns, ships"),
+              and drops the worn-out "AI employees" frame. */}
           <div className="col-span-12 lg:col-span-9">
-            <h1 className="serif text-[clamp(56px,10vw,148px)] leading-[0.92] tracking-[-0.035em] text-ink">
+            <h1 className="serif text-[clamp(44px,7vw,96px)] leading-[0.95] tracking-[-0.03em] text-ink">
               <Reveal y={32}>
-                <span className="block">AI employees</span>
+                <span className="block">Stop configuring</span>
               </Reveal>
               <Reveal y={32} delay={0.08}>
-                <span className="block">that learn</span>
+                <span className="block italic-serif text-coral-deep">AI.</span>
               </Reveal>
               <Reveal y={32} delay={0.16}>
-                <span className="block">
-                  how <span className="italic-serif text-coral-deep">you work.</span>
-                </span>
+                <span className="block">It configures itself.</span>
               </Reveal>
             </h1>
 
             <Reveal delay={0.28}>
-              <p className="mt-6 lg:mt-8 italic-serif text-[clamp(22px,2.6vw,34px)] leading-[1.2] text-ink-muted pl-1">
-                Not the other way around.
+              <p className="mt-6 lg:mt-8 italic-serif text-[clamp(22px,2.6vw,34px)] leading-[1.2] text-ink-muted pl-1 max-w-[28ch]">
+                Aluqos watches how your team actually works — then ships the workflows that save you hours.
               </p>
             </Reveal>
           </div>
 
-          {/* Side caption + meta */}
-          <div className="col-span-12 lg:col-span-3 lg:-mt-20 lg:self-stretch flex flex-col gap-5 lg:gap-6">
+          {/* Side caption + meta — compact so the column matches the
+              headline's height and the CTAs stay above the fold. */}
+          <div className="col-span-12 lg:col-span-3 lg:self-stretch flex flex-col gap-3 lg:gap-3.5">
             <Reveal delay={0.2} className="flex-1 flex">
-              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-xl p-7 lg:p-8 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
-                <div className="label mb-4 text-coral-deep">Problem</div>
-                <p className="text-[17px] lg:text-[19px] leading-[1.5] text-ink">
-                  Most AI needs prompts, training, and an engineer.{" "}
+              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-lg p-4 lg:p-5 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
+                <div className="label mb-2 text-coral-deep text-[10px]">Pain</div>
+                <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
+                  Most AI dies in pilot.{" "}
                   <span className="text-ink-muted">
-                    Your team tries it once and quits.
+                    Nobody has time to prompt or configure it.
                   </span>
                 </p>
               </div>
             </Reveal>
 
             <Reveal delay={0.26} className="flex-1 flex">
-              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-xl p-7 lg:p-8 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
-                <div className="label mb-4 text-coral-deep">Solution</div>
-                <p className="text-[17px] lg:text-[19px] leading-[1.5] text-ink">
-                  Aluqos watches how you actually work.{" "}
+              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-lg p-4 lg:p-5 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
+                <div className="label mb-2 text-coral-deep text-[10px]">Shift</div>
+                <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
+                  Aluqos observes for a week.{" "}
                   <span className="text-ink-muted">
-                    Then does the job. No setup, no prompting.
+                    Then ships the workflows that save the most hours.
                   </span>
                 </p>
               </div>
             </Reveal>
 
             <Reveal delay={0.32} className="flex-1 flex">
-              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-xl p-7 lg:p-8 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
-                <div className="label mb-4 text-coral-deep">Future</div>
-                <p className="text-[17px] lg:text-[19px] leading-[1.5] text-ink">
-                  Start with one hire. Grow to a whole team.{" "}
+              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-lg p-4 lg:p-5 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
+                <div className="label mb-2 text-coral-deep text-[10px]">Trust</div>
+                <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
+                  You hold the leash.{" "}
                   <span className="text-ink-muted">
-                    Same product. No migration, ever.
+                    Per-workflow autonomy — confirm-all to fully autonomous.
                   </span>
                 </p>
               </div>
@@ -176,7 +182,7 @@ export function LandingHeroEditorial() {
 
         {/* CTAs — left-aligned, editorial */}
         <Reveal delay={0.36}>
-          <div className="mt-12 lg:mt-14 flex flex-wrap items-center gap-3">
+          <div className="mt-8 lg:mt-10 flex flex-wrap items-center gap-3">
             <EarlyAccessDialog
               triggerLabel="Sign up for waitlist"
               triggerVariant="ink"
@@ -204,7 +210,7 @@ export function LandingHeroEditorial() {
           </div>
           <figcaption className="label mt-6 lg:mt-8 flex items-baseline gap-3">
             <span className="text-coral">Fig. 01</span>
-            <span>The workspace, day one. Customer data redacted.</span>
+            <span>Day eight. Aluqos has shipped its first proposed workflow.</span>
           </figcaption>
         </motion.figure>
       </div>
