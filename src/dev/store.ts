@@ -42,22 +42,103 @@ export type DevBackfillRun = {
   cursor: string | null;
 };
 
+export type DevWorkflowProposal = {
+  id: string;
+  tenant_id: string;
+  title: string;
+  rationale: string;
+  trigger_kind: "weekly" | "daily" | "on_demand";
+  trigger_config: Record<string, unknown>;
+  source_filter: Record<string, unknown>;
+  recipient: string | null;
+  draft_template: string;
+  sample_draft: string;
+  status: "open" | "approved" | "dismissed";
+  created_at: string;
+  decided_at: string | null;
+};
+
+export type DevWorkflow = {
+  id: string;
+  tenant_id: string;
+  proposal_id: string | null;
+  title: string;
+  trigger_kind: "weekly" | "daily" | "on_demand";
+  trigger_config: Record<string, unknown>;
+  source_filter: Record<string, unknown>;
+  recipient: string | null;
+  draft_template: string;
+  enabled: boolean;
+  created_at: string;
+  last_run_at: string | null;
+  next_run_at: string | null;
+};
+
+export type DevWorkflowRun = {
+  id: string;
+  workflow_id: string;
+  tenant_id: string;
+  status: "running" | "drafted" | "approved" | "sent" | "cancelled" | "failed";
+  started_at: string;
+  finished_at: string | null;
+  error_message: string | null;
+};
+
+export type DevDraft = {
+  id: string;
+  run_id: string;
+  workflow_id: string;
+  tenant_id: string;
+  subject: string;
+  body: string;
+  recipient: string | null;
+  status: "pending" | "approved" | "sent" | "rejected" | "cancelled";
+  created_at: string;
+  approved_at: string | null;
+  send_at: string | null; // when the 60s cancel window expires
+  sent_at: string | null;
+  rejected_at: string | null;
+};
+
 type DevStore = {
   connections: Map<string, DevConnection>; // key = `${tenant_id}|${source}`
   events: Map<string, DevActivityEvent>; // key = `${source}|${source_event_id}`
   backfills: Map<string, DevBackfillRun>; // key = `${tenant_id}|${source}`
+  proposals: Map<string, DevWorkflowProposal>; // key = id
+  workflows: Map<string, DevWorkflow>; // key = id
+  runs: Map<string, DevWorkflowRun>; // key = id
+  drafts: Map<string, DevDraft>; // key = id
 };
 
 const GLOBAL_KEY = "__aluqos_dev_store__";
 
 function makeStore(): DevStore {
-  return { connections: new Map(), events: new Map(), backfills: new Map() };
+  return {
+    connections: new Map(),
+    events: new Map(),
+    backfills: new Map(),
+    proposals: new Map(),
+    workflows: new Map(),
+    runs: new Map(),
+    drafts: new Map(),
+  };
 }
 
 export function getDevStore(): DevStore {
   const g = globalThis as Record<string, unknown>;
   if (!g[GLOBAL_KEY]) g[GLOBAL_KEY] = makeStore();
-  return g[GLOBAL_KEY] as DevStore;
+  // Backfill any maps that were added after the store was first instantiated.
+  // Hot-reload doesn't recreate the global, so a store created before this
+  // module added new maps would otherwise be missing fields.
+  const s = g[GLOBAL_KEY] as Partial<DevStore>;
+  if (!s.connections) s.connections = new Map();
+  if (!s.events) s.events = new Map();
+  if (!s.backfills) s.backfills = new Map();
+  if (!s.proposals) s.proposals = new Map();
+  if (!s.workflows) s.workflows = new Map();
+  if (!s.runs) s.runs = new Map();
+  if (!s.drafts) s.drafts = new Map();
+  return s as DevStore;
 }
 
 export function connectionKey(tenantId: string, source: SourceId): string {
@@ -94,6 +175,12 @@ export function seedLinearDemoData(tenantId: string): void {
     external_account_id: "dev-org-aluqos",
   };
   store.connections.set(connectionKey(tenantId, "linear"), connection);
+
+  // Clear prior Linear events for this tenant — re-seed should replace, not
+  // accumulate. Each call uses a fresh `now` so source_event_ids differ.
+  for (const [key, ev] of store.events) {
+    if (ev.tenant_id === tenantId && ev.source === "linear") store.events.delete(key);
+  }
 
   const seeds: Array<{
     minusDays: number;
@@ -142,15 +229,122 @@ export function seedLinearDemoData(tenantId: string): void {
     cursor: null,
   };
   store.backfills.set(connectionKey(tenantId, "linear"), backfill);
+
+  seedAlexProposals(tenantId);
+}
+
+// Synthesizes 3 plausible workflow proposals from the seeded activity. In
+// production this is what an LLM analysis pass would produce after backfill;
+// here we hardcode the result so the autonomous behavior is visible without
+// any API keys. Idempotent — clears prior open proposals for the tenant first
+// so reconnecting starts fresh.
+export function seedAlexProposals(tenantId: string): void {
+  const store = getDevStore();
+
+  // Clear any open proposals so re-seed is idempotent.
+  for (const [id, p] of store.proposals) {
+    if (p.tenant_id === tenantId && p.status === "open") store.proposals.delete(id);
+  }
+
+  const nowIso = new Date().toISOString();
+
+  const proposals: Array<Omit<DevWorkflowProposal, "id" | "tenant_id" | "created_at" | "decided_at" | "status">> = [
+    {
+      title: "Friday status digest to Priya",
+      rationale:
+        "Priya commented on 2 of your tickets this week and reacts to your updates within an hour. She reads like the stakeholder you report to. I'll draft Thursday EOD so you can edit before Friday morning.",
+      trigger_kind: "weekly",
+      trigger_config: { day_of_week: "thursday", hour: 17 },
+      source_filter: { sources: ["linear"], stakeholder: "priya@aluqos.com" },
+      recipient: "priya@aluqos.com",
+      draft_template:
+        "You are Alex, an AI PM. Draft a concise weekly status email from {user} to {recipient}. " +
+        "Use the activity events from the last 7 days. Lead with shipped, then in-flight, then risks. " +
+        "Keep it under 200 words. Match {user}'s voice: direct, no fluff.",
+      sample_draft:
+        "Subject: Weekly status — week of " +
+        new Date(Date.now() - 6 * 86400000).toLocaleDateString("en-US", { month: "short", day: "numeric" }) +
+        "\n\n" +
+        "Hi Priya,\n\n" +
+        "Shipped this week:\n" +
+        "• ENG-122 — Settings → Connections empty state landed.\n" +
+        "• ENG-124 — Backfill source_event_id collision fix is in.\n\n" +
+        "In flight:\n" +
+        "• ENG-128 — Stakeholder weekly digest copy (in review).\n" +
+        "• ENG-126 — Linear webhook tenant lookup (Ravi has it).\n\n" +
+        "Risks: none material. Phase-1 foundation is on track for next week's demo.\n\n" +
+        "— Alex (drafted from Aman's activity)",
+    },
+    {
+      title: "Monday week-ahead memo to the team",
+      rationale:
+        "Aman, Priya, and Ravi all touched Linear this week but no one posted a plan. A 3-line Monday memo would unblock standups. I'll draft from Friday's tickets and pending issues.",
+      trigger_kind: "weekly",
+      trigger_config: { day_of_week: "monday", hour: 9 },
+      source_filter: { sources: ["linear"], scope: "team" },
+      recipient: "team@aluqos.com",
+      draft_template:
+        "You are Alex. Draft a 3-line week-ahead memo for {team}. Pull pending Linear issues " +
+        "and call out who owns what. Tone: clear and short.",
+      sample_draft:
+        "Subject: Week ahead — Mon\n\n" +
+        "Top of the week:\n" +
+        "• Aman → ENG-128 (digest copy review with Priya).\n" +
+        "• Ravi → ENG-126 (webhook tenant lookup).\n" +
+        "• Open for grabs: ENG-127 follow-ups.\n\n" +
+        "— Alex",
+    },
+    {
+      title: "Daily 'what just landed' digest",
+      rationale:
+        "There were 3 'Done' state transitions in Linear this week. A short EOD digest would let you close the day without scrolling Linear yourself.",
+      trigger_kind: "daily",
+      trigger_config: { hour: 18 },
+      source_filter: { sources: ["linear"], state: "Done" },
+      recipient: null,
+      draft_template:
+        "You are Alex. Summarize today's 'Done' Linear transitions in 4 bullets or fewer.",
+      sample_draft:
+        "Today's wins:\n" +
+        "• ENG-124 — Backfill source_event_id collision (Aman).\n" +
+        "• ENG-122 — Connections empty state (Priya).\n\n" +
+        "Tomorrow's queue: ENG-128, ENG-126.",
+    },
+  ];
+
+  for (const p of proposals) {
+    const id = devId("prop");
+    store.proposals.set(id, {
+      ...p,
+      id,
+      tenant_id: tenantId,
+      status: "open",
+      created_at: nowIso,
+      decided_at: null,
+    });
+  }
 }
 
 // Removes the connection, its events, and its backfill state — used by the
-// Disconnect button so the demo flow is reversible.
+// Disconnect button so the demo flow is reversible. Also wipes derived
+// proposals / workflows / runs / drafts so the loop fully resets.
 export function purgeSourceForTenant(tenantId: string, source: SourceId): void {
   const store = getDevStore();
   store.connections.delete(connectionKey(tenantId, source));
   store.backfills.delete(connectionKey(tenantId, source));
   for (const [key, ev] of store.events) {
     if (ev.tenant_id === tenantId && ev.source === source) store.events.delete(key);
+  }
+  for (const [id, p] of store.proposals) {
+    if (p.tenant_id === tenantId) store.proposals.delete(id);
+  }
+  for (const [id, w] of store.workflows) {
+    if (w.tenant_id === tenantId) store.workflows.delete(id);
+  }
+  for (const [id, r] of store.runs) {
+    if (r.tenant_id === tenantId) store.runs.delete(id);
+  }
+  for (const [id, d] of store.drafts) {
+    if (d.tenant_id === tenantId) store.drafts.delete(id);
   }
 }

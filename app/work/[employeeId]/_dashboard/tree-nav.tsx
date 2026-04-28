@@ -15,6 +15,8 @@ import {
   PanelLeftOpen,
   LogOut,
   Settings,
+  Workflow,
+  Mailbox,
 } from "lucide-react";
 import { cn } from "@/src/lib/cn";
 import { toast } from "@/src/components/toast";
@@ -30,6 +32,8 @@ export type ActiveNavKey =
   | "alex-backlog"
   | "alex-calendar"
   | "alex-goals"
+  | "alex-workflows"
+  | "alex-inbox"
   | "alex-settings"
   | "jordan-dashboard"
   | "jordan-standups"
@@ -80,6 +84,8 @@ function buildSections(employeeId: string): NavSection[] {
         { key: "alex-backlog", label: "Backlog", icon: <ListTodo {...ICON_PROPS} />, href: `/work/${employeeId}/backlog` },
         { key: "alex-calendar", label: "Calendar", icon: <Calendar {...ICON_PROPS} />, href: `/work/${employeeId}/calendar` },
         { key: "alex-goals", label: "Goals", icon: <Target {...ICON_PROPS} />, href: `/work/${employeeId}/goals` },
+        { key: "alex-workflows", label: "Workflows", icon: <Workflow {...ICON_PROPS} />, href: `/work/${employeeId}/workflows` },
+        { key: "alex-inbox", label: "Inbox", icon: <Mailbox {...ICON_PROPS} />, href: `/work/${employeeId}/inbox` },
         { key: "alex-settings", label: "Settings", icon: <Settings {...ICON_PROPS} />, href: `/work/${employeeId}/settings` },
       ],
     },

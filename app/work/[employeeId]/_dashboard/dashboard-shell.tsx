@@ -4,7 +4,9 @@ import { KpiRow } from "./kpi-row";
 import { NeedsAttention } from "./needs-attention";
 import { Today } from "./today";
 import { Pipeline } from "./pipeline";
+import { AlexProposals } from "./alex-proposals";
 import type { DashboardData } from "./data/types";
+import type { WorkflowProposal } from "@/src/workflows/queries";
 
 function formatToday(): string {
   const d = new Date();
@@ -24,6 +26,8 @@ const HEADER_TITLE: Record<ActiveNavKey, string> = {
   "alex-backlog": "Backlog",
   "alex-calendar": "Calendar",
   "alex-goals": "Goals",
+  "alex-workflows": "Workflows",
+  "alex-inbox": "Inbox",
   "alex-settings": "Settings",
   "jordan-dashboard": "Jordan",
   "jordan-standups": "Jordan · Standups",
@@ -41,6 +45,7 @@ export function DashboardShell({
   activeNav = "alex-dashboard",
   data,
   children,
+  proposals,
 }: {
   employeeId: string;
   employeeName: string;
@@ -49,6 +54,8 @@ export function DashboardShell({
   data?: DashboardData;
   /** Pass custom content (e.g. <ComingSoon />) to override the dashboard composition. */
   children?: React.ReactNode;
+  /** Open workflow proposals to surface as the autonomous-Alex card. */
+  proposals?: WorkflowProposal[];
 }) {
   const dateLabel = formatToday();
   const headerTitle = HEADER_TITLE[activeNav];
@@ -79,6 +86,10 @@ export function DashboardShell({
           ) : data ? (
             <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
               <Greeting name={data.greetingName} subline={data.greetingSubline} />
+
+              {proposals && proposals.length > 0 && (
+                <AlexProposals employeeId={employeeId} proposals={proposals} />
+              )}
 
               <KpiRow kpis={data.kpis} />
 
