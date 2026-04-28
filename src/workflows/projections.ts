@@ -37,6 +37,11 @@ function nameFromEmail(email: string): { name: string; initials: string } {
 export function derivePeople(
   events: DevActivityEvent[],
   workflows: Workflow[],
+  /** Optional: emails Alex has *proposed* a workflow to, even if the user
+   *  hasn't approved yet. Lets the orbit hint a likely-stakeholder ahead of
+   *  approval so the relationship graph reflects what Alex thinks, not just
+   *  what's been confirmed. */
+  proposedStakeholders: string[] = [],
 ): Person[] {
   const stakeholderEmails = new Set<string>();
   for (const wf of workflows) {
@@ -44,6 +49,9 @@ export function derivePeople(
       stakeholderEmails.add(wf.recipient);
     }
   }
+  const proposedSet = new Set(
+    proposedStakeholders.filter((e) => e && e.includes("@") && !e.startsWith("team@")),
+  );
 
   const byEmail = new Map<string, { count: number; last: string }>();
   for (const ev of events) {
@@ -56,6 +64,21 @@ export function derivePeople(
     }
   }
 
+  // Pick the single highest-count collaborator as "most active". Anyone with
+  // the same count ties on alphabetical so the result is stable.
+  let topActorEmail: string | null = null;
+  let topCount = 0;
+  for (const [email, stats] of byEmail) {
+    if (stakeholderEmails.has(email)) continue;
+    if (
+      stats.count > topCount ||
+      (stats.count === topCount && (topActorEmail === null || email < topActorEmail))
+    ) {
+      topActorEmail = email;
+      topCount = stats.count;
+    }
+  }
+
   const people: Person[] = [];
   for (const [email, stats] of byEmail) {
     const { name, initials } = nameFromEmail(email);
@@ -63,10 +86,16 @@ export function derivePeople(
     let hint = "Recently active in your sources.";
     if (stakeholderEmails.has(email)) {
       role = "stakeholder";
-      hint = "Your stakeholder · receives weekly digest.";
+      hint = "Your stakeholder · receives the weekly digest.";
+    } else if (proposedSet.has(email)) {
+      role = "stakeholder";
+      hint = "Likely stakeholder · I drafted a digest proposal for them.";
     } else if (stats.count >= 2) {
       role = "collaborator";
-      hint = stats.count >= 3 ? "Your most active teammate this week." : "Steady contributor in your orbit.";
+      hint =
+        email === topActorEmail
+          ? "Your most active teammate this week."
+          : "Steady contributor in your orbit.";
     }
     people.push({ email, name, initials, role, last_seen: stats.last, event_count: stats.count, hint });
   }
@@ -213,7 +242,7 @@ export function derivePipeline(workflows: Workflow[]): PipelineItem[] {
       recipient_name: wf.recipient ? nameFromEmail(wf.recipient).name : null,
       next_run_at: next.toISOString(),
       countdown_label: formatCountdown(next.getTime()),
-      next_action: wf.recipient ? `drafts a note to ${nameFromEmail(wf.recipient).name}` : "drafts a recap for you",
+      next_action: wf.recipient ? `draft a note to ${nameFromEmail(wf.recipient).name}` : "draft a recap for you",
     });
   }
   return items.sort((a, b) => a.next_run_at.localeCompare(b.next_run_at));
@@ -310,7 +339,7 @@ export function deriveAlexStatus(opts: {
   if (opts.pipeline.length > 0) {
     const next = opts.pipeline[0];
     return {
-      line: `Next up: I ${next.next_action} ${next.countdown_label}. I'll let you know when there's a draft to look at.`,
+      line: `Next up: I'll ${next.next_action} ${next.countdown_label}. I'll let you know when there's a draft to look at.`,
       tone: "neutral",
     };
   }

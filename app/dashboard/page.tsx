@@ -59,7 +59,8 @@ export default async function DashboardPage() {
   const recentWins = deriveRecentWins(allDrafts);
   const pipeline = derivePipeline(workflows);
   const attention = deriveAttention(events, workflows);
-  const people = derivePeople(events, workflows);
+  const proposedStakeholders = proposals.map((p) => p.recipient).filter(Boolean) as string[];
+  const people = derivePeople(events, workflows, proposedStakeholders);
 
   const status = deriveAlexStatus({
     pendingDrafts: pendingDrafts.filter((d) => d.status === "pending"),

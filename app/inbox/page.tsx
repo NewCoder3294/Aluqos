@@ -23,7 +23,7 @@ export default async function InboxPage() {
   const pipeline = derivePipeline(workflows);
   const nextRunHint =
     pipeline.length > 0
-      ? `Next: I ${pipeline[0].next_action} ${pipeline[0].countdown_label}.`
+      ? `Next: I'll ${pipeline[0].next_action} ${pipeline[0].countdown_label}.`
       : null;
 
   return (

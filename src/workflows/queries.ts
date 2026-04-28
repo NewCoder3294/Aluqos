@@ -233,11 +233,15 @@ function synthesizeDraftBody(
   }
   const deduped = [...byKey.values()];
 
-  const shipped = deduped.filter((e) => {
+  // Don't report the recipient's own work back to them — it would feel weird,
+  // and the reasoning trail will explain those omissions explicitly.
+  const reportable = deduped.filter((e) => !(wf.recipient && e.actor === wf.recipient));
+
+  const shipped = reportable.filter((e) => {
     const state = (e.context_json as { state?: string })?.state;
     return state === "Done";
   });
-  const inFlight = deduped.filter((e) => {
+  const inFlight = reportable.filter((e) => {
     const state = (e.context_json as { state?: string })?.state;
     return state && state !== "Done";
   });
