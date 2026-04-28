@@ -9,7 +9,7 @@ const userId = process.env.SAATHI_DEMO_USER_ID;
 const { data: emps } = await sb.from("employees").select("id").eq("user_id", userId);
 const ids = (emps ?? []).map(e => e.id);
 if (ids.length) {
-  await sb.from("events").delete().in("employee_id", ids);
+  await sb.from("walkthrough_events").delete().in("employee_id", ids);
   await sb.from("prds").delete().in("employee_id", ids);
   await sb.from("uploads").delete().in("employee_id", ids);
   await sb.from("onboarding_sessions").delete().in("employee_id", ids);

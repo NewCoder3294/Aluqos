@@ -133,6 +133,6 @@ export async function logEvent(employee_id: string | null, type: string, payload
   if (MOCK_MODE) return;
   try {
     const sb = serverClient();
-    await sb.from("events").insert({ employee_id, type, payload: payload ?? {} });
+    await sb.from("walkthrough_events").insert({ employee_id, type, payload: payload ?? {} });
   } catch {}
 }

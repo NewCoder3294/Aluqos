@@ -52,7 +52,7 @@ create table if not exists prds (
   updated_at      timestamptz default now()
 );
 
-create table if not exists events (
+create table if not exists walkthrough_events (
   id              uuid primary key default uuid_generate_v4(),
   employee_id     uuid references employees(id) on delete cascade,
   type            text not null,
@@ -62,7 +62,7 @@ create table if not exists events (
 
 create index if not exists idx_uploads_employee on uploads(employee_id);
 create index if not exists idx_prds_employee on prds(employee_id);
-create index if not exists idx_events_employee on events(employee_id, created_at desc);
+create index if not exists idx_walkthrough_events_employee on walkthrough_events(employee_id, created_at desc);
 
 insert into storage.buckets (id, name, public)
 values ('uploads', 'uploads', false)
