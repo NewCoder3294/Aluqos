@@ -177,6 +177,7 @@ export async function runWorkflow(workflowId: string): Promise<{ runId: string; 
     });
     const body = synthesizeDraftBody(wf, events);
     const subject = synthesizeDraftSubject(wf);
+    const reasoning_trail = synthesizeReasoningTrail(wf, events);
 
     store.drafts.set(draftId, {
       id: draftId,
@@ -187,6 +188,7 @@ export async function runWorkflow(workflowId: string): Promise<{ runId: string; 
       body,
       recipient: wf.recipient,
       status: "pending",
+      reasoning_trail,
       created_at: now.toISOString(),
       approved_at: null,
       send_at: null,
@@ -267,6 +269,69 @@ function synthesizeDraftBody(
   return lines.join("\n");
 }
 
+// Build a user-facing reasoning trail explaining what Alex thought about
+// before drafting. Surfaced verbatim in the Inbox card so the user can audit
+// the work — included tickets, omitted ones with reasons, voice note, and a
+// confidence label. In prod the LLM returns this alongside the body via
+// structured output; here we synthesize deterministically.
+function synthesizeReasoningTrail(
+  wf: Workflow,
+  events: Array<{ actor: string | null; verb: string; object: string | null; context_json: Record<string, unknown>; occurred_at: string }>,
+): import("@/src/dev/store").DraftReasoningTrail {
+  // Dedupe by identifier so we report each ticket once.
+  const byKey = new Map<string, typeof events[number]>();
+  for (const e of events) {
+    const ident = (e.context_json as { identifier?: string })?.identifier;
+    if (!ident) continue;
+    const prev = byKey.get(ident);
+    if (!prev || e.occurred_at > prev.occurred_at) byKey.set(ident, e);
+  }
+  const deduped = [...byKey.values()];
+
+  // Heuristic omissions: if any included ticket's actor matches the recipient
+  // (only meaningful for workflows with a recipient), call that out — it would
+  // feel weird to report someone's own work back to them.
+  const included: string[] = [];
+  const omitted: { ref: string; reason: string }[] = [];
+  for (const e of deduped) {
+    const ident = (e.context_json as { identifier?: string })?.identifier ?? "";
+    if (wf.recipient && e.actor === wf.recipient) {
+      omitted.push({
+        ref: ident,
+        reason: `${recipientFirstName(wf.recipient)} did this herself — would feel weird to report it back.`,
+      });
+      continue;
+    }
+    if (ident) included.push(ident);
+  }
+
+  // Confidence: high when we have a healthy mix of shipped + in-flight,
+  // medium when only one bucket, low when nothing meaningful was found.
+  const shippedCount = deduped.filter((e) => (e.context_json as { state?: string })?.state === "Done").length;
+  const inFlightCount = deduped.filter((e) => {
+    const s = (e.context_json as { state?: string })?.state;
+    return s && s !== "Done";
+  }).length;
+  let confidence: import("@/src/dev/store").DraftConfidence = "low";
+  if (shippedCount + inFlightCount >= 4) confidence = "high";
+  else if (shippedCount + inFlightCount >= 2) confidence = "medium";
+
+  const voice_note =
+    wf.trigger_kind === "weekly"
+      ? "Tone matches your past stakeholder updates — direct, no fluff."
+      : wf.trigger_kind === "daily"
+      ? "Tone matches your past EOD notes — short, momentum-forward."
+      : "Tone matches the way you usually write to this audience.";
+
+  return { included, omitted, voice_note, confidence };
+}
+
+function recipientFirstName(recipient: string | null): string {
+  if (!recipient) return "they";
+  const local = recipient.split("@")[0] ?? recipient;
+  return local.charAt(0).toUpperCase() + local.slice(1);
+}
+
 export async function listPendingDrafts(tenantId: string): Promise<Draft[]> {
   if (MOCK_MODE) {
     const store = getDevStore();
@@ -291,6 +356,25 @@ export async function getDraft(id: string): Promise<Draft | null> {
   const { data, error } = await sb.from("drafts").select("*").eq("id", id).maybeSingle();
   if (error) throw new Error(`getDraft failed: ${error.message}`);
   return (data ?? null) as Draft | null;
+}
+
+// All drafts for a tenant, regardless of status. Powers the per-workflow
+// past-sends timeline + the dashboard's recent-wins card.
+export async function listAllDrafts(tenantId: string): Promise<Draft[]> {
+  if (MOCK_MODE) {
+    const store = getDevStore();
+    return [...store.drafts.values()]
+      .filter((d) => d.tenant_id === tenantId)
+      .sort((a, b) => b.created_at.localeCompare(a.created_at));
+  }
+  const sb = serverClient();
+  const { data, error } = await sb
+    .from("drafts")
+    .select("*")
+    .eq("tenant_id", tenantId)
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(`listAllDrafts failed: ${error.message}`);
+  return (data ?? []) as Draft[];
 }
 
 // Approve flips status to "approved" and stamps a send_at 60s in the future.
