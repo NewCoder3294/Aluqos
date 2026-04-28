@@ -1,6 +1,6 @@
 import { fetchWorkspaceState } from "@/src/server/run-prd";
-import { fakeEmployee } from "@/src/db/client";
-import { DashboardShell } from "../_dashboard/dashboard-shell";
+import { fakeEmployee, DEMO_EMPLOYEE_ID } from "@/src/db/client";
+import { DashboardShell } from "@/app/work/[employeeId]/_dashboard/dashboard-shell";
 import { PrdsList, type PrdRow } from "./prds-list";
 
 const PRDS: PrdRow[] = [
@@ -18,12 +18,8 @@ const PRDS: PrdRow[] = [
   { id: "issue-31", title: "Voice notes capture", issue: "Issue #31", words: 1050, sectionsDone: 6, sectionsTotal: 6, status: "shipped", lastEdited: "3w ago" },
 ];
 
-export default async function PrdsPage({
-  params,
-}: {
-  params: Promise<{ employeeId: string }>;
-}) {
-  const { employeeId } = await params;
+export default async function PrdsPage() {
+  const employeeId = DEMO_EMPLOYEE_ID;
   let state;
   try {
     state = await fetchWorkspaceState(employeeId);

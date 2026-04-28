@@ -111,7 +111,7 @@ export function ActivityFeed({
                       >
                         {event.href ? (
                           <Link
-                            href={`/work/${employeeId}/${event.href}`}
+                            href={`/${event.href}`}
                             className="block"
                           >
                             {inner}

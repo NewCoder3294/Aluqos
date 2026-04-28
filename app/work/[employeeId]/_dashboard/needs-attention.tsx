@@ -55,7 +55,7 @@ export function NeedsAttention({
             return (
               <li key={item.id}>
                 {item.href ? (
-                  <Link href={`/work/${employeeId}/${item.href}`} className={cn(rowClass, "block")}>
+                  <Link href={`/${item.href}`} className={cn(rowClass, "block")}>
                     <span className="flex items-center gap-3 w-full">{rowInner}</span>
                   </Link>
                 ) : (

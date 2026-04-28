@@ -1,6 +1,6 @@
 import { fetchWorkspaceState } from "@/src/server/run-prd";
-import { fakeEmployee } from "@/src/db/client";
-import { DashboardShell } from "../_dashboard/dashboard-shell";
+import { fakeEmployee, DEMO_EMPLOYEE_ID } from "@/src/db/client";
+import { DashboardShell } from "@/app/work/[employeeId]/_dashboard/dashboard-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Badge } from "@/src/components/ui/badge";
 import { cn } from "@/src/lib/cn";
@@ -87,12 +87,8 @@ function pct(current: number, target: number): number {
   return Math.min(100, Math.max(0, Math.round((current / target) * 100)));
 }
 
-export default async function GoalsPage({
-  params,
-}: {
-  params: Promise<{ employeeId: string }>;
-}) {
-  const { employeeId } = await params;
+export default async function GoalsPage() {
+  const employeeId = DEMO_EMPLOYEE_ID;
   let state;
   try {
     state = await fetchWorkspaceState(employeeId);

@@ -16,7 +16,7 @@ export function Today({
       <CardHeader>
         <CardTitle>Today</CardTitle>
         <Button variant="outline" size="sm" asChild>
-          <Link href={`/work/${employeeId}/calendar`}>Calendar →</Link>
+          <Link href={`/calendar`}>Calendar →</Link>
         </Button>
       </CardHeader>
       <CardContent compact className="p-0">

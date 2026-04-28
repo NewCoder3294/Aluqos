@@ -1,12 +1,8 @@
-import { serverClient, MOCK_MODE, fakeEmployee } from "@/src/db/client";
+import { serverClient, MOCK_MODE, fakeEmployee, DEMO_EMPLOYEE_ID } from "@/src/db/client";
 import { SetupClient } from "./setup-client";
 
-export default async function SetupPage({
-  params,
-}: {
-  params: Promise<{ employeeId: string }>;
-}) {
-  const { employeeId } = await params;
+export default async function SetupPage() {
+  const employeeId = DEMO_EMPLOYEE_ID;
 
   if (MOCK_MODE) {
     return (

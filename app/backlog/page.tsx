@@ -1,10 +1,11 @@
 import { fetchWorkspaceState, draftPrdFromBacklog } from "@/src/server/run-prd";
-import { fakeEmployee } from "@/src/db/client";
+import { fakeEmployee, DEMO_EMPLOYEE_ID } from "@/src/db/client";
 import { MessageCircle, Code2, Mail, Phone } from "lucide-react";
-import { DashboardShell } from "../_dashboard/dashboard-shell";
+import { DashboardShell } from "@/app/work/[employeeId]/_dashboard/dashboard-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/lib/cn";
+import { SourceDonut } from "./source-donut";
 
 type Source = "slack" | "github" | "email" | "call";
 
@@ -49,12 +50,8 @@ const HEATMAP: { source: string; count: number; color: string }[] = [
   { source: "Email", count: 1, color: "#9a9388" },
 ];
 
-export default async function BacklogPage({
-  params,
-}: {
-  params: Promise<{ employeeId: string }>;
-}) {
-  const { employeeId } = await params;
+export default async function BacklogPage() {
+  const employeeId = DEMO_EMPLOYEE_ID;
   let state;
   try {
     state = await fetchWorkspaceState(employeeId);
@@ -62,20 +59,6 @@ export default async function BacklogPage({
     state = { emp: { ...fakeEmployee(), id: employeeId }, session: null, uploads: [], prds: [] };
   }
   const emp = state.emp ?? { ...fakeEmployee(), id: employeeId };
-
-  const total = HEATMAP.reduce((s, h) => s + h.count, 0);
-  const RADIUS = 56;
-  const STROKE = 22;
-  const CIRC = 2 * Math.PI * RADIUS;
-  let cumulative = 0;
-  const slices = HEATMAP.map((h) => {
-    const fraction = h.count / total;
-    const length = fraction * CIRC;
-    const dasharray = `${length} ${CIRC - length}`;
-    const dashoffset = -cumulative;
-    cumulative += length;
-    return { ...h, dasharray, dashoffset, pct: Math.round(fraction * 100) };
-  });
 
   return (
     <DashboardShell employeeId={emp.id} employeeName={emp.name} activeNav="alex-backlog">
@@ -141,64 +124,7 @@ export default async function BacklogPage({
               <CardTitle>Top sources this week</CardTitle>
             </CardHeader>
             <CardContent className="space-y-5">
-              <div className="flex items-center justify-center pt-1">
-                <div className="relative">
-                  <svg
-                    width={160}
-                    height={160}
-                    viewBox="0 0 160 160"
-                    className="-rotate-90"
-                    aria-hidden
-                  >
-                    <circle
-                      cx={80}
-                      cy={80}
-                      r={RADIUS}
-                      fill="none"
-                      stroke="var(--color-paper-hi)"
-                      strokeWidth={STROKE}
-                    />
-                    {slices.map((s) => (
-                      <circle
-                        key={s.source}
-                        cx={80}
-                        cy={80}
-                        r={RADIUS}
-                        fill="none"
-                        stroke={s.color}
-                        strokeWidth={STROKE}
-                        strokeDasharray={s.dasharray}
-                        strokeDashoffset={s.dashoffset}
-                      />
-                    ))}
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className="serif text-[28px] tabular-nums text-ink leading-none">
-                      {total}
-                    </span>
-                    <span className="text-[10px] uppercase tracking-[0.14em] text-ink-faint mt-1">
-                      requests
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <ul className="space-y-2">
-                {slices.map((s) => (
-                  <li key={s.source} className="flex items-center gap-2.5">
-                    <span
-                      aria-hidden
-                      className="size-2.5 rounded-sm shrink-0"
-                      style={{ backgroundColor: s.color }}
-                    />
-                    <span className="text-[13px] text-ink flex-1">{s.source}</span>
-                    <span className="text-[11.5px] tabular-nums text-ink-faint">{s.pct}%</span>
-                    <span className="serif text-[15px] tabular-nums text-ink w-7 text-right">
-                      {s.count}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <SourceDonut data={HEATMAP} />
 
               <div className="pt-3 border-t border-paper-edge">
                 <div className="text-[11px] uppercase tracking-[0.12em] text-ink-faint mb-1">Signal</div>

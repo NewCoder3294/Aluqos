@@ -132,7 +132,7 @@ export function PrdsList({
             {filtered.map((prd, idx) => (
               <li key={prd.id}>
                 <Link
-                  href={`/work/${employeeId}/prd/${prd.id}`}
+                  href={`/prds/${prd.id}`}
                   className={cn(
                     "flex items-center gap-4 px-5 py-4 transition-colors hover:bg-paper-hi/40 cursor-pointer",
                     idx !== filtered.length - 1 && "border-b border-paper-edge",

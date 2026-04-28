@@ -1,18 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, SlidersHorizontal } from "lucide-react";
 import { fetchWorkspaceState } from "@/src/server/run-prd";
-import { fakeEmployee } from "@/src/db/client";
+import { fakeEmployee, DEMO_EMPLOYEE_ID } from "@/src/db/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Serif } from "@/src/components/serif";
-import { DashboardShell } from "../_dashboard/dashboard-shell";
+import { DashboardShell } from "@/app/work/[employeeId]/_dashboard/dashboard-shell";
 
-export default async function SettingsPage({
-  params,
-}: {
-  params: Promise<{ employeeId: string }>;
-}) {
-  const { employeeId } = await params;
+export default async function SettingsPage() {
+  const employeeId = DEMO_EMPLOYEE_ID;
 
   let state;
   try {
@@ -58,7 +54,7 @@ export default async function SettingsPage({
             </p>
             <div className="mt-5">
               <Button variant="outline" size="md" asChild>
-                <Link href={`/work/${employeeId}/settings/setup`}>
+                <Link href="/settings/setup">
                   Open detailed setup <ArrowRight className="size-4" />
                 </Link>
               </Button>

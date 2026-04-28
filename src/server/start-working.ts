@@ -19,7 +19,7 @@ export async function startWorking(
 ) {
   await authorizeEmployee(employeeId);
   if (MOCK_MODE) {
-    redirect(`/work/${employeeId}`);
+    redirect("/dashboard");
   }
   try {
     const sb = serverClient();
@@ -43,5 +43,5 @@ export async function startWorking(
   } catch (err) {
     if ((err as { digest?: string } | null)?.digest?.startsWith("NEXT_REDIRECT")) throw err;
   }
-  redirect(`/work/${employeeId}?bootstrap=1`);
+  redirect("/dashboard?bootstrap=1");
 }

@@ -56,7 +56,7 @@ export function ComingSoonWall({
 
           <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
             <Button variant="ink" size="lg" asChild>
-              <Link href={`/work/${employeeId}`}>Back to Alex →</Link>
+              <Link href={`/dashboard`}>Back to Alex →</Link>
             </Button>
             <Button variant="quiet" size="md" asChild>
               <Link href="/#waitlist">Join the waitlist</Link>

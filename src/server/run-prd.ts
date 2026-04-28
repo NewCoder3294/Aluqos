@@ -134,7 +134,7 @@ export async function draftPrdFromBacklog(
   // is unavailable; prd-surface will still kick off generation against the
   // source label passed via the URL.
   const created = await createPrd(employeeId, "", source);
-  redirect(`/work/${employeeId}/prd/${created.id}?bootstrap=1`);
+  redirect(`/prds/${created.id}?bootstrap=1`);
 }
 
 /**

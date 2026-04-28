@@ -53,7 +53,7 @@ export function SetupClient({
 
         <div className="absolute top-4 left-6 z-20">
           <Link
-            href={`/work/${employee.id}/settings`}
+            href="/settings"
             className="inline-flex items-center gap-1.5 text-[12px] uppercase tracking-[0.12em] text-ink-faint hover:text-coral-deep transition-colors"
           >
             <ArrowLeft size={12} strokeWidth={2} /> Settings

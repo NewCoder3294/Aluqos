@@ -33,7 +33,7 @@ export function TeamToday({
         <ul>
           {team.map((row, idx) => {
             const meta = AGENTS[row.agent];
-            const href = `/work/${employeeId}${row.href ? "/" + row.href : ""}`;
+            const href = `/${row.href ?? "dashboard"}`;
             return (
               <li key={row.agent}>
                 <Link

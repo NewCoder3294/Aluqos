@@ -1,15 +1,11 @@
 import { fetchWorkspaceState } from "@/src/server/run-prd";
-import { fakeEmployee } from "@/src/db/client";
-import { DashboardShell } from "../_dashboard/dashboard-shell";
-import { ActivityFeed } from "../_dashboard/activity-feed";
-import { ACTIVITY_FEED } from "../_dashboard/data/activity";
+import { fakeEmployee, DEMO_EMPLOYEE_ID } from "@/src/db/client";
+import { DashboardShell } from "@/app/work/[employeeId]/_dashboard/dashboard-shell";
+import { ActivityFeed } from "@/app/work/[employeeId]/_dashboard/activity-feed";
+import { ACTIVITY_FEED } from "@/app/work/[employeeId]/_dashboard/data/activity";
 
-export default async function GlobalActivityPage({
-  params,
-}: {
-  params: Promise<{ employeeId: string }>;
-}) {
-  const { employeeId } = await params;
+export default async function GlobalActivityPage() {
+  const employeeId = DEMO_EMPLOYEE_ID;
   let state;
   try {
     state = await fetchWorkspaceState(employeeId);

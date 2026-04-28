@@ -1,5 +1,5 @@
 import { fetchWorkspaceState } from "@/src/server/run-prd";
-import { fakeEmployee } from "@/src/db/client";
+import { fakeEmployee, DEMO_EMPLOYEE_ID } from "@/src/db/client";
 import { PrdDetailClient } from "./prd-detail-client";
 
 function formatToday(): string {
@@ -15,10 +15,11 @@ export default async function PrdDetailPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ employeeId: string; prdId: string }>;
+  params: Promise<{ prdId: string }>;
   searchParams: Promise<{ bootstrap?: string }>;
 }) {
-  const { employeeId, prdId } = await params;
+  const { prdId } = await params;
+  const employeeId = DEMO_EMPLOYEE_ID;
   const sp = await searchParams;
 
   let state;

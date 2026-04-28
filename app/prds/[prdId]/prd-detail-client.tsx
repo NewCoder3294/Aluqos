@@ -1,7 +1,7 @@
 "use client";
 
 import { TreeNav } from "@/app/_chrome/tree-nav";
-import { PrdSurface } from "../../_workspace/prd-surface";
+import { PrdSurface } from "@/app/work/[employeeId]/_workspace/prd-surface";
 import { useWorkspace } from "@/src/store/workspace";
 
 export function PrdDetailClient({

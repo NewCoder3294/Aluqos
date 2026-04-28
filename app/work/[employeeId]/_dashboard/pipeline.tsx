@@ -20,7 +20,7 @@ export function Pipeline({
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <Button variant="outline" size="sm" asChild>
-          <Link href={`/work/${employeeId}/prds`}>View all →</Link>
+          <Link href={`/prds`}>View all →</Link>
         </Button>
       </CardHeader>
       <CardContent>
@@ -63,7 +63,7 @@ export function Pipeline({
                   </div>
                 );
                 return card.href ? (
-                  <Link key={card.id} href={`/work/${employeeId}/${card.href}`} className="block">
+                  <Link key={card.id} href={`/${card.href}`} className="block">
                     {inner}
                   </Link>
                 ) : (
@@ -73,7 +73,7 @@ export function Pipeline({
 
               {col.truncatedExtra && (
                 <Link
-                  href={`/work/${employeeId}/prds`}
+                  href={`/prds`}
                   className="block w-full text-[11.5px] text-ink-faint hover:text-coral-deep transition-colors px-3 py-2 text-left"
                 >
                   +{col.truncatedExtra} more →

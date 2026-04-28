@@ -1,16 +1,14 @@
 import { fetchWorkspaceState } from "@/src/server/run-prd";
-import { fakeEmployee } from "@/src/db/client";
-import { DashboardShell } from "../_dashboard/dashboard-shell";
-import { FileGrid } from "../_dashboard/file-grid";
+import { fakeEmployee, DEMO_EMPLOYEE_ID } from "@/src/db/client";
+import { DashboardShell } from "@/app/work/[employeeId]/_dashboard/dashboard-shell";
+import { FileGrid } from "@/app/work/[employeeId]/_dashboard/file-grid";
 
 export default async function GlobalFilesPage({
-  params,
   searchParams,
 }: {
-  params: Promise<{ employeeId: string }>;
   searchParams: Promise<{ path?: string }>;
 }) {
-  const { employeeId } = await params;
+  const employeeId = DEMO_EMPLOYEE_ID;
   const sp = await searchParams;
   let state;
   try {

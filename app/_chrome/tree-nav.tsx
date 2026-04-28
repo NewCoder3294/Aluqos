@@ -73,8 +73,8 @@ function buildSections(employeeId: string): NavSection[] {
       id: "all",
       label: "All · Overview",
       items: [
-        { key: "all-files", label: "Files", icon: <FolderOpen {...ICON_PROPS} />, href: `/work/${employeeId}/files` },
-        { key: "all-activity", label: "Activity", icon: <Activity {...ICON_PROPS} />, href: `/work/${employeeId}/activity` },
+        { key: "all-files", label: "Files", icon: <FolderOpen {...ICON_PROPS} />, href: `/files` },
+        { key: "all-activity", label: "Activity", icon: <Activity {...ICON_PROPS} />, href: `/activity` },
       ],
     },
     {
@@ -85,11 +85,11 @@ function buildSections(employeeId: string): NavSection[] {
         { key: "alex-dashboard", label: "Dashboard", icon: <LayoutDashboard {...ICON_PROPS} />, href: `/dashboard` },
         { key: "alex-inbox", label: "Inbox", icon: <Mailbox {...ICON_PROPS} />, href: `/inbox` },
         { key: "alex-workflows", label: "Workflows", icon: <Workflow {...ICON_PROPS} />, href: `/workflows` },
-        { key: "alex-prds", label: "PRDs", icon: <FileText {...ICON_PROPS} />, href: `/work/${employeeId}/prds` },
-        { key: "alex-backlog", label: "Backlog", icon: <ListTodo {...ICON_PROPS} />, href: `/work/${employeeId}/backlog` },
-        { key: "alex-calendar", label: "Calendar", icon: <Calendar {...ICON_PROPS} />, href: `/work/${employeeId}/calendar` },
-        { key: "alex-goals", label: "Goals", icon: <Target {...ICON_PROPS} />, href: `/work/${employeeId}/goals` },
-        { key: "alex-settings", label: "Settings", icon: <Settings {...ICON_PROPS} />, href: `/work/${employeeId}/settings` },
+        { key: "alex-prds", label: "PRDs", icon: <FileText {...ICON_PROPS} />, href: `/prds` },
+        { key: "alex-backlog", label: "Backlog", icon: <ListTodo {...ICON_PROPS} />, href: `/backlog` },
+        { key: "alex-calendar", label: "Calendar", icon: <Calendar {...ICON_PROPS} />, href: `/calendar` },
+        { key: "alex-goals", label: "Goals", icon: <Target {...ICON_PROPS} />, href: `/goals` },
+        { key: "alex-settings", label: "Settings", icon: <Settings {...ICON_PROPS} />, href: `/settings` },
       ],
     },
   ];
@@ -142,7 +142,7 @@ export function TreeNav({
       >
         {!collapsed && (
           <Link
-            href={`/work/${employeeId}`}
+            href="/dashboard"
             className="serif text-[18px] tracking-[-0.01em] text-ink hover:text-coral-deep"
           >
             Aluqos
