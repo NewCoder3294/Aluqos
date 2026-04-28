@@ -20,14 +20,22 @@ export async function listConnections(tenantId: string): Promise<Connection[]> {
       .filter((c) => c.tenant_id === tenantId)
       .sort((a, b) => a.connected_at.localeCompare(b.connected_at));
   }
-  const sb = serverClient();
-  const { data, error } = await sb
-    .from("connections")
-    .select("*")
-    .eq("tenant_id", tenantId)
-    .order("connected_at", { ascending: true });
-  if (error) throw new Error(`listConnections failed: ${error.message}`);
-  return (data ?? []) as Connection[];
+  try {
+    const sb = serverClient();
+    const { data, error } = await sb
+      .from("connections")
+      .select("*")
+      .eq("tenant_id", tenantId)
+      .order("connected_at", { ascending: true });
+    if (error) {
+      console.warn(`listConnections: ${error.message}`);
+      return [];
+    }
+    return (data ?? []) as Connection[];
+  } catch (err) {
+    console.warn(`listConnections: ${(err as Error).message}`);
+    return [];
+  }
 }
 
 export async function upsertConnection(input: {

@@ -1,6 +1,8 @@
 import { serverClient, MOCK_MODE, fakeEmployee, DEMO_EMPLOYEE_ID } from "@/src/db/client";
 import { SetupClient } from "./setup-client";
 
+export const dynamic = "force-dynamic";
+
 export default async function SetupPage() {
   const employeeId = DEMO_EMPLOYEE_ID;
 
