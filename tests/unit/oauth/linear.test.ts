@@ -1,5 +1,10 @@
 import { describe, it, expect, beforeAll, vi } from "vitest";
-import { buildLinearAuthorizeUrl, exchangeLinearCode, refreshLinearToken } from "@/src/oauth/linear";
+import {
+  buildLinearAuthorizeUrl,
+  exchangeLinearCode,
+  fetchLinearOrganizationId,
+  refreshLinearToken,
+} from "@/src/oauth/linear";
 
 beforeAll(() => {
   process.env.LINEAR_CLIENT_ID = "test-client-id";
@@ -59,6 +64,33 @@ describe("Linear OAuth", () => {
     );
     const tokens = await refreshLinearToken("old-refresh");
     expect(tokens.accessToken).toBe("linear-access-2");
+    fetchMock.mockRestore();
+  });
+
+  it("fetches the organization id via viewer GraphQL query", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({
+        data: { viewer: { organization: { id: "org-xyz" } } },
+      }), { status: 200, headers: { "content-type": "application/json" } })
+    );
+    const id = await fetchLinearOrganizationId("access-token-abc");
+    expect(id).toBe("org-xyz");
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://api.linear.app/graphql",
+      expect.objectContaining({
+        method: "POST",
+        headers: expect.objectContaining({ authorization: "Bearer access-token-abc" }),
+      })
+    );
+    fetchMock.mockRestore();
+  });
+
+  it("throws when the viewer response has no organization id", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ data: { viewer: { organization: null } } }),
+        { status: 200, headers: { "content-type": "application/json" } })
+    );
+    await expect(fetchLinearOrganizationId("access-token")).rejects.toThrow(/organization id missing/);
     fetchMock.mockRestore();
   });
 });

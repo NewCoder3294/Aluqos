@@ -9,6 +9,7 @@ vi.mock("@/src/oauth/state", () => ({
 }));
 vi.mock("@/src/oauth/linear", () => ({
   exchangeLinearCode: vi.fn(),
+  fetchLinearOrganizationId: vi.fn(),
 }));
 vi.mock("@/src/oauth/credentials", () => ({
   saveCredentials: vi.fn(),
@@ -23,7 +24,7 @@ vi.mock("@/src/inngest/client", () => ({
 import { GET } from "@/app/api/oauth/linear/callback/route";
 import { readStateCookie, clearStateCookie } from "@/src/oauth/cookies";
 import { verifyState } from "@/src/oauth/state";
-import { exchangeLinearCode } from "@/src/oauth/linear";
+import { exchangeLinearCode, fetchLinearOrganizationId } from "@/src/oauth/linear";
 import { saveCredentials } from "@/src/oauth/credentials";
 import { upsertConnection } from "@/src/connections/queries";
 import { inngest } from "@/src/inngest/client";
@@ -40,6 +41,7 @@ describe("Linear callback", () => {
       expiresAt: new Date(),
       scope: "read",
     });
+    (fetchLinearOrganizationId as any).mockResolvedValue("org-xyz");
     (saveCredentials as any).mockResolvedValue({ id: "cred1" });
     (upsertConnection as any).mockResolvedValue({ id: "conn1" });
 
@@ -47,6 +49,10 @@ describe("Linear callback", () => {
     const res = await GET(req as any);
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("/settings/connections?connected=linear");
+    // Org id must flow into the connection so the webhook handler can look it up.
+    expect(upsertConnection).toHaveBeenCalledWith(
+      expect.objectContaining({ tenant_id: "t1", source: "linear", external_account_id: "org-xyz" })
+    );
     expect((inngest.send as any)).toHaveBeenCalledWith({
       name: "backfill/start",
       data: { tenantId: "t1", source: "linear" },

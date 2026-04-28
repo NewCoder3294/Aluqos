@@ -1,5 +1,6 @@
 const LINEAR_AUTHORIZE = "https://linear.app/oauth/authorize";
 const LINEAR_TOKEN = "https://api.linear.app/oauth/token";
+const LINEAR_GRAPHQL = "https://api.linear.app/graphql";
 
 export type LinearTokens = {
   accessToken: string;
@@ -62,6 +63,28 @@ export async function exchangeLinearCode(code: string): Promise<LinearTokens> {
     expiresAt: new Date(Date.now() + (Number(json.expires_in) || 3600) * 1000),
     scope: String(json.scope ?? "read"),
   };
+}
+
+// Fetches the Linear organization id for the authenticated user. Used at
+// OAuth-callback time to populate connections.external_account_id, which the
+// webhook handler uses to recover the owning tenant from a payload's
+// organizationId — without trusting any client-controllable header.
+export async function fetchLinearOrganizationId(accessToken: string): Promise<string> {
+  const res = await fetch(LINEAR_GRAPHQL, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${accessToken}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ query: "query { viewer { organization { id } } }" }),
+  });
+  if (!res.ok) throw new Error(`Linear viewer query failed: ${res.status}`);
+  const json = (await res.json()) as {
+    data?: { viewer?: { organization?: { id?: string } } };
+  };
+  const id = json.data?.viewer?.organization?.id;
+  if (!id) throw new Error("Linear organization id missing in viewer response");
+  return id;
 }
 
 export async function refreshLinearToken(refreshToken: string): Promise<LinearTokens> {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { readStateCookie, clearStateCookie } from "@/src/oauth/cookies";
 import { verifyState } from "@/src/oauth/state";
-import { exchangeLinearCode } from "@/src/oauth/linear";
+import { exchangeLinearCode, fetchLinearOrganizationId } from "@/src/oauth/linear";
 import { saveCredentials } from "@/src/oauth/credentials";
 import { upsertConnection } from "@/src/connections/queries";
 import { inngest } from "@/src/inngest/client";
@@ -38,7 +38,15 @@ export async function GET(req: Request) {
       expires_at: tokens.expiresAt,
       scope: tokens.scope,
     });
-    await upsertConnection({ tenant_id: tenantId, source: "linear" });
+    // Persist the Linear organizationId on the connection so inbound webhooks
+    // can recover the owning tenant from the payload, instead of trusting an
+    // `x-aluqos-tenant` header.
+    const organizationId = await fetchLinearOrganizationId(tokens.accessToken);
+    await upsertConnection({
+      tenant_id: tenantId,
+      source: "linear",
+      external_account_id: organizationId,
+    });
     await inngest.send({
       name: "backfill/start",
       data: { tenantId, source: "linear" },
