@@ -67,3 +67,65 @@ create index if not exists idx_walkthrough_events_employee on walkthrough_events
 insert into storage.buckets (id, name, public)
 values ('uploads', 'uploads', false)
 on conflict (id) do nothing;
+
+-- Phase 1 foundation: connections registry, OAuth credential vault references,
+-- normalized activity event store, async backfill state.
+
+create table if not exists connections (
+  id              uuid primary key default uuid_generate_v4(),
+  tenant_id       uuid not null,
+  source          text not null check (source in ('linear', 'github', 'calendar', 'slack')),
+  consent_active  boolean not null default true,
+  connected_at    timestamptz default now(),
+  disconnected_at timestamptz,
+  display_handle  text,
+  unique(tenant_id, source)
+);
+
+create index if not exists idx_connections_tenant on connections(tenant_id);
+
+create table if not exists oauth_credentials (
+  id                       uuid primary key default uuid_generate_v4(),
+  tenant_id                uuid not null,
+  source                   text not null check (source in ('linear', 'github', 'calendar', 'slack')),
+  access_token_secret_id   uuid,
+  refresh_token_secret_id  uuid,
+  scope                    text,
+  expires_at               timestamptz,
+  created_at               timestamptz default now(),
+  updated_at               timestamptz default now(),
+  unique(tenant_id, source)
+);
+
+create table if not exists activity_events (
+  id              uuid primary key default uuid_generate_v4(),
+  tenant_id       uuid not null,
+  source          text not null check (source in ('linear', 'github', 'calendar', 'slack')),
+  source_event_id text not null,
+  actor           text,
+  verb            text not null,
+  object          text,
+  context_json    jsonb not null default '{}'::jsonb,
+  occurred_at     timestamptz not null,
+  ingested_at     timestamptz default now(),
+  unique(source, source_event_id)
+);
+
+create index if not exists idx_activity_events_tenant_time
+  on activity_events(tenant_id, occurred_at desc);
+
+create index if not exists idx_activity_events_tenant_source_actor
+  on activity_events(tenant_id, source, actor);
+
+create table if not exists backfill_runs (
+  id              uuid primary key default uuid_generate_v4(),
+  tenant_id       uuid not null,
+  source          text not null check (source in ('linear', 'github', 'calendar', 'slack')),
+  status          text not null default 'queued' check (status in ('queued', 'running', 'completed', 'failed', 'partial')),
+  started_at      timestamptz,
+  completed_at    timestamptz,
+  cursor          text,
+  events_ingested int not null default 0,
+  error_message   text,
+  unique(tenant_id, source)
+);
