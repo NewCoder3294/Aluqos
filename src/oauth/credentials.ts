@@ -1,4 +1,4 @@
-import { serverClient } from "@/src/db/client";
+import { MOCK_MODE, serverClient } from "@/src/db/client";
 import { storeSecret, readSecret, revokeSecret } from "@/src/oauth/vault";
 import type { SourceId } from "@/src/config/sources";
 
@@ -17,6 +17,9 @@ export async function saveCredentials(input: {
   expires_at: Date;
   scope: string;
 }): Promise<{ id: string }> {
+  // Dev: skip Vault round-trip and pretend the credential was stored. No real
+  // tokens exist anyway when MOCK_MODE is on.
+  if (MOCK_MODE) return { id: `dev-cred-${input.tenant_id}-${input.source}` };
   const accessId = await storeSecret(input.access_token, {
     tenant_id: input.tenant_id,
     source: input.source,
@@ -55,6 +58,7 @@ export async function getDecryptedTokens(
   tenantId: string,
   source: SourceId
 ): Promise<DecryptedTokens | null> {
+  if (MOCK_MODE) return null; // dev: no real tokens exist; backfill is mocked
   const sb = serverClient();
   const { data, error } = await sb
     .from("oauth_credentials")
@@ -76,6 +80,7 @@ export async function getDecryptedTokens(
 }
 
 export async function revokeCredentials(tenantId: string, source: SourceId): Promise<void> {
+  if (MOCK_MODE) return; // dev: no Vault rows to revoke
   const sb = serverClient();
   const { data } = await sb
     .from("oauth_credentials")

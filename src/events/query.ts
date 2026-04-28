@@ -1,4 +1,5 @@
-import { serverClient } from "@/src/db/client";
+import { MOCK_MODE, serverClient } from "@/src/db/client";
+import { getDevStore } from "@/src/dev/store";
 import type { SourceId } from "@/src/config/sources";
 
 export async function queryActivityEvents(opts: {
@@ -8,6 +9,22 @@ export async function queryActivityEvents(opts: {
   until?: Date;
   limit?: number;
 }) {
+  if (MOCK_MODE) {
+    const store = getDevStore();
+    const sinceMs = opts.since?.getTime();
+    const untilMs = opts.until?.getTime();
+    let rows = [...store.events.values()].filter((e) => {
+      if (e.tenant_id !== opts.tenant_id) return false;
+      if (opts.source && e.source !== opts.source) return false;
+      const t = new Date(e.occurred_at).getTime();
+      if (sinceMs !== undefined && t < sinceMs) return false;
+      if (untilMs !== undefined && t >= untilMs) return false;
+      return true;
+    });
+    rows.sort((a, b) => b.occurred_at.localeCompare(a.occurred_at));
+    if (opts.limit) rows = rows.slice(0, opts.limit);
+    return rows;
+  }
   const sb = serverClient();
   let q = sb
     .from("activity_events")
@@ -24,6 +41,14 @@ export async function queryActivityEvents(opts: {
 }
 
 export async function countActivityEvents(tenantId: string, source: SourceId): Promise<number> {
+  if (MOCK_MODE) {
+    const store = getDevStore();
+    let n = 0;
+    for (const e of store.events.values()) {
+      if (e.tenant_id === tenantId && e.source === source) n += 1;
+    }
+    return n;
+  }
   const sb = serverClient();
   const { count, error } = await sb
     .from("activity_events")

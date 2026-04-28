@@ -1,4 +1,4 @@
-import { serverClient } from "@/src/db/client";
+import { MOCK_MODE, serverClient } from "@/src/db/client";
 import type { SourceId } from "@/src/config/sources";
 
 type BudgetConfig = { capacity: number; windowMs: number };
@@ -23,6 +23,7 @@ export class RateBudgetExceeded extends Error {
 // inside a single transaction with row-level locking. The RPC returns null
 // on success or the milliseconds-until-retry on rejection.
 export async function takeRateBudget(source: SourceId, tenantId: string): Promise<void> {
+  if (MOCK_MODE) return; // dev: no-op — fake events aren't subject to provider quotas
   const cfg = BUDGETS[source];
   const sb = serverClient();
   const { data, error } = await sb.rpc("rate_budget_take", {

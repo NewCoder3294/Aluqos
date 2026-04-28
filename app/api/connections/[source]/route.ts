@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { disconnectSource, upsertConnection } from "@/src/connections/queries";
 import { revokeCredentials } from "@/src/oauth/credentials";
-import { DEMO_USER_ID } from "@/src/db/client";
+import { DEMO_USER_ID, MOCK_MODE } from "@/src/db/client";
+import { purgeSourceForTenant } from "@/src/dev/store";
 import type { SourceId } from "@/src/config/sources";
 
 export const runtime = "nodejs";
@@ -18,6 +19,10 @@ export async function DELETE(
   }
   await disconnectSource(DEMO_USER_ID, source as SourceId);
   await revokeCredentials(DEMO_USER_ID, source as SourceId);
+  // Dev: also wipe seeded events + backfill state so Connect/Disconnect cycles
+  // start clean. In prod we keep historical events on disconnect (the UI copy
+  // already promises this); only the localhost demo benefits from a hard reset.
+  if (MOCK_MODE) purgeSourceForTenant(DEMO_USER_ID, source as SourceId);
   return NextResponse.json({ ok: true });
 }
 
