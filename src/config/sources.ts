@@ -25,7 +25,7 @@ export const SOURCES: Record<SourceId, SourceConfig> = {
     id: "github",
     displayName: "GitHub",
     brandColor: "24292E",
-    v1Status: "live",
+    v1Status: "coming-soon",
     oauthScopes: ["repo:read", "read:user", "user:email"],
     webhookSupported: true,
     webhookEvents: [
@@ -42,7 +42,7 @@ export const SOURCES: Record<SourceId, SourceConfig> = {
     id: "calendar",
     displayName: "Google Calendar",
     brandColor: "4285F4",
-    v1Status: "live",
+    v1Status: "coming-soon",
     oauthScopes: [
       "https://www.googleapis.com/auth/calendar.events.readonly",
       "https://www.googleapis.com/auth/calendar.readonly",
