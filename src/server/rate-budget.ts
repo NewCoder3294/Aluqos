@@ -1,3 +1,4 @@
+import { serverClient } from "@/src/db/client";
 import type { SourceId } from "@/src/config/sources";
 
 type BudgetConfig = { capacity: number; windowMs: number };
@@ -9,10 +10,6 @@ const BUDGETS: Record<SourceId, BudgetConfig> = {
   slack: { capacity: 20, windowMs: 60 * 1000 },
 };
 
-type BucketKey = `${SourceId}:${string}`;
-
-const buckets = new Map<BucketKey, { count: number; windowStart: number }>();
-
 export class RateBudgetExceeded extends Error {
   constructor(public source: SourceId, public retryAfterMs: number) {
     super(`Rate budget exceeded for ${source}; retry after ${retryAfterMs}ms`);
@@ -20,22 +17,24 @@ export class RateBudgetExceeded extends Error {
   }
 }
 
+// Postgres-backed atomic rate budget. The previous in-process Map evaporated
+// on serverless cold start — we now defer the window check + increment to a
+// SECURITY DEFINER plpgsql function (rate_budget_take) which performs both
+// inside a single transaction with row-level locking. The RPC returns null
+// on success or the milliseconds-until-retry on rejection.
 export async function takeRateBudget(source: SourceId, tenantId: string): Promise<void> {
   const cfg = BUDGETS[source];
-  const key: BucketKey = `${source}:${tenantId}`;
-  const now = Date.now();
-  const bucket = buckets.get(key);
-  if (!bucket || now - bucket.windowStart >= cfg.windowMs) {
-    buckets.set(key, { count: 1, windowStart: now });
-    return;
-  }
-  if (bucket.count >= cfg.capacity) {
-    const retryAfterMs = cfg.windowMs - (now - bucket.windowStart);
+  const sb = serverClient();
+  const { data, error } = await sb.rpc("rate_budget_take", {
+    p_source: source,
+    p_tenant_id: tenantId,
+    p_capacity: cfg.capacity,
+    p_window_ms: cfg.windowMs,
+  });
+  if (error) throw new Error(`takeRateBudget failed: ${error.message}`);
+  if (data === null || data === undefined) return;
+  const retryAfterMs = Number(data);
+  if (Number.isFinite(retryAfterMs) && retryAfterMs > 0) {
     throw new RateBudgetExceeded(source, retryAfterMs);
   }
-  bucket.count += 1;
-}
-
-export function resetRateBudget(): void {
-  buckets.clear();
 }
