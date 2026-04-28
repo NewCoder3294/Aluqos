@@ -44,7 +44,7 @@ const NEXT_UP: Array<{ initial: string; name: string; role: string; gradient: st
 
 export function LandingTeam() {
   return (
-    <section id="roles" className="max-w-6xl mx-auto px-6 py-24 lg:py-32">
+    <section id="roles" className="max-w-6xl mx-auto px-6 py-16 lg:py-24">
       <Reveal>
         <div className="text-[12px] tracking-[0.14em] uppercase text-coral-deep font-medium">
           Available now

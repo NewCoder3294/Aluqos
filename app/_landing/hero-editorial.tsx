@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useReducedMotion } from "motion/react";
-import { WorkspaceMockup } from "./workspace-mockup";
+import { useReducedMotion } from "motion/react";
 import { EarlyAccessDialog } from "./early-access-dialog";
 import { TryDemoButton } from "./try-demo-button";
-import { EASE, Reveal } from "./motion-primitives";
 
 export function LandingHeroEditorial() {
   const reduced = useReducedMotion() ?? false;
@@ -60,7 +58,7 @@ export function LandingHeroEditorial() {
     <section
       ref={sectionRef}
       id="top"
-      className="relative pt-24 pb-10 lg:pt-32 lg:pb-16 overflow-hidden"
+      className="relative pt-16 pb-12 lg:pt-20 lg:pb-16 overflow-hidden"
     >
       {/* Background stack — explicit z-0 so it always sits behind content */}
       {/* Warm halo that fills the gaps between lit dots, following the spotlight */}
@@ -86,7 +84,7 @@ export function LandingHeroEditorial() {
       {/* Vertical rotated badge — anchored to the right edge of the section */}
       <div
         aria-hidden
-        className="hidden lg:flex absolute right-0 top-[260px] items-center z-10"
+        className="hidden lg:flex absolute right-0 top-[200px] items-center z-10"
       >
         <div className="bg-ink text-paper py-5 px-2.5 text-[10px] tracking-[0.22em] font-medium">
           <span className="[writing-mode:vertical-rl] rotate-180">
@@ -95,21 +93,21 @@ export function LandingHeroEditorial() {
         </div>
       </div>
 
-      {/* Top label */}
+      {/* Top label — rendered without Reveal so it paints instantly. Above-the-fold
+          content cannot rely on whileInView triggers; intersection-observer races
+          with hydration and leaves the hero looking blank on first paint. */}
       <div className="relative z-10 max-w-[1280px] mx-auto px-6">
-        <Reveal>
-          <div className="inline-flex items-center gap-2 rounded-full border border-paper-edge bg-paper-hi px-3 py-1.5">
-            <span className="relative flex size-1.5">
-              <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-60 animate-ping" />
-              <span className="relative size-1.5 rounded-full bg-emerald-500" />
-            </span>
-            <span className="label">Private beta · Now reviewing applications</span>
-          </div>
-        </Reveal>
+        <div className="inline-flex items-center gap-2 rounded-full border border-paper-edge bg-paper-hi px-3 py-1.5">
+          <span className="relative flex size-1.5">
+            <span className="absolute inset-0 rounded-full bg-emerald-500 opacity-60 animate-ping" />
+            <span className="relative size-1.5 rounded-full bg-emerald-500" />
+          </span>
+          <span className="label">Private beta · Now reviewing applications</span>
+        </div>
       </div>
 
       {/* Editorial stacked headline + side caption */}
-      <div className="relative z-10 max-w-[1280px] mx-auto px-6 mt-10 lg:mt-14">
+      <div className="relative z-10 max-w-[1280px] mx-auto px-6 mt-6 lg:mt-8">
         <div className="grid grid-cols-12 gap-6 lg:gap-10 items-start">
           {/* Headline column */}
           {/* Headline variants considered (kept as a record for the team):
@@ -121,98 +119,61 @@ export function LandingHeroEditorial() {
               and drops the worn-out "AI employees" frame. */}
           <div className="col-span-12 lg:col-span-9">
             <h1 className="serif text-[clamp(44px,7vw,96px)] leading-[0.95] tracking-[-0.03em] text-ink">
-              <Reveal y={32}>
-                <span className="block">Stop configuring</span>
-              </Reveal>
-              <Reveal y={32} delay={0.08}>
-                <span className="block italic-serif text-coral-deep">AI.</span>
-              </Reveal>
-              <Reveal y={32} delay={0.16}>
-                <span className="block">It configures itself.</span>
-              </Reveal>
+              <span className="block">Stop configuring</span>
+              <span className="block italic-serif text-coral-deep">AI.</span>
+              <span className="block">It configures itself.</span>
             </h1>
 
-            <Reveal delay={0.28}>
-              <p className="mt-6 lg:mt-8 italic-serif text-[clamp(22px,2.6vw,34px)] leading-[1.2] text-ink-muted pl-1 max-w-[28ch]">
-                Aluqos watches how your team actually works — then ships the workflows that save you hours.
-              </p>
-            </Reveal>
+            <p className="mt-6 lg:mt-8 italic-serif text-[clamp(22px,2.6vw,34px)] leading-[1.2] text-ink-muted pl-1 max-w-[28ch]">
+              Aluqos watches how your team actually works — then ships the workflows that save you hours.
+            </p>
           </div>
 
           {/* Side caption + meta — compact so the column matches the
               headline's height and the CTAs stay above the fold. */}
           <div className="col-span-12 lg:col-span-3 lg:self-stretch flex flex-col gap-3 lg:gap-3.5">
-            <Reveal delay={0.2} className="flex-1 flex">
-              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-lg p-4 lg:p-5 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
-                <div className="label mb-2 text-coral-deep text-[10px]">Pain</div>
-                <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
-                  Most AI dies in pilot.{" "}
-                  <span className="text-ink-muted">
-                    Nobody has time to prompt or configure it.
-                  </span>
-                </p>
-              </div>
-            </Reveal>
+            <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-lg p-4 lg:p-5 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
+              <div className="label mb-2 text-coral-deep text-[10px]">Pain</div>
+              <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
+                Most AI dies in pilot.{" "}
+                <span className="text-ink-muted">
+                  Nobody has time to prompt or configure it.
+                </span>
+              </p>
+            </div>
 
-            <Reveal delay={0.26} className="flex-1 flex">
-              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-lg p-4 lg:p-5 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
-                <div className="label mb-2 text-coral-deep text-[10px]">Shift</div>
-                <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
-                  Aluqos observes for a week.{" "}
-                  <span className="text-ink-muted">
-                    Then ships the workflows that save the most hours.
-                  </span>
-                </p>
-              </div>
-            </Reveal>
+            <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-lg p-4 lg:p-5 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
+              <div className="label mb-2 text-coral-deep text-[10px]">Shift</div>
+              <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
+                Aluqos observes for a week.{" "}
+                <span className="text-ink-muted">
+                  Then ships the workflows that save the most hours.
+                </span>
+              </p>
+            </div>
 
-            <Reveal delay={0.32} className="flex-1 flex">
-              <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-lg p-4 lg:p-5 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
-                <div className="label mb-2 text-coral-deep text-[10px]">Trust</div>
-                <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
-                  You hold the leash.{" "}
-                  <span className="text-ink-muted">
-                    Per-workflow autonomy — confirm-all to fully autonomous.
-                  </span>
-                </p>
-              </div>
-            </Reveal>
+            <div className="flex-1 flex flex-col bg-paper-hi border border-paper-edge rounded-lg p-4 lg:p-5 shadow-[0_2px_8px_rgba(60,40,20,0.05)]">
+              <div className="label mb-2 text-coral-deep text-[10px]">Trust</div>
+              <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
+                You hold the leash.{" "}
+                <span className="text-ink-muted">
+                  Per-workflow autonomy — confirm-all to fully autonomous.
+                </span>
+              </p>
+            </div>
           </div>
         </div>
 
         {/* CTAs — left-aligned, editorial */}
-        <Reveal delay={0.36}>
-          <div className="mt-8 lg:mt-10 flex flex-wrap items-center gap-3">
-            <EarlyAccessDialog
-              triggerLabel="Sign up for waitlist"
-              triggerVariant="ink"
-              triggerSize="lg"
-              source="hero"
-            />
-            <TryDemoButton />
-          </div>
-        </Reveal>
-      </div>
-
-      {/* Mockup with editorial figure caption */}
-      <div className="relative z-10 mt-20 lg:mt-28 max-w-[1280px] mx-auto px-6">
-        <motion.figure
-          initial={{ opacity: 0, y: reduced ? 0 : 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: reduced ? 0 : 0.8, delay: reduced ? 0 : 0.15, ease: EASE }}
-          aria-hidden
-          className="pointer-events-none select-none"
-        >
-          <div className="relative">
-            <div className="absolute -inset-6 lg:-inset-8 bg-paper-hi rounded-2xl -z-10" />
-            <WorkspaceMockup />
-          </div>
-          <figcaption className="label mt-6 lg:mt-8 flex items-baseline gap-3">
-            <span className="text-coral">Fig. 01</span>
-            <span>Day eight. Aluqos has shipped its first proposed workflow.</span>
-          </figcaption>
-        </motion.figure>
+        <div className="mt-8 lg:mt-10 flex flex-wrap items-center gap-3">
+          <EarlyAccessDialog
+            triggerLabel="Sign up for waitlist"
+            triggerVariant="ink"
+            triggerSize="lg"
+            source="hero"
+          />
+          <TryDemoButton />
+        </div>
       </div>
     </section>
   );

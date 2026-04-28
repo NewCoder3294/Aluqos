@@ -43,7 +43,7 @@ const TIERS: Tier[] = [
 
 export function LandingCTA() {
   return (
-    <section id="pricing" className="max-w-6xl mx-auto px-6 py-24 lg:py-32">
+    <section id="pricing" className="max-w-6xl mx-auto px-6 py-16 lg:py-24">
       {/* Pricing */}
       <Reveal>
         <div className="text-[12px] tracking-[0.14em] uppercase text-coral-deep font-medium">
@@ -120,7 +120,7 @@ export function LandingCTA() {
       <Reveal delay={0.35}>
         <Card
           tone="primary"
-          className="relative overflow-hidden px-8 lg:px-16 py-14 lg:py-20 mt-20"
+          className="relative overflow-hidden px-8 lg:px-16 py-12 lg:py-16 mt-14"
         >
           <span
             aria-hidden

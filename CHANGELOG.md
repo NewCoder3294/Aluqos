@@ -1,6 +1,15 @@
 # Changelog
 
-## Unreleased — Homepage rewrite for depth (2026-04-28)
+## Unreleased — Visual QA fixes (2026-04-28)
+
+- Hero h1 / subhead / cards / CTAs no longer wrapped in `<Reveal>`; intersection-observer animations were racing with hydration, leaving the headline blank on first paint. Headline now renders instantly.
+- Hero workspace mockup figure removed — redundant with the better demo three sections down, and was pushing Pain/Shift/Trust below the fold.
+- Hero top padding reduced (pt-24 → pt-16); Pain/Shift/Trust + CTA now visible above the fold on a 1456×840 viewport.
+- "How it works" step crossfade tightened (500ms → 200ms) and inactive cards now flip to `visibility: hidden` after fade-out so DOM text can't bleed through during scroll.
+- `scroll-padding-top` bumped 100→110px so anchor links land cleanly below the floating nav.
+- Section padding reduced site-wide (py-24/py-32 → py-16/py-24) on team, founders, pricing.
+
+## 2026-04-28 — Homepage rewrite for depth
 
 - Hero leads with the auto-discovery thesis ("Stop configuring AI. It should configure itself.") and replaces the generic "AI employees" frame.
 - "How it works" rewritten as the Week 1 / Week 2 / Week 3 narrative: it watches → it proposes → it ships. Autonomy slider is now Week 3's visual hero.

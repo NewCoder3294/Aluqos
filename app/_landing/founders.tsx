@@ -56,7 +56,7 @@ export function LandingFounders() {
     <section
       id="team"
       aria-labelledby="founders-heading"
-      className="max-w-6xl mx-auto px-6 py-24 lg:py-32"
+      className="max-w-6xl mx-auto px-6 py-16 lg:py-24"
     >
       <Reveal>
         <div className="text-[12px] tracking-[0.14em] uppercase text-coral-deep font-medium">

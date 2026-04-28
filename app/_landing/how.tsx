@@ -307,12 +307,17 @@ export function LandingHow() {
                     return (
                       <div
                         key={step.n}
-                        className="absolute inset-0 transition-all duration-500 ease-out"
+                        className="absolute inset-0 transition-[opacity,transform,visibility] duration-200 ease-out"
                         style={{
                           opacity: isActive ? 1 : 0,
                           transform: isActive
                             ? "translateY(0px)"
-                            : `translateY(${isPast ? -24 : 24}px)`,
+                            : `translateY(${isPast ? -16 : 16}px)`,
+                          // Visibility lags by the transition duration so the inactive
+                          // card stops claiming layout/text once its fade-out finishes —
+                          // this is what kept text from "bleeding through" during scroll.
+                          visibility: isActive ? "visible" : "hidden",
+                          transitionDelay: isActive ? "0ms" : "200ms",
                           pointerEvents: isActive ? "auto" : "none",
                         }}
                         aria-hidden={!isActive}
@@ -367,12 +372,14 @@ export function LandingHow() {
                   return (
                     <div
                       key={step.n}
-                      className="absolute inset-0 flex items-center justify-center transition-all duration-500 ease-out"
+                      className="absolute inset-0 flex items-center justify-center transition-[opacity,transform,visibility] duration-200 ease-out"
                       style={{
                         opacity: isActive ? 1 : 0,
                         transform: isActive
                           ? "translateY(0px) scale(1)"
-                          : `translateY(${isPast ? -32 : 32}px) scale(0.97)`,
+                          : `translateY(${isPast ? -20 : 20}px) scale(0.98)`,
+                        visibility: isActive ? "visible" : "hidden",
+                        transitionDelay: isActive ? "0ms" : "200ms",
                         pointerEvents: isActive ? "auto" : "none",
                       }}
                       aria-hidden={!isActive}
