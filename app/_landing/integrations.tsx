@@ -47,12 +47,17 @@ const OrbitingIntegration = memo(({ config, angle }: { config: IntegrationConfig
   return (
     <div
       className="absolute top-1/2 left-1/2 transition-all duration-300 ease-out"
+      // Render numeric CSS values as explicit "Npx" strings so server and
+      // client produce identical inline-style strings — avoids a hydration
+      // mismatch when browser extensions or React serializers normalize
+      // numeric style values differently across SSR/CSR.
       style={{
-        width: size,
-        height: size,
+        width: `${size}px`,
+        height: `${size}px`,
         transform: `translate(calc(${x}px - 50%), calc(${y}px - 50%))`,
         zIndex: hovered ? 20 : 10,
       }}
+      suppressHydrationWarning
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
