@@ -1,10 +1,3 @@
-import type { inngest } from "./client";
+import { startBackfill } from "@/src/backfill/runner";
 
-// Functions land in subsequent tasks. This file is the export aggregation point
-// consumed by app/api/inngest/route.ts.
-// Type uses ReturnType to stay in sync with whatever createFunction signature
-// the installed Inngest version exposes.
-
-type InngestFunction = ReturnType<typeof inngest.createFunction>;
-
-export const functions: InngestFunction[] = [];
+export const functions = [startBackfill];
