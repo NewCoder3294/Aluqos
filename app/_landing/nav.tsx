@@ -9,7 +9,6 @@ const NAV_LINKS: Array<{ href: string; label: string }> = [
   { href: "#integrations", label: "Integrations" },
   { href: "#architecture", label: "Architecture" },
   { href: "#founders", label: "Founders" },
-  { href: "#pricing", label: "Pricing" },
 ];
 
 export function LandingNav() {

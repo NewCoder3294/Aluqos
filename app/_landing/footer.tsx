@@ -6,8 +6,9 @@ import { Reveal } from "./motion-primitives";
 // Do not add a footer link without first making sure its target exists.
 const FOOTER_LINKS: Array<{ href: string; label: string }> = [
   { href: "#how", label: "How it works" },
-  { href: "#team", label: "Team" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "#integrations", label: "Integrations" },
+  { href: "#architecture", label: "Architecture" },
+  { href: "#founders", label: "Founders" },
   { href: "mailto:hello@aluqos.ai", label: "hello@aluqos.ai" },
 ];
 

@@ -46,7 +46,7 @@ const FOUNDERS: Founder[] = [
     role: "Chief Product Officer",
     photo: "/team/aman.jpeg",
     blurb:
-      "Agentic AI PM at T-Mobile. CMU AI Research alum. Designs the agent personas and runs the early enterprise pipeline.",
+      "Agentic AI PM. CMU AI Research alum. Designs the agent personas and runs the early enterprise pipeline.",
     link: "https://www.linkedin.com/in/amangoyal99/",
   },
 ];
