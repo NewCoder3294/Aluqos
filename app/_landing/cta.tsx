@@ -53,7 +53,7 @@ export function LandingCTA() {
       <Reveal delay={0.05}>
         <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[24ch]">
           One agent.{" "}
-          <span className="italic text-ink-faint">Or a whole team.</span>
+          <span className="italic-serif text-coral-deep">Or a whole team.</span>
         </h2>
       </Reveal>
 

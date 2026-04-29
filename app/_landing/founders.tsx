@@ -69,7 +69,7 @@ export function LandingFounders() {
           className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[26ch]"
         >
           The four people{" "}
-          <span className="italic text-ink-faint">building this.</span>
+          <span className="italic-serif text-coral-deep">building this.</span>
         </h2>
       </Reveal>
       <Reveal delay={0.1}>
@@ -80,7 +80,7 @@ export function LandingFounders() {
         </p>
       </Reveal>
 
-      <ul className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5">
+      <ul className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-5">
         {FOUNDERS.map((f, i) => (
           <Reveal key={f.name} delay={0.12 + i * 0.05}>
             <li className="h-full rounded-xl border border-paper-edge bg-paper-hi/40 p-6 lg:p-7 flex gap-5 hover:bg-paper-hi/70 transition-colors">

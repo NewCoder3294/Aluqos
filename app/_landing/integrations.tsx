@@ -154,7 +154,7 @@ export function LandingIntegrations() {
   return (
     <section className="relative py-12 sm:py-16 px-4 sm:px-8 bg-paper">
       <div className="w-full">
-        <div className="relative bg-paper-hi border border-paper-edge rounded-[2.5rem] shadow-[0_16px_64px_rgba(31,29,26,0.08)] overflow-hidden min-h-[720px]">
+        <div className="relative bg-paper-hi border border-paper-edge rounded-[2.5rem] shadow-[0_16px_64px_rgba(31,29,26,0.08)] overflow-hidden min-h-[560px]">
           {/* visible grid pattern */}
           <div
             className="absolute inset-0 pointer-events-none"
@@ -183,7 +183,7 @@ export function LandingIntegrations() {
             }}
           />
 
-          <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-12 items-center p-10 sm:p-14 lg:p-24 min-h-[720px] max-w-[1400px] mx-auto">
+          <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-12 items-center p-10 sm:p-12 lg:p-16 min-h-[560px] max-w-[1400px] mx-auto">
             {/* Copy */}
             <div>
           <div className="label mb-3">Integrations</div>

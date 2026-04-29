@@ -27,7 +27,9 @@ export function LandingNav() {
         "sticky top-0 z-40 transition-all duration-300 ease-out",
         scrolled
           ? "py-3 bg-transparent"
-          : "py-0 bg-paper/40 backdrop-blur-md border-b border-paper-edge/30",
+          // Stronger backdrop on the un-scrolled state: text passing under the
+          // bar reads as de-emphasized rather than competing with the nav.
+          : "py-0 bg-paper/70 backdrop-blur-md backdrop-saturate-150 border-b border-paper-edge/40",
       )}
     >
       <div
@@ -36,8 +38,10 @@ export function LandingNav() {
           scrolled
             ? // Pill — liquid glass: heavy blur, saturated bg, paper-edge ring,
               // soft outer drop shadow + thin inset highlight on the top edge.
+              // Opacity bumped to 80% so headlines passing underneath are visibly
+              // de-emphasized; was 60%, which left H2's bleeding through legibly.
               "max-w-4xl h-13 px-7 rounded-full " +
-              "bg-paper-hi/60 backdrop-blur-xl backdrop-saturate-150 " +
+              "bg-paper-hi/80 backdrop-blur-xl backdrop-saturate-150 " +
               "border border-paper-edge/70 " +
               "shadow-[0_10px_30px_-12px_rgba(31,29,26,0.20),inset_0_1px_0_0_rgba(255,255,255,0.55)]"
             : // Full-width bar — flush, transparent, lets the hero glow show through

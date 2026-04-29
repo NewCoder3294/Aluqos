@@ -296,7 +296,7 @@ export function LandingHow() {
                 <Reveal delay={0.05}>
                   <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[20ch]">
                     Three weeks.{" "}
-                    <span className="italic text-ink-faint">Zero configuration.</span>
+                    <span className="italic-serif text-coral-deep">Zero configuration.</span>
                   </h2>
                 </Reveal>
 
@@ -307,17 +307,26 @@ export function LandingHow() {
                     return (
                       <div
                         key={step.n}
-                        className="absolute inset-0 transition-[opacity,transform,visibility] duration-200 ease-out"
+                        // Per-property transitions (NOT a single shared duration/delay):
+                        //   opacity:    fades 200ms in BOTH directions, no delay
+                        //   transform:  ditto
+                        //   visibility: instant when becoming active; delayed by 200ms
+                        //               when becoming inactive (so it hides AFTER the
+                        //               opacity fade completes, never during it)
+                        // Earlier version applied the 200ms delay to all three, which
+                        // held the outgoing card at opacity 1 while the incoming card
+                        // was already fading in — that's the bleed-through bug.
                         style={{
+                          position: "absolute",
+                          inset: 0,
                           opacity: isActive ? 1 : 0,
                           transform: isActive
                             ? "translateY(0px)"
                             : `translateY(${isPast ? -16 : 16}px)`,
-                          // Visibility lags by the transition duration so the inactive
-                          // card stops claiming layout/text once its fade-out finishes —
-                          // this is what kept text from "bleeding through" during scroll.
                           visibility: isActive ? "visible" : "hidden",
-                          transitionDelay: isActive ? "0ms" : "200ms",
+                          transition: isActive
+                            ? "opacity 200ms ease-out, transform 200ms ease-out, visibility 0s linear 0s"
+                            : "opacity 200ms ease-out, transform 200ms ease-out, visibility 0s linear 200ms",
                           pointerEvents: isActive ? "auto" : "none",
                         }}
                         aria-hidden={!isActive}
@@ -372,14 +381,16 @@ export function LandingHow() {
                   return (
                     <div
                       key={step.n}
-                      className="absolute inset-0 flex items-center justify-center transition-[opacity,transform,visibility] duration-200 ease-out"
+                      className="absolute inset-0 flex items-center justify-center"
                       style={{
                         opacity: isActive ? 1 : 0,
                         transform: isActive
                           ? "translateY(0px) scale(1)"
                           : `translateY(${isPast ? -20 : 20}px) scale(0.98)`,
                         visibility: isActive ? "visible" : "hidden",
-                        transitionDelay: isActive ? "0ms" : "200ms",
+                        transition: isActive
+                          ? "opacity 200ms ease-out, transform 200ms ease-out, visibility 0s linear 0s"
+                          : "opacity 200ms ease-out, transform 200ms ease-out, visibility 0s linear 200ms",
                         pointerEvents: isActive ? "auto" : "none",
                       }}
                       aria-hidden={!isActive}

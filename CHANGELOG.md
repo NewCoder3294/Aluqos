@@ -1,6 +1,13 @@
 # Changelog
 
-## Unreleased — Visual QA fixes (2026-04-28)
+## Unreleased — Visual QA round 2 (2026-04-28)
+
+- Real fix for "How it works" step bleed-through: previous patch applied a 200ms `transition-delay` to the whole `transition-[opacity,transform,visibility]` shorthand, which held the outgoing card at opacity 1 for 200ms while the incoming card was already fading in. Replaced the shorthand with explicit per-property transitions: `opacity 200ms ease-out, transform 200ms ease-out, visibility 0s linear {0s when becoming active, 200ms when becoming inactive}`. Visibility now lags only on the way out; opacity always animates immediately. Future maintainer note: do not add a single shared `transition-delay` to a multi-property shorthand on this component — opacity and visibility need different delay rules.
+- Navbar backdrop strengthened: scrolled pill bumped 60→80% opacity; un-scrolled bar bumped 40→70% opacity + added `backdrop-saturate-150`. Headlines passing under the nav now read as de-emphasized rather than bleeding through.
+- Vertical voids tightened: team `mt-12 → mt-8`, founders `mt-12 → mt-8`, team "Next up" header `mt-14 → mt-10`, integrations card `min-h-[720px] → min-h-[560px]` and inner `lg:p-24 → lg:p-16`.
+- Italic accents in h2's standardized to `text-coral-deep` (matching the hero "AI." treatment) — was inconsistent `text-ink-faint` across team / founders / cta / how it works.
+
+## 2026-04-28 — Visual QA fixes round 1
 
 - Hero h1 / subhead / cards / CTAs no longer wrapped in `<Reveal>`; intersection-observer animations were racing with hydration, leaving the headline blank on first paint. Headline now renders instantly.
 - Hero workspace mockup figure removed — redundant with the better demo three sections down, and was pushing Pain/Shift/Trust below the fold.

@@ -53,7 +53,7 @@ export function LandingTeam() {
       <Reveal delay={0.05}>
         <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[24ch]">
           Meet Alex.{" "}
-          <span className="italic text-ink-faint">Your first AI hire.</span>
+          <span className="italic-serif text-coral-deep">Your first AI hire.</span>
         </h2>
       </Reveal>
       <Reveal delay={0.1}>
@@ -66,7 +66,7 @@ export function LandingTeam() {
 
       {/* Centerpiece — Alex */}
       <Reveal delay={0.15}>
-        <Card className="mt-12 grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-0 overflow-hidden">
+        <Card className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-0 overflow-hidden">
           <div
             className="relative px-8 py-10 lg:p-12 flex flex-col justify-between min-h-[280px]"
             style={{ background: HERO_ROLE.gradient }}
@@ -121,7 +121,7 @@ export function LandingTeam() {
 
       {/* Next up — Jordan & Sam, demoted */}
       <Reveal delay={0.25}>
-        <div className="mt-14">
+        <div className="mt-10">
           <div className="text-[11px] tracking-[0.14em] uppercase text-ink-faint font-medium">
             Next up
           </div>
