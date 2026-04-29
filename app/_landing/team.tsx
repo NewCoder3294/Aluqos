@@ -57,10 +57,12 @@ export function LandingTeam() {
         </h2>
       </Reveal>
       <Reveal delay={0.1}>
-        <p className="mt-5 max-w-[58ch] text-[16px] lg:text-[17px] leading-[1.6] text-ink-muted">
-          We&rsquo;re starting with the role that pays back fastest: a Product Manager.
-          One Aluqos PM observes your team for a week, then ships the workflows that
-          claw back the hours you keep losing to busywork.
+        <p className="mt-5 max-w-[64ch] text-[16px] lg:text-[17px] leading-[1.6] text-ink-muted">
+          Every Aluqos employee comes with three agents — a Role agent, a
+          Personal Assistant, and an Autonomous agent that writes your team&rsquo;s
+          automation library. We&rsquo;re starting with PM because that&rsquo;s
+          where the busywork is most measurable. Engineering, Ops, and Marketing
+          are next.
         </p>
       </Reveal>
 
@@ -122,8 +124,13 @@ export function LandingTeam() {
       {/* Next up — Jordan & Sam, demoted */}
       <Reveal delay={0.25}>
         <div className="mt-10">
-          <div className="text-[11px] tracking-[0.14em] uppercase text-ink-faint font-medium">
-            Next up
+          <div className="flex items-baseline gap-3 flex-wrap">
+            <div className="text-[11px] tracking-[0.14em] uppercase text-ink-faint font-medium">
+              Next up
+            </div>
+            <div className="text-[11px] italic-serif text-ink-faint">
+              Same three-agent stack. Different role agent.
+            </div>
           </div>
           <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
             {NEXT_UP.map((r) => (

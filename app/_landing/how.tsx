@@ -202,7 +202,7 @@ const STEPS = [
     eyebrow: "Week 1",
     title: "It watches.",
     titleAccent: "Read-only.",
-    body: "Aluqos joins your stack — Slack, Linear, Notion, GitHub, your inbox — read-only. It sees what you do, what you ignore, what you copy-paste, what wakes you up. No setup. No prompts. Nothing to configure.",
+    body: "Aluqos joins your stack read-only: Slack, Linear, Notion, GitHub, your inbox. It sees what you do, what you ignore, what you copy-paste, what wakes you up. No setup. No prompts. Nothing to configure.",
     Visual: StepWatchVisual,
   },
   {
@@ -210,7 +210,7 @@ const STEPS = [
     eyebrow: "Week 2",
     title: "It proposes",
     titleAccent: "the workflows.",
-    body: "Aluqos surfaces what it would automate, ranked by hours saved per week, with the evidence for each. You approve, edit, or reject — you don't write specs, you don't prompt, you don't configure. You just say yes or no.",
+    body: "Aluqos surfaces what it would automate, ranked by hours saved per week, with the evidence for each. You approve, edit, or reject. No specs. No prompts. No configuration. Just yes or no.",
     Visual: StepProposeVisual,
   },
   {
@@ -218,7 +218,7 @@ const STEPS = [
     eyebrow: "Week 3",
     title: "It ships.",
     titleAccent: "Your leash.",
-    body: "Approved workflows go live with your chosen autonomy level — confirm everything, only outbound, or fully autonomous. Per workflow. Change at any time. Aluqos keeps watching and proposes new workflows as your work evolves.",
+    body: "Approved workflows go live at your chosen autonomy level: confirm everything, only outbound, or fully autonomous. Per workflow. Change at any time. Aluqos keeps watching and proposes new workflows as your work evolves.",
     Visual: StepShipVisual,
   },
 ];
@@ -277,6 +277,47 @@ export function LandingHow() {
                 backgroundPosition: "28px 28px",
               }}
             />
+            {/* Cell-shade pattern — 4 shades distributed across a 4×4 tile
+                so each grid cell takes a slightly different tone. Two
+                lifts (white) and two drops (ink) over paper-hi. */}
+            <svg
+              aria-hidden
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{
+                maskImage:
+                  "radial-gradient(ellipse at center, black 70%, transparent 100%)",
+                WebkitMaskImage:
+                  "radial-gradient(ellipse at center, black 70%, transparent 100%)",
+              }}
+            >
+              <defs>
+                <pattern id="cell-shade-how" x="0" y="0" width="224" height="224" patternUnits="userSpaceOnUse">
+                  {/* 4 shades — all subtle drops below paper-hi so white
+                      content cards stay readable on the right side. */}
+                  {/* Row 0 */}
+                  <rect x="0" y="0" width="56" height="56" fill="#1f1d1a" fillOpacity="0.012" />
+                  <rect x="56" y="0" width="56" height="56" fill="#1f1d1a" fillOpacity="0.040" />
+                  <rect x="112" y="0" width="56" height="56" fill="#1f1d1a" fillOpacity="0.024" />
+                  <rect x="168" y="0" width="56" height="56" fill="#1f1d1a" fillOpacity="0.060" />
+                  {/* Row 1 */}
+                  <rect x="0" y="56" width="56" height="56" fill="#1f1d1a" fillOpacity="0.024" />
+                  <rect x="56" y="56" width="56" height="56" fill="#1f1d1a" fillOpacity="0.060" />
+                  <rect x="112" y="56" width="56" height="56" fill="#1f1d1a" fillOpacity="0.040" />
+                  <rect x="168" y="56" width="56" height="56" fill="#1f1d1a" fillOpacity="0.012" />
+                  {/* Row 2 */}
+                  <rect x="0" y="112" width="56" height="56" fill="#1f1d1a" fillOpacity="0.060" />
+                  <rect x="56" y="112" width="56" height="56" fill="#1f1d1a" fillOpacity="0.012" />
+                  <rect x="112" y="112" width="56" height="56" fill="#1f1d1a" fillOpacity="0.024" />
+                  <rect x="168" y="112" width="56" height="56" fill="#1f1d1a" fillOpacity="0.040" />
+                  {/* Row 3 */}
+                  <rect x="0" y="168" width="56" height="56" fill="#1f1d1a" fillOpacity="0.040" />
+                  <rect x="56" y="168" width="56" height="56" fill="#1f1d1a" fillOpacity="0.024" />
+                  <rect x="112" y="168" width="56" height="56" fill="#1f1d1a" fillOpacity="0.060" />
+                  <rect x="168" y="168" width="56" height="56" fill="#1f1d1a" fillOpacity="0.012" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#cell-shade-how)" />
+            </svg>
             <div
               className="absolute inset-y-0 right-0 w-2/3 pointer-events-none"
               style={{
@@ -295,7 +336,6 @@ export function LandingHow() {
                 </Reveal>
                 <Reveal delay={0.05}>
                   <h2 className="serif mt-4 text-[clamp(32px,4.4vw,52px)] leading-[1.1] tracking-[-0.02em] max-w-[20ch]">
-                    Three weeks.{" "}
                     <span className="italic-serif text-coral-deep">Zero configuration.</span>
                   </h2>
                 </Reveal>

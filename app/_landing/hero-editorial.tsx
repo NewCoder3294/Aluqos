@@ -125,7 +125,7 @@ export function LandingHeroEditorial() {
             </h1>
 
             <p className="mt-6 lg:mt-8 italic-serif text-[clamp(22px,2.6vw,34px)] leading-[1.2] text-ink-muted pl-1 max-w-[28ch]">
-              Aluqos watches how your team actually works — then ships the workflows that save you hours.
+              Aluqos watches how your team works. Ships the workflows that save you hours.
             </p>
           </div>
 
@@ -157,7 +157,7 @@ export function LandingHeroEditorial() {
               <p className="text-[13px] lg:text-[14px] leading-[1.45] text-ink">
                 You hold the leash.{" "}
                 <span className="text-ink-muted">
-                  Per-workflow autonomy — confirm-all to fully autonomous.
+                  Per-workflow autonomy. Confirm-all to fully autonomous.
                 </span>
               </p>
             </div>

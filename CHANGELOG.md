@@ -1,6 +1,16 @@
 # Changelog
 
-## Unreleased — Visual QA round 2 (2026-04-28)
+## Unreleased — Architecture + LOI-ready content (2026-04-28)
+
+- New section: **AI in your meetings** ("Your AI showed up to your 9am.") — Tuesday-morning concrete moment, with a meeting mockup showing live action items + 3 actions queued for approval. Headline candidates kept as comments in `meetings.tsx`. Walkthrough CTA links to `#meetings` (TODO: swap href to real Loom).
+- New section: **The three agents working for you** — Role agent / Personal Assistant / Autonomous agent, each with a tiny role-specific mockup (PRD pending review / standup timeline + drafted .md / dark-themed code preview of a skill file).
+- New section: **Your team's automation library, in plain text** — three example `.md` skill cards (`weekly-stakeholder-update.md`, `triage-incoming-pages.md`, `draft-prd-from-customer-calls.md`) with realistic YAML frontmatter and body previews. This is the moat.
+- New section: **FAQ / objections** — Glean/Notion comparison, trust model, data location. Direct, confident answers; no soft-pedalling.
+- "Meet Alex" intro rewritten: now frames roles as variations of a three-agent stack, not three separate products. Added "Same three-agent stack. Different role agent." caption to the Next-up tiles.
+- Founder bios sharpened to one-liner-each, tying background → product capability (audit discipline / on-call trust / skills backbone / agent personas + enterprise pipeline).
+- Footer dead links removed (`#why`, `#`, `#`); replaced with anchors to the new sections (`#how`, `#agents`, `#skills`, `#roles`, `#team`, `#faq`, `#pricing`).
+
+## 2026-04-28 — Visual QA round 2
 
 - Real fix for "How it works" step bleed-through: previous patch applied a 200ms `transition-delay` to the whole `transition-[opacity,transform,visibility]` shorthand, which held the outgoing card at opacity 1 for 200ms while the incoming card was already fading in. Replaced the shorthand with explicit per-property transitions: `opacity 200ms ease-out, transform 200ms ease-out, visibility 0s linear {0s when becoming active, 200ms when becoming inactive}`. Visibility now lags only on the way out; opacity always animates immediately. Future maintainer note: do not add a single shared `transition-delay` to a multi-property shorthand on this component — opacity and visibility need different delay rules.
 - Navbar backdrop strengthened: scrolled pill bumped 60→80% opacity; un-scrolled bar bumped 40→70% opacity + added `backdrop-saturate-150`. Headlines passing under the nav now read as de-emphasized rather than bleeding through.

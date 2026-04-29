@@ -2,13 +2,12 @@
 
 import { Reveal } from "./motion-primitives";
 
+// All hrefs resolve to live anchors on the homepage or a real address.
+// Do not add a footer link without first making sure its target exists.
 const FOOTER_LINKS: Array<{ href: string; label: string }> = [
-  { href: "#roles", label: "Roles" },
-  { href: "#pricing", label: "Pricing" },
   { href: "#how", label: "How it works" },
-  { href: "#why", label: "Why now" },
-  { href: "#", label: "Changelog" },
-  { href: "#", label: "About" },
+  { href: "#team", label: "Team" },
+  { href: "#pricing", label: "Pricing" },
   { href: "mailto:hello@aluqos.ai", label: "hello@aluqos.ai" },
 ];
 

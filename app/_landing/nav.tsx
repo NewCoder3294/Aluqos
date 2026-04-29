@@ -6,8 +6,9 @@ import { LogoMark } from "./logo";
 
 const NAV_LINKS: Array<{ href: string; label: string }> = [
   { href: "#how", label: "How it works" },
-  { href: "#roles", label: "Roles" },
-  { href: "#team", label: "Team" },
+  { href: "#integrations", label: "Integrations" },
+  { href: "#architecture", label: "Architecture" },
+  { href: "#founders", label: "Founders" },
   { href: "#pricing", label: "Pricing" },
 ];
 

@@ -97,7 +97,7 @@ export function EarlyAccessDialog({
               </Serif>
               <p className="mt-3 text-[14px] text-ink-muted max-w-[42ch] mx-auto leading-snug">
                 {success.status === "duplicate"
-                  ? `You're #${success.position} — we'll email you the moment your AI employee is ready.`
+                  ? `You're #${success.position}. We'll email you the moment your AI employee is ready.`
                   : `You're #${success.position}. We onboard a small cohort each week. We'll email you when it's your turn.`}
               </p>
               <div className="mt-6 flex flex-col items-center gap-3">

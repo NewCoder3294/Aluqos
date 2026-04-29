@@ -22,7 +22,7 @@ const FOUNDERS: Founder[] = [
     role: "Chief Executive Officer",
     photo: "/team/nicolas.jpeg",
     blurb:
-      "UC San Diego SWE. Air Force National Guard, Cyber Defense Operations. Anthropic × Parallel.ai hackathon winner. Brings the SOC discipline that lets an autonomous agent earn trust.",
+      "Air Force Cyber Defense Operations. Brings the audit-and-permission discipline the brain needs to earn enterprise trust.",
     link: "https://www.linkedin.com/in/nicolas2007/",
   },
   {
@@ -30,7 +30,7 @@ const FOUNDERS: Founder[] = [
     role: "Chief Growth Officer",
     photo: "/team/wali.png",
     blurb:
-      "NC State CS. Incoming SWE intern at Red Hat — building their internal AI on-call automation. Has watched first-hand what it takes for an engineer to actually trust an agent at 3am.",
+      "Built Red Hat's internal AI on-call automation. Knows exactly what makes engineers and operators trust agents.",
     link: "https://www.linkedin.com/in/waliviqas/",
   },
   {
@@ -38,7 +38,7 @@ const FOUNDERS: Founder[] = [
     role: "Chief Technology Officer",
     photo: "/team/aditya.jpeg",
     blurb:
-      "Incoming CS at University of Washington. Founder of YourChessBuddy and AIRethought. Owns the telemetry-and-memory backbone — ClickHouse, Kafka/Redpanda, MCP — that makes observation possible.",
+      "Built versioned data platforms on ClickHouse, Kafka/Redpanda, and MCP. Owns the brain's memory and skills backbone.",
     link: "https://www.linkedin.com/in/aditya-chandrashekaran/",
   },
   {
@@ -46,7 +46,7 @@ const FOUNDERS: Founder[] = [
     role: "Chief Product Officer",
     photo: "/team/aman.jpeg",
     blurb:
-      "CMU grad. Agentic AI Product Manager at T-Mobile. Ex-Intel and CMU AI Research. CVPR-published in multimodal ML. Brings carrier-scale ops know-how and warm intros into Fortune-50 buyers.",
+      "Agentic AI PM at T-Mobile. CMU AI Research alum. Designs the agent personas and runs the early enterprise pipeline.",
     link: "https://www.linkedin.com/in/amangoyal99/",
   },
 ];
@@ -54,7 +54,7 @@ const FOUNDERS: Founder[] = [
 export function LandingFounders() {
   return (
     <section
-      id="team"
+      id="founders"
       aria-labelledby="founders-heading"
       className="max-w-6xl mx-auto px-6 py-16 lg:py-24"
     >
@@ -74,9 +74,9 @@ export function LandingFounders() {
       </Reveal>
       <Reveal delay={0.1}>
         <p className="mt-5 max-w-[58ch] text-[16px] lg:text-[17px] leading-[1.6] text-ink-muted">
-          Four founders, four overlapping unfair advantages. We did not pick this team
-          for the resumes — we picked it because each of us has lived the problem from
-          a different angle.
+          Four founders, four unfair advantages. We didn't pick this team for the
+          resumes. We picked it because each of us has lived the problem from a
+          different angle.
         </p>
       </Reveal>
 

@@ -152,7 +152,7 @@ export function LandingIntegrations() {
   }, [paused]);
 
   return (
-    <section className="relative py-12 sm:py-16 px-4 sm:px-8 bg-paper">
+    <section id="integrations" className="relative py-12 sm:py-16 px-4 sm:px-8 bg-paper">
       <div className="w-full">
         <div className="relative bg-paper-hi border border-paper-edge rounded-[2.5rem] shadow-[0_16px_64px_rgba(31,29,26,0.08)] overflow-hidden min-h-[560px]">
           {/* visible grid pattern */}
@@ -174,6 +174,47 @@ export function LandingIntegrations() {
               backgroundPosition: "28px 28px",
             }}
           />
+          {/* Cell-shade pattern — 4 shades distributed across a 4×4 tile so
+              each grid cell takes a slightly different tone. Two lifts
+              (white over paper-hi) and two drops (ink over paper-hi). */}
+          <svg
+            aria-hidden
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            style={{
+              maskImage:
+                "radial-gradient(ellipse at center, black 70%, transparent 100%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse at center, black 70%, transparent 100%)",
+            }}
+          >
+            <defs>
+              <pattern id="cell-shade-integrations" x="0" y="0" width="224" height="224" patternUnits="userSpaceOnUse">
+                {/* 4 shades — all subtle drops below paper-hi so white
+                    content cards stay readable on the right side. */}
+                {/* Row 0 */}
+                <rect x="0" y="0" width="56" height="56" fill="#1f1d1a" fillOpacity="0.012" />
+                <rect x="56" y="0" width="56" height="56" fill="#1f1d1a" fillOpacity="0.040" />
+                <rect x="112" y="0" width="56" height="56" fill="#1f1d1a" fillOpacity="0.024" />
+                <rect x="168" y="0" width="56" height="56" fill="#1f1d1a" fillOpacity="0.060" />
+                {/* Row 1 */}
+                <rect x="0" y="56" width="56" height="56" fill="#1f1d1a" fillOpacity="0.024" />
+                <rect x="56" y="56" width="56" height="56" fill="#1f1d1a" fillOpacity="0.060" />
+                <rect x="112" y="56" width="56" height="56" fill="#1f1d1a" fillOpacity="0.040" />
+                <rect x="168" y="56" width="56" height="56" fill="#1f1d1a" fillOpacity="0.012" />
+                {/* Row 2 */}
+                <rect x="0" y="112" width="56" height="56" fill="#1f1d1a" fillOpacity="0.060" />
+                <rect x="56" y="112" width="56" height="56" fill="#1f1d1a" fillOpacity="0.012" />
+                <rect x="112" y="112" width="56" height="56" fill="#1f1d1a" fillOpacity="0.024" />
+                <rect x="168" y="112" width="56" height="56" fill="#1f1d1a" fillOpacity="0.040" />
+                {/* Row 3 */}
+                <rect x="0" y="168" width="56" height="56" fill="#1f1d1a" fillOpacity="0.040" />
+                <rect x="56" y="168" width="56" height="56" fill="#1f1d1a" fillOpacity="0.024" />
+                <rect x="112" y="168" width="56" height="56" fill="#1f1d1a" fillOpacity="0.060" />
+                <rect x="168" y="168" width="56" height="56" fill="#1f1d1a" fillOpacity="0.012" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#cell-shade-integrations)" />
+          </svg>
           {/* soft coral wash bleeding from the orbit side */}
           <div
             className="absolute inset-y-0 right-0 w-2/3 pointer-events-none"
@@ -191,8 +232,8 @@ export function LandingIntegrations() {
             Plugs into the stack <span className="italic-serif text-coral-deep">you already use</span>.
           </h2>
           <p className="mt-5 text-lg text-ink-faint max-w-md">
-            Aluqos lives where your team already works — Slack, Linear, Notion, GitHub, Figma.
-            No migration, no second source of truth.
+            Aluqos plugs into Slack, Linear, Notion, GitHub, Figma. No migration.
+            No second source of truth.
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
             {integrationsConfig.map(t => (
