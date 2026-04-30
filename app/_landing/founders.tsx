@@ -44,7 +44,7 @@ const FOUNDERS: Founder[] = [
   {
     name: "Aman Goyal",
     role: "Chief Product Officer",
-    photo: "/team/aman.jpeg",
+    photo: "/team/aman.png",
     blurb:
       "Agentic AI PM. CMU AI Research alum. Designs the agent personas and runs the early enterprise pipeline.",
     link: "https://www.linkedin.com/in/amangoyal99/",

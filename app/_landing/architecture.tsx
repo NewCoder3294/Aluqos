@@ -1,6 +1,18 @@
 "use client";
 
-import { Briefcase, Mic, Wand2, FileText, Check } from "lucide-react";
+import {
+  Briefcase,
+  Mic,
+  Wand2,
+  FileText,
+  Check,
+  Database,
+  Code,
+  BookOpen,
+  Mail,
+  MessageSquare,
+  Calendar,
+} from "lucide-react";
 import { Serif } from "@/src/components/serif";
 import { FlipCard, FlipCardFront, FlipCardBack } from "@/src/components/ui/flip-card";
 import { Reveal } from "./motion-primitives";
@@ -26,6 +38,47 @@ type Agent = {
   output: string; // short label between card and artifact ("Drafts", "Recaps", "Skills")
   accent?: boolean;
 };
+
+// Knowledge sources the brain ingests. Anchors the "company brain" idea:
+// the brain reads everything the company already produces, then synthesizes.
+// Each source has an explicit scatter position + rotation so the row reads
+// like notes dropped on the canvas, not a tidy lineup.
+type Source = {
+  Icon: typeof Briefcase;
+  label: string;
+  leftPct: number; // 0–100, horizontal anchor inside the scatter area
+  topPx: number; // px from top of scatter area
+  rotate: number; // degrees, slight tilt for the dropped feel
+};
+
+// Fan/arc layout: outer chips sit higher, inner chips sit lower. This
+// gives every chip its own clear vertical lane down to the central
+// junction so connector curves never sweep through another pill.
+const SOURCES: Source[] = [
+  { Icon: Database, label: "Legacy DBs", leftPct: 2, topPx: 8, rotate: -5 },
+  { Icon: Code, label: "Codebases", leftPct: 18, topPx: 62, rotate: 3 },
+  { Icon: BookOpen, label: "Docs", leftPct: 34, topPx: 120, rotate: -2 },
+  { Icon: Mail, label: "Emails", leftPct: 54, topPx: 120, rotate: 5 },
+  { Icon: MessageSquare, label: "Slack", leftPct: 71, topPx: 62, rotate: -4 },
+  { Icon: Calendar, label: "Meetings", leftPct: 85, topPx: 8, rotate: 4 },
+];
+
+function SourceChip({
+  Icon,
+  label,
+}: {
+  Icon: typeof Briefcase;
+  label: string;
+}) {
+  return (
+    <div className="inline-flex items-center gap-2.5 px-5 py-3 rounded-full bg-paper/95 border border-paper-edge shadow-[0_12px_28px_-10px_rgba(0,0,0,0.55)]">
+      <Icon className="w-4 h-4 text-coral-deep" aria-hidden />
+      <span className="text-[14px] font-medium tracking-[0.01em] text-ink">
+        {label}
+      </span>
+    </div>
+  );
+}
 
 const AGENTS: Agent[] = [
   {
@@ -85,26 +138,28 @@ function AgentFlipCard({ agent }: { agent: Agent }) {
         className="hidden lg:block absolute -top-1.5 left-1/2 -translate-x-1/2 size-3 rounded-full bg-coral border-2 border-ink z-30"
       />
 
-      {/* FRONT */}
+      {/* FRONT — sits on the dark grid, so it needs a real lift shadow
+          and a subtle inner highlight to read as a tactile object rather
+          than a flat panel. */}
       <FlipCardFront
-        className={`rounded-xl border bg-white p-7 lg:p-8 flex flex-col ${
+        className={`rounded-2xl border bg-white p-8 lg:p-10 flex flex-col ${
           agent.accent
-            ? "border-coral/45 shadow-[0_4px_28px_rgba(196,100,73,0.14)]"
-            : "border-paper-edge shadow-[0_2px_12px_rgba(60,40,20,0.05)]"
+            ? "border-coral/45 shadow-[0_24px_60px_-18px_rgba(196,100,73,0.45),0_8px_24px_-8px_rgba(0,0,0,0.35),inset_0_1px_0_0_rgba(255,255,255,0.9)]"
+            : "border-paper-edge shadow-[0_24px_60px_-18px_rgba(0,0,0,0.55),0_8px_24px_-8px_rgba(0,0,0,0.30),inset_0_1px_0_0_rgba(255,255,255,0.85)]"
         }`}
       >
-        <div className="flex items-center gap-2 text-[10.5px] uppercase tracking-[0.14em] text-coral-deep font-medium">
+        <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-coral-deep font-semibold">
           <agent.Icon className="w-3.5 h-3.5" aria-hidden />
           {agent.label}
         </div>
-        <Serif as="h3" className="mt-4 text-[24px] lg:text-[26px] leading-tight tracking-[-0.01em] text-ink">
+        <Serif as="h3" className="mt-5 text-[28px] lg:text-[32px] leading-[1.05] tracking-[-0.02em] text-ink">
           {agent.promise}
         </Serif>
-        <p className="mt-3 text-[14px] leading-[1.55] text-ink-muted">
+        <p className="mt-4 text-[15px] lg:text-[16px] leading-[1.55] text-ink-muted">
           {agent.description.split(".")[0] + "."}
         </p>
         {/* Hover hint — shows on hover/focus that the card flips */}
-        <div className="mt-auto pt-6 flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.12em] text-ink-faint">
+        <div className="mt-auto pt-6 flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.14em] text-ink-faint">
           <span className="size-1 rounded-full bg-coral" aria-hidden />
           Hover to expand
         </div>
@@ -112,23 +167,23 @@ function AgentFlipCard({ agent }: { agent: Agent }) {
 
       {/* BACK */}
       <FlipCardBack
-        className={`rounded-xl border bg-paper-hi p-7 lg:p-8 flex flex-col ${
+        className={`rounded-2xl border bg-paper-hi p-8 lg:p-10 flex flex-col ${
           agent.accent
-            ? "border-coral/45 shadow-[0_4px_28px_rgba(196,100,73,0.14)]"
-            : "border-paper-edge shadow-[0_2px_12px_rgba(60,40,20,0.05)]"
+            ? "border-coral/45 shadow-[0_24px_60px_-18px_rgba(196,100,73,0.45),0_8px_24px_-8px_rgba(0,0,0,0.35),inset_0_1px_0_0_rgba(255,255,255,0.9)]"
+            : "border-paper-edge shadow-[0_24px_60px_-18px_rgba(0,0,0,0.55),0_8px_24px_-8px_rgba(0,0,0,0.30),inset_0_1px_0_0_rgba(255,255,255,0.85)]"
         }`}
       >
-        <div className="flex items-center gap-2 text-[10.5px] uppercase tracking-[0.14em] text-coral-deep font-medium">
+        <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-coral-deep font-semibold">
           <agent.Icon className="w-3.5 h-3.5" aria-hidden />
           {agent.label}
         </div>
-        <p className="mt-4 text-[13.5px] leading-[1.55] text-ink">
+        <p className="mt-4 text-[14px] leading-[1.6] text-ink">
           {agent.description}
         </p>
-        <ul className="mt-4 space-y-2 flex-1">
+        <ul className="mt-4 space-y-2.5 flex-1">
           {agent.capabilities.map((cap) => (
-            <li key={cap} className="flex items-start gap-2 text-[12.5px] leading-snug text-ink-muted">
-              <Check className="w-3 h-3 mt-0.5 shrink-0 text-coral-deep" aria-hidden />
+            <li key={cap} className="flex items-start gap-2.5 text-[13px] leading-[1.5] text-ink-muted">
+              <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-coral-deep" aria-hidden />
               <span>{cap}</span>
             </li>
           ))}
@@ -520,6 +575,159 @@ export function LandingArchitecture() {
           coral spotlight + grid pattern do the schematic-blueprint work;
           this wrapper just stacks brain → connector → agents → artifacts. */}
       <div className="relative mt-14 lg:mt-20">
+        {/* Sources scatter — chips dropped onto the canvas at varied
+            positions, slight tilt each, with dashed-flow lines emerging
+            from each chip's location and converging to the brain top.
+            Reads as "the company's existing knowledge being pulled in"
+            rather than a tidy row. */}
+        <Reveal delay={0.1}>
+          <div className="relative z-10">
+            <div className="flex items-center justify-center gap-2 mb-6 lg:mb-8">
+              <span className="h-px w-8 bg-coral/40" aria-hidden />
+              <span className="text-[10.5px] uppercase tracking-[0.18em] text-coral/85 font-medium">
+                Ingests from
+              </span>
+              <span className="h-px w-8 bg-coral/40" aria-hidden />
+            </div>
+
+            {/* Desktop scatter — absolutely-positioned chips with a
+                full-bleed funnel SVG drawn from each chip's anchor. */}
+            <div className="hidden md:block relative h-[260px] max-w-[1180px] mx-auto">
+              <svg
+                aria-hidden
+                className="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
+                viewBox="0 0 1000 260"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <linearGradient id="arch-funnel" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#c46449" stopOpacity="0.45" />
+                    <stop offset="100%" stopColor="#c46449" stopOpacity="0.95" />
+                  </linearGradient>
+                </defs>
+                {/* Every chip curves into a single junction point above
+                    the brain, then ONE trunk line continues into the
+                    brain card. Visually: many sources → one company brain. */}
+                {(() => {
+                  const junctionX = 500;
+                  const junctionY = 215;
+                  const trunkEndY = 260;
+                  const guides = SOURCES.map((s, i) => {
+                    const startX = s.leftPct * 10 + 60;
+                    const startY = s.topPx + 44;
+                    const dy = junctionY - startY;
+                    // cp1 directly below the chip (vertical tangent at the
+                    // start) gives a clean vertical drop. cp2 is interpolated
+                    // 60% of the way from the chip to the junction so each
+                    // curve enters the junction from an angle proportional
+                    // to its lateral distance — outer chips sweep in
+                    // diagonally, inner chips drop nearly straight, producing
+                    // a visible fan instead of a parallel bundle.
+                    const cp1y = startY + dy * 0.55;
+                    const cp2x = startX + (junctionX - startX) * 0.6;
+                    const cp2y = junctionY - 12;
+                    const d = `M ${startX} ${startY} C ${startX} ${cp1y}, ${cp2x} ${cp2y}, ${junctionX} ${junctionY}`;
+                    return { d, i };
+                  });
+                  return (
+                    <>
+                      {/* Static guides */}
+                      {guides.map(({ d, i }) => (
+                        <path
+                          key={`g-${i}`}
+                          d={d}
+                          stroke="#c46449"
+                          strokeOpacity="0.22"
+                          strokeWidth="1.5"
+                          fill="none"
+                          strokeLinecap="round"
+                          vectorEffect="non-scaling-stroke"
+                        />
+                      ))}
+                      {/* Animated dashed flow */}
+                      {guides.map(({ d, i }) => {
+                        const stagger =
+                          i % 3 === 1
+                            ? "arch-flow-d1"
+                            : i % 3 === 2
+                              ? "arch-flow-d2"
+                              : "";
+                        return (
+                          <path
+                            key={`f-${i}`}
+                            d={d}
+                            stroke="url(#arch-funnel)"
+                            strokeWidth="1.5"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeDasharray="3 8"
+                            className={`arch-flow ${stagger}`}
+                            vectorEffect="non-scaling-stroke"
+                          />
+                        );
+                      })}
+                      {/* Single trunk: junction → brain top edge */}
+                      <path
+                        d={`M ${junctionX} ${junctionY} L ${junctionX} ${trunkEndY}`}
+                        stroke="#c46449"
+                        strokeOpacity="0.85"
+                        strokeWidth="2.5"
+                        fill="none"
+                        strokeLinecap="round"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                      <path
+                        d={`M ${junctionX} ${junctionY} L ${junctionX} ${trunkEndY}`}
+                        stroke="url(#arch-funnel)"
+                        strokeWidth="2.5"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeDasharray="3 8"
+                        className="arch-flow"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                      {/* Junction node */}
+                      <circle
+                        cx={junctionX}
+                        cy={junctionY}
+                        r="4"
+                        fill="#c46449"
+                      />
+                    </>
+                  );
+                })()}
+              </svg>
+
+              {SOURCES.map((s) => (
+                <div
+                  key={s.label}
+                  className="absolute z-10"
+                  style={{
+                    left: `${s.leftPct}%`,
+                    top: `${s.topPx}px`,
+                    transform: `rotate(${s.rotate}deg)`,
+                  }}
+                >
+                  <SourceChip Icon={s.Icon} label={s.label} />
+                </div>
+              ))}
+
+              {/* Anchor dot at convergence point */}
+              <span
+                aria-hidden
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 size-2.5 rounded-full bg-coral border-2 border-ink"
+              />
+            </div>
+
+            {/* Mobile fallback — center-stacked chips, no scatter */}
+            <div className="md:hidden flex flex-wrap items-center justify-center gap-3 max-w-[600px] mx-auto">
+              {SOURCES.map((s) => (
+                <SourceChip key={s.label} Icon={s.Icon} label={s.label} />
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
         {/* Brain card — bigger, weightier, no card-in-card halo. Coral glow
             via box-shadow only. Pulsing dot sits inside the badge row. */}
         <Reveal delay={0.15}>
@@ -601,11 +809,27 @@ export function LandingArchitecture() {
           </svg>
         </div>
 
-        {/* Agent cards row */}
-        <div className="relative z-10 mt-12 lg:mt-2 grid grid-cols-1 md:grid-cols-3 gap-5">
+        {/* Agent cards row — each card sits in its own subtle radial
+            spotlight on the dark grid so the three columns feel like
+            three discrete stages rather than three identical panels on
+            a single backdrop. The autonomous (accent) column gets a
+            slightly stronger coral wash to flag the moat. */}
+        <div className="relative z-10 mt-12 lg:mt-2 grid grid-cols-1 md:grid-cols-3 gap-6">
           {AGENTS.map((agent, i) => (
             <Reveal key={agent.label} delay={0.2 + i * 0.06}>
-              <AgentFlipCard agent={agent} />
+              <div className="relative">
+                {/* Per-card spotlight backdrop */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem]"
+                  style={{
+                    background: agent.accent
+                      ? "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(196,100,73,0.22) 0%, rgba(196,100,73,0.08) 45%, transparent 75%)"
+                      : "radial-gradient(ellipse 65% 55% at 50% 45%, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 50%, transparent 78%)",
+                  }}
+                />
+                <AgentFlipCard agent={agent} />
+              </div>
             </Reveal>
           ))}
         </div>

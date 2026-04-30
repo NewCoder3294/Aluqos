@@ -12,11 +12,6 @@ import { LandingCTA } from "./_landing/cta";
 import { LandingFooter } from "./_landing/footer";
 import { ScrollProgress } from "./_landing/motion-primitives";
 
-// Sections kept on disk but unmounted (waiting on Nicolas):
-//   - meetings.tsx, three-agents.tsx, skills-library.tsx, faq.tsx
-//     (LOI-content round; pulled out pending direction)
-//   - team.tsx ("Meet Alex") — replaced by architecture.tsx
-
 export default function Home() {
   return (
     <MotionConfig reducedMotion="user">

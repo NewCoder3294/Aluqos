@@ -8,27 +8,43 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 import { Card, CardContent } from "@/src/components/ui/card";
-import { Eye, Sparkles, ShieldCheck, ArrowUpRight } from "lucide-react";
+import {
+  Network,
+  Users,
+  Activity,
+  Database,
+  Code as CodeIcon,
+  BookOpen,
+  Mail,
+  MessageSquare,
+  Calendar,
+  Briefcase,
+  Mic,
+  Wand2,
+} from "lucide-react";
 import { EASE, Reveal } from "./motion-primitives";
 
 // ─── Step visuals ─────────────────────────────────────────────────────
 
-// Week 1 — read-only observation. Shows Aluqos passively watching the
-// surfaces a real team works in. No actions, no writes — just signal.
-function StepWatchVisual() {
+// Step 1 — the brain ingests every source the company already produces.
+// The visual is a live indexing receipt so "context" reads as concrete
+// (record counts, repo counts, transcripts) rather than vibes.
+function StepContextVisual() {
   const reduced = useReducedMotion() ?? false;
-  const observed: Array<{ source: string; signal: string; tone: "muted" | "warm" }> = [
-    { source: "#oncall-pages", signal: "12 pages this week · 4 false alarms", tone: "warm" },
-    { source: "Notion · Q2 roadmap", signal: "edited 9× · 3 stakeholders", tone: "muted" },
-    { source: "Linear · #ENG-471", signal: "blocked 3 days · waiting on design", tone: "warm" },
-    { source: "Slack · #product", signal: "47 threads · 6 unresolved asks", tone: "muted" },
+  const sources: Array<{ Icon: typeof Database; label: string; count: string; warm?: boolean }> = [
+    { Icon: Database, label: "Legacy DBs", count: "12,847 records · indexed" },
+    { Icon: CodeIcon, label: "Codebases", count: "4 repos · 89k commits" },
+    { Icon: BookOpen, label: "Docs · Notion", count: "3,210 pages · indexed" },
+    { Icon: Mail, label: "Emails", count: "48k threads · indexed" },
+    { Icon: MessageSquare, label: "Slack", count: "186 channels · mapped" },
+    { Icon: Calendar, label: "Meetings", count: "324 transcripts · indexed", warm: true },
   ];
   return (
     <div className="rounded-lg border border-paper-edge bg-white p-6 lg:p-7">
       <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint mb-5 flex items-center justify-between">
         <span className="flex items-center gap-1.5">
-          <Eye className="w-3.5 h-3.5 text-coral" />
-          Observing · read-only
+          <Network className="w-3.5 h-3.5 text-coral" />
+          Indexing company knowledge · read-only
         </span>
         <span className="flex items-center gap-1 text-coral">
           <span className="size-1.5 rounded-full bg-coral pulse-coral" />
@@ -36,160 +52,183 @@ function StepWatchVisual() {
         </span>
       </div>
       <div className="space-y-2">
-        {observed.map((row, i) => (
+        {sources.map((row, i) => (
           <motion.div
-            key={row.source}
+            key={row.label}
             initial={reduced ? false : { opacity: 0, x: -8 }}
             animate={reduced ? undefined : { opacity: 1, x: 0 }}
             transition={{ duration: 0.45, delay: i * 0.08, ease: EASE }}
-            className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded bg-paper-hi/60 border border-paper-edge"
+            className="flex items-center gap-3 px-3.5 py-2.5 rounded bg-paper-hi/60 border border-paper-edge"
           >
-            <span className="serif text-[13px] text-ink truncate">{row.source}</span>
+            <row.Icon className="w-3.5 h-3.5 text-coral-deep shrink-0" aria-hidden />
+            <span className="serif text-[13px] text-ink truncate flex-1">{row.label}</span>
             <span
               className={`text-[11px] truncate shrink-0 ${
-                row.tone === "warm" ? "text-coral-deep" : "text-ink-faint"
+                row.warm ? "text-coral-deep" : "text-ink-faint"
               }`}
             >
-              {row.signal}
+              {row.count}
             </span>
           </motion.div>
         ))}
       </div>
-      <div className="mt-5 pt-4 border-t border-paper-edge text-[12px] text-ink-faint">
-        Day 6 · no actions taken yet
+      <div className="mt-5 pt-4 border-t border-paper-edge flex items-center justify-between text-[12px]">
+        <span className="text-ink-faint">Brain ready</span>
+        <span className="text-coral-deep tabular-nums">6m 12s</span>
       </div>
     </div>
   );
 }
 
-// Week 2 — proposed workflows ranked by estimated hours saved per week.
-// The buyer's first "oh this is different" moment: Aluqos found work to
-// automate that they didn't have to spec.
-function StepProposeVisual() {
+// Step 2 — three agents activate per employee. Mirrors the architecture
+// trio (role / personal / automation) but framed as a deployment receipt:
+// every new hire gets all three on day one, all inheriting the brain.
+function StepAgentsVisual() {
   const reduced = useReducedMotion() ?? false;
-  const proposals: Array<{ title: string; why: string; hours: string; rank: number }> = [
-    {
-      rank: 1,
-      title: "Auto-triage incoming pages",
-      why: "60% of last week's pages were duplicates of incidents already resolved.",
-      hours: "6 hrs/wk",
-    },
-    {
-      rank: 2,
-      title: "Draft weekly stakeholder update",
-      why: "Pulled from Linear activity, customer calls, and PRD edits.",
-      hours: "3 hrs/wk",
-    },
-    {
-      rank: 3,
-      title: "Surface stale blocks in standup",
-      why: "Detected 4 issues that have been waiting on review > 3 days.",
-      hours: "1.5 hrs/wk",
-    },
-  ];
-  return (
-    <div className="rounded-lg border border-paper-edge bg-paper-hi/50 p-6 lg:p-7">
-      <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint mb-5 flex items-center justify-between">
-        <span className="flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-coral" />
-          Proposed workflows · ranked
-        </span>
-        <span className="text-ink-faint">10.5 hrs/wk total</span>
-      </div>
-      <div className="space-y-2.5">
-        {proposals.map((p, i) => (
-          <motion.div
-            key={p.title}
-            initial={reduced ? false : { opacity: 0, y: 8 }}
-            animate={reduced ? undefined : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: i * 0.1, ease: EASE }}
-            className="flex items-start gap-3 px-3.5 py-3 rounded-md bg-white border border-paper-edge"
-          >
-            <span className="serif text-[14px] text-coral-deep tabular-nums shrink-0 w-5">
-              {p.rank}.
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="text-[13.5px] text-ink leading-snug">{p.title}</div>
-              <div className="text-[11px] text-ink-faint leading-snug mt-0.5 truncate">
-                {p.why}
-              </div>
-            </div>
-            <span className="text-[11px] uppercase tracking-[0.1em] text-coral-deep border border-coral/30 rounded-full px-2 py-0.5 shrink-0 self-center tabular-nums">
-              {p.hours}
-            </span>
-          </motion.div>
-        ))}
-      </div>
-      <div className="mt-5 pt-4 border-t border-paper-edge flex items-center justify-between text-[11.5px]">
-        <span className="text-ink-faint">Approve all · Edit · Reject</span>
-        <span className="text-coral-deep flex items-center gap-1">
-          You decide what ships <ArrowUpRight className="w-3 h-3" />
-        </span>
-      </div>
-    </div>
-  );
-}
-
-// Week 3 — autonomy slider. The visual hero of the section. The buyer
-// picks how much trust to extend, per workflow, and changes their mind
-// at any time. Migrated from the old bento to live with the narrative.
-function StepShipVisual() {
-  const modes: Array<{ id: string; label: string; sub: string; icon: string; active?: boolean }> = [
-    { id: "ask",      label: "Ask always",         sub: "Confirm every action",            icon: "?" },
-    { id: "external", label: "Ask before external", sub: "Send to Slack/email needs OK",   icon: "↗", active: true },
-    { id: "go",       label: "Just do it",          sub: "Run with full autonomy",          icon: "→" },
+  const agents: Array<{ Icon: typeof Briefcase; label: string; sub: string }> = [
+    { Icon: Briefcase, label: "Role agent", sub: "Drafts the artifacts your role ships" },
+    { Icon: Mic, label: "Personal assistant", sub: "Joins meetings, files recaps & TODOs" },
+    { Icon: Wand2, label: "Automation agent", sub: "Writes the workflows & skills" },
   ];
   return (
     <div className="rounded-lg border border-paper-edge bg-white p-6 lg:p-7">
       <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint mb-5 flex items-center justify-between">
         <span className="flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-coral" />
-          Auto-triage · autonomy
+          <Users className="w-3.5 h-3.5 text-coral" />
+          Deploying · per employee
         </span>
-        <span className="text-ink-faint">per workflow</span>
+        <span className="text-ink-faint">Sarah · PM</span>
       </div>
       <div className="space-y-2.5">
-        {modes.map((m, i) => (
+        {agents.map((a, i) => (
           <motion.div
-            key={m.id}
-            initial={{ opacity: 0, x: -6 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.07, duration: 0.4, ease: EASE }}
-            className={`flex items-center gap-3 rounded-md border p-3 ${
-              m.active
-                ? "border-coral/40 bg-coral/[0.06]"
-                : "border-paper-edge bg-paper-hi/40"
-            }`}
+            key={a.label}
+            initial={reduced ? false : { opacity: 0, y: 8 }}
+            animate={reduced ? undefined : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: i * 0.1, ease: EASE }}
+            className="flex items-start gap-3 px-3.5 py-3 rounded-md bg-paper-hi/50 border border-paper-edge"
           >
-            <div
-              className={`w-8 h-8 rounded-full grid place-items-center text-[13px] shrink-0 ${
-                m.active
-                  ? "bg-coral text-paper"
-                  : "bg-paper-hi text-ink-faint border border-paper-edge"
-              }`}
-              aria-hidden
-            >
-              {m.icon}
-            </div>
+            <span className="w-7 h-7 rounded-full grid place-items-center bg-coral/10 border border-coral/30 shrink-0">
+              <a.Icon className="w-3.5 h-3.5 text-coral-deep" aria-hidden />
+            </span>
             <div className="min-w-0 flex-1">
-              <div
-                className={`text-[13px] ${m.active ? "text-ink font-medium" : "text-ink"}`}
-              >
-                {m.label}
+              <div className="text-[13.5px] text-ink leading-snug">{a.label}</div>
+              <div className="text-[11px] text-ink-faint leading-snug mt-0.5 truncate">
+                {a.sub}
               </div>
-              <div className="text-[11px] text-ink-faint truncate">{m.sub}</div>
             </div>
-            {m.active && (
-              <span className="text-[10px] uppercase tracking-[0.12em] text-coral-deep shrink-0">
-                Current
-              </span>
-            )}
+            <span className="text-[10px] uppercase tracking-[0.12em] text-coral-deep border border-coral/30 rounded-full px-2 py-0.5 shrink-0 self-center">
+              Active
+            </span>
           </motion.div>
         ))}
       </div>
-      <div className="mt-5 pt-4 border-t border-paper-edge text-[11.5px] text-ink-faint">
-        Change any time · per-workflow · audit log of every action
+      <div className="mt-5 pt-4 border-t border-paper-edge flex items-center justify-between text-[11.5px]">
+        <span className="text-ink-faint">3 of 3 deployed · brain inherited</span>
+        <span className="text-coral-deep tabular-nums">in 4s</span>
+      </div>
+    </div>
+  );
+}
+
+// Step 3 — the three agents run continuously. Visual is a live activity
+// feed grouped by agent, so the buyer sees what each one ships and what
+// each one is about to do next. Frames day-two-onward as "all three
+// agents working at once" rather than singling out any one of them.
+type AgentRow = {
+  Icon: typeof Briefcase;
+  name: string;
+  role: string;
+  events: Array<{ text: string; when: string; warm?: boolean }>;
+};
+
+function StepDailyVisual() {
+  const reduced = useReducedMotion() ?? false;
+  const rows: AgentRow[] = [
+    {
+      Icon: Briefcase,
+      name: "Role agent",
+      role: "Drafts the artifacts your role ships",
+      events: [
+        { text: "Drafted Q2-roadmap update", when: "6m ago" },
+        { text: "Shipped weekly stakeholder note", when: "1h ago" },
+        { text: "PRD draft · #ENG-471", when: "next", warm: true },
+      ],
+    },
+    {
+      Icon: Mic,
+      name: "Personal assistant",
+      role: "Joins meetings, files recaps & TODOs",
+      events: [
+        { text: "Filed 4 TODOs from standup", when: "now", warm: true },
+        { text: "Flagged blocker on #ENG-471", when: "12m ago" },
+        { text: "Joining design review", when: "in 18m" },
+      ],
+    },
+    {
+      Icon: Wand2,
+      name: "Automation agent",
+      role: "Runs the workflows you approved",
+      events: [
+        { text: "Auto-triaged 12 oncall pages", when: "today" },
+        { text: "Proposed new workflow · #7", when: "this AM" },
+        { text: "Nightly cleanup", when: "in 6h" },
+      ],
+    },
+  ];
+  return (
+    <div className="rounded-lg border border-paper-edge bg-white p-6 lg:p-7">
+      <div className="text-[10px] uppercase tracking-[0.12em] text-ink-faint mb-5 flex items-center justify-between">
+        <span className="flex items-center gap-1.5">
+          <Activity className="w-3.5 h-3.5 text-coral" />
+          Today · all three agents
+        </span>
+        <span className="flex items-center gap-1 text-coral">
+          <span className="size-1.5 rounded-full bg-coral pulse-coral" />
+          live
+        </span>
+      </div>
+      <div className="space-y-3">
+        {rows.map((row, i) => (
+          <motion.div
+            key={row.name}
+            initial={reduced ? false : { opacity: 0, y: 6 }}
+            animate={reduced ? undefined : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: i * 0.1, ease: EASE }}
+            className="rounded-md bg-paper-hi/50 border border-paper-edge p-3"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="w-7 h-7 rounded-full grid place-items-center bg-coral/10 border border-coral/30 shrink-0">
+                <row.Icon className="w-3.5 h-3.5 text-coral-deep" aria-hidden />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="text-[13px] text-ink leading-snug">{row.name}</div>
+                <div className="text-[10.5px] text-ink-faint truncate">{row.role}</div>
+              </div>
+            </div>
+            <ul className="mt-2.5 pl-9 space-y-1">
+              {row.events.map(e => (
+                <li
+                  key={e.text}
+                  className="flex items-start justify-between gap-3 text-[11.5px]"
+                >
+                  <span className="text-ink-muted truncate">· {e.text}</span>
+                  <span
+                    className={`shrink-0 tabular-nums ${
+                      e.warm ? "text-coral-deep" : "text-ink-faint"
+                    }`}
+                  >
+                    {e.when}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        ))}
+      </div>
+      <div className="mt-5 pt-4 border-t border-paper-edge flex items-center justify-between text-[11.5px]">
+        <span className="text-ink-faint">12 actions today · 0 errors</span>
+        <span className="text-coral-deep">audit log open</span>
       </div>
     </div>
   );
@@ -199,27 +238,27 @@ function StepShipVisual() {
 const STEPS = [
   {
     n: "01",
-    eyebrow: "Week 1",
-    title: "It watches.",
-    titleAccent: "Read-only.",
-    body: "Aluqos joins your stack read-only: Slack, Linear, Notion, GitHub, your inbox. It sees what you do, what you ignore, what you copy-paste, what wakes you up. No setup. No prompts. Nothing to configure.",
-    Visual: StepWatchVisual,
+    eyebrow: "Day one",
+    title: "It learns",
+    titleAccent: "the company.",
+    body: "Aluqos joins read-only and reads everything the company already produces: legacy databases, codebases, docs, emails, Slack, meetings. The brain forms in minutes, not weeks. Nothing to spec, nothing to prompt.",
+    Visual: StepContextVisual,
   },
   {
     n: "02",
-    eyebrow: "Week 2",
-    title: "It proposes",
-    titleAccent: "the workflows.",
-    body: "Aluqos surfaces what it would automate, ranked by hours saved per week, with the evidence for each. You approve, edit, or reject. No specs. No prompts. No configuration. Just yes or no.",
-    Visual: StepProposeVisual,
+    eyebrow: "Day one",
+    title: "It spawns",
+    titleAccent: "three agents.",
+    body: "Every employee gets a role agent that does their job, a personal assistant in every meeting, and an automation agent that writes the workflows. All three inherit the company brain. No setup, no prompts.",
+    Visual: StepAgentsVisual,
   },
   {
     n: "03",
-    eyebrow: "Week 3",
-    title: "It ships.",
-    titleAccent: "Your leash.",
-    body: "Approved workflows go live at your chosen autonomy level: confirm everything, only outbound, or fully autonomous. Per workflow. Change at any time. Aluqos keeps watching and proposes new workflows as your work evolves.",
-    Visual: StepShipVisual,
+    eyebrow: "Every day after",
+    title: "They run",
+    titleAccent: "your day.",
+    body: "The role agent drafts what your role ships. The personal assistant sits in every meeting and files the followups. The automation agent runs the workflows you approved. Three agents, one paper trail, every action under your leash.",
+    Visual: StepDailyVisual,
   },
 ];
 
