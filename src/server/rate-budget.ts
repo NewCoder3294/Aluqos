@@ -8,6 +8,9 @@ const BUDGETS: Record<SourceId, BudgetConfig> = {
   github: { capacity: 5000, windowMs: 60 * 60 * 1000 },
   calendar: { capacity: 600, windowMs: 60 * 60 * 1000 },
   slack: { capacity: 20, windowMs: 60 * 1000 },
+  // Gmail's per-user quota is 250 quota units/sec; user.labels.get costs 1 unit.
+  // 600/hr is conservative — well under provider limits and matches Calendar.
+  gmail: { capacity: 600, windowMs: 60 * 60 * 1000 },
 };
 
 export class RateBudgetExceeded extends Error {

@@ -1,4 +1,4 @@
-export type SourceId = "linear" | "github" | "calendar" | "slack";
+export type SourceId = "linear" | "github" | "calendar" | "slack" | "gmail";
 
 export type SourceConfig = {
   id: SourceId;
@@ -69,6 +69,15 @@ export const SOURCES: Record<SourceId, SourceConfig> = {
       "message.im",
       "app_mention",
     ],
+  },
+  gmail: {
+    id: "gmail",
+    displayName: "Gmail",
+    brandColor: "EA4335",
+    v1Status: "live",
+    oauthScopes: ["https://www.googleapis.com/auth/gmail.readonly"],
+    webhookSupported: false,
+    pollIntervalSec: 900,
   },
 };
 

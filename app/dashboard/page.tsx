@@ -5,7 +5,11 @@ import { PipelineCard } from "@/app/_chrome/pipeline-card";
 import { PeopleOrbit } from "@/app/_chrome/people-orbit";
 import { WinsCard } from "@/app/_chrome/wins-card";
 import { ProposalCards } from "@/app/_chrome/proposal-card";
-import { DEMO_EMPLOYEE_ID, DEMO_USER_ID } from "@/src/db/client";
+import { OAuthGmailSection } from "./_oauth-section";
+import { DEMO_EMPLOYEE_ID, DEMO_USER_ID, MOCK_MODE } from "@/src/db/client";
+import { serverAuthClient } from "@/src/db/auth-client";
+import { getDecryptedTokens } from "@/src/oauth/credentials";
+import { getInboxStats } from "@/src/integrations/gmail/client";
 import {
   listOpenProposals,
   listWorkflows,
@@ -39,9 +43,13 @@ export const dynamic = "force-dynamic";
 // the proposal approve/dismiss flow. All projections are derived from the
 // existing event/workflow/draft store — no new persistence layer.
 export default async function DashboardPage() {
-  const tenantId = DEMO_USER_ID;
+  // Detect a Google-authenticated viewer. If a Supabase session is present
+  // AND we have a stored gmail credential, we're in the OAuth dashboard
+  // variant; the existing widgets still render below for shared parity.
+  const oauthViewer = await resolveOAuthViewer();
+  const tenantId = oauthViewer?.userId ?? DEMO_USER_ID;
 
-  const [proposals, workflows, allDrafts, pendingDrafts, connections, eventsRaw] =
+  const [proposals, workflows, allDrafts, pendingDrafts, connections, eventsRaw, gmailStats] =
     await Promise.all([
       listOpenProposals(tenantId),
       listWorkflows(tenantId),
@@ -49,6 +57,7 @@ export default async function DashboardPage() {
       listPendingDrafts(tenantId),
       listConnections(tenantId),
       queryActivityEvents({ tenant_id: tenantId, limit: 60 }),
+      oauthViewer ? getInboxStats(oauthViewer.userId).catch(() => null) : Promise.resolve(null),
     ]);
 
   // queryActivityEvents returns objects matching DevActivityEvent shape in dev
@@ -71,9 +80,24 @@ export default async function DashboardPage() {
   });
 
   return (
-    <AppShell employeeId={DEMO_EMPLOYEE_ID} activeNav="alex-dashboard">
+    <AppShell
+      employeeId={DEMO_EMPLOYEE_ID}
+      activeNav="alex-dashboard"
+      showDemoBadge={!oauthViewer}
+    >
       <div className="space-y-6 pb-12">
-        <AlexStatusCard greetingName="there" status={status} />
+        {oauthViewer && (
+          <OAuthGmailSection
+            fullName={oauthViewer.fullName}
+            email={oauthViewer.email}
+            stats={gmailStats}
+          />
+        )}
+
+        <AlexStatusCard
+          greetingName={oauthViewer?.fullName.split(" ")[0] ?? "there"}
+          status={status}
+        />
 
         {proposals.length > 0 && <ProposalCards proposals={proposals} />}
 
@@ -88,4 +112,33 @@ export default async function DashboardPage() {
       </div>
     </AppShell>
   );
+}
+
+type OAuthViewer = {
+  userId: string;
+  fullName: string;
+  email: string | null;
+};
+
+// Returns viewer info iff we have a Supabase Auth session AND a Gmail
+// credential row for that user. Anything missing → render the demo dashboard.
+async function resolveOAuthViewer(): Promise<OAuthViewer | null> {
+  if (MOCK_MODE) return null;
+  try {
+    const supabase = await serverAuthClient();
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) return null;
+
+    const tokens = await getDecryptedTokens(data.user.id, "gmail");
+    if (!tokens) return null;
+
+    const meta = (data.user.user_metadata ?? {}) as {
+      full_name?: string;
+      name?: string;
+    };
+    const fullName = meta.full_name ?? meta.name ?? data.user.email ?? "there";
+    return { userId: data.user.id, fullName, email: data.user.email ?? null };
+  } catch {
+    return null;
+  }
 }

@@ -5,7 +5,7 @@
 -- A pattern Alex inferred from the user's events that *could* become a recurring
 -- workflow. Stays in the proposal state until the user approves or dismisses.
 create table if not exists workflow_proposals (
-  id              uuid primary key default uuid_generate_v4(),
+  id              uuid primary key default gen_random_uuid(),
   tenant_id       uuid not null,
   title           text not null,
   rationale       text not null, -- why Alex thinks this would help (shown to user)
@@ -25,7 +25,7 @@ create index if not exists idx_proposals_tenant_status on workflow_proposals(ten
 -- An approved workflow that Alex executes on its trigger. Lifted from a proposal
 -- when the user approves, or created directly via the future "edit / new" flow.
 create table if not exists workflows (
-  id                uuid primary key default uuid_generate_v4(),
+  id                uuid primary key default gen_random_uuid(),
   tenant_id         uuid not null,
   proposal_id       uuid references workflow_proposals(id) on delete set null,
   title             text not null,
@@ -45,7 +45,7 @@ create index if not exists idx_workflows_tenant on workflows(tenant_id);
 -- Each invocation. Tracks whether the run produced a draft and whether the
 -- draft was approved / sent / cancelled.
 create table if not exists workflow_runs (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   workflow_id  uuid not null references workflows(id) on delete cascade,
   tenant_id    uuid not null,
   status       text not null default 'running' check (status in ('running', 'drafted', 'approved', 'sent', 'cancelled', 'failed')),
@@ -60,7 +60,7 @@ create index if not exists idx_runs_workflow on workflow_runs(workflow_id, start
 -- send_at is set when the user clicks Approve; the 60-second cancel window runs
 -- between approved_at and send_at.
 create table if not exists drafts (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   run_id       uuid not null references workflow_runs(id) on delete cascade,
   workflow_id  uuid not null references workflows(id) on delete cascade,
   tenant_id    uuid not null,

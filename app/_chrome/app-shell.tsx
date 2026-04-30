@@ -1,4 +1,5 @@
 import { TreeNav, type ActiveNavKey } from "./tree-nav";
+import { HeaderAuthControl } from "./header-auth-control";
 
 export type { ActiveNavKey };
 
@@ -69,7 +70,10 @@ export function AppShell({
               </span>
             )}
           </div>
-          <div className="text-[12px] text-ink-faint">{dateLabel}</div>
+          <div className="flex items-center gap-4">
+            <HeaderAuthControl />
+            <div className="text-[12px] text-ink-faint">{dateLabel}</div>
+          </div>
         </header>
 
         <main className="flex-1 overflow-y-auto">
