@@ -37,19 +37,19 @@ begin
 end;
 $$;
 
-revoke all on function public.vault_create_secret(text, text, text) from public, anon, authenticated;
+revoke all on function public.vault_create_secret(text, text, text) from anon, authenticated;
 grant execute on function public.vault_create_secret(text, text, text) to service_role;
 
 -- Mirror vault.decrypted_secrets as a view in public so PostgREST can serve it.
 create or replace view public.decrypted_secrets as
   select id, decrypted_secret from vault.decrypted_secrets;
 
-revoke all on view public.decrypted_secrets from public, anon, authenticated;
-grant select on view public.decrypted_secrets to service_role;
+revoke all on table public.decrypted_secrets from anon, authenticated;
+grant select on table public.decrypted_secrets to service_role;
 
 -- Mirror vault.secrets for revocation.
 create or replace view public.vault_secrets as
   select id from vault.secrets;
 
-revoke all on view public.vault_secrets from public, anon, authenticated;
-grant select, delete on view public.vault_secrets to service_role;
+revoke all on table public.vault_secrets from anon, authenticated;
+grant select, delete on table public.vault_secrets to service_role;

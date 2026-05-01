@@ -1,8 +1,9 @@
 import { serverClient } from "@/src/db/client";
+import type { SourceId } from "@/src/config/sources";
 
 type SecretMetadata = {
   tenant_id: string;
-  source: "linear" | "github" | "calendar" | "slack";
+  source: SourceId;
   kind: "access_token" | "refresh_token";
 };
 
