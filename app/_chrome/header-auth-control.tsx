@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MOCK_MODE } from "@/src/db/client";
-import { serverAuthClient } from "@/src/db/auth-client";
+import { serverAuthClient } from "@/src/db/auth-server";
 import { signOut } from "@/src/server/sign-out";
 
 // Server component rendered in the AppShell header. Surfaces a "Sign in" link

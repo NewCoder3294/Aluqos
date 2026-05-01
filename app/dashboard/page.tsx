@@ -7,7 +7,7 @@ import { WinsCard } from "@/app/_chrome/wins-card";
 import { ProposalCards } from "@/app/_chrome/proposal-card";
 import { OAuthGmailSection } from "./_oauth-section";
 import { DEMO_EMPLOYEE_ID, DEMO_USER_ID, MOCK_MODE } from "@/src/db/client";
-import { serverAuthClient } from "@/src/db/auth-client";
+import { serverAuthClient } from "@/src/db/auth-server";
 import { getDecryptedTokens } from "@/src/oauth/credentials";
 import { getInboxStats } from "@/src/integrations/gmail/client";
 import {

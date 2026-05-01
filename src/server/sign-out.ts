@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { serverAuthClient } from "@/src/db/auth-client";
+import { serverAuthClient } from "@/src/db/auth-server";
 
 const SESSION_COOKIE = "aluqos_session_id";
 

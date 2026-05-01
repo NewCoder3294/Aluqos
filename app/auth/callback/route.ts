@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { serverAuthClient } from "@/src/db/auth-client";
+import { serverAuthClient } from "@/src/db/auth-server";
 import { MOCK_MODE, serverClient } from "@/src/db/client";
 import { saveCredentials } from "@/src/oauth/credentials";
 
